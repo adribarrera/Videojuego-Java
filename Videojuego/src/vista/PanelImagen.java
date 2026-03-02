@@ -1,4 +1,4 @@
-package eldap;
+package vista;
 
 import java.awt.Graphics;
 import javax.swing.ImageIcon;

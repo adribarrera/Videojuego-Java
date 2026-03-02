@@ -1,4 +1,4 @@
-package eldap;
+package vista;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -17,8 +17,5 @@ public class VentanaPrincipal extends JFrame {
         this.add(portada, BorderLayout.CENTER); // Añado el panel de la portada
     }
 
-    public static void main(String[] args) {
-        VentanaPrincipal frame = new VentanaPrincipal();
-        frame.setVisible(true);
-    }
+    
 }
