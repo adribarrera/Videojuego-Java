@@ -8,7 +8,7 @@ classDiagram
 
     class personaje
     
-    class heroe
+    class Guerrero
     
     class miniBoss
     
