@@ -4,6 +4,7 @@ classDiagram
     %% Clases
     class personaje
     class Guerrero
+    class Enemigo
     class miniBoss
     class bossFinal
     class item
@@ -14,8 +15,8 @@ classDiagram
 
     %% Herencias
     personaje <|-- Guerrero
-    personaje <|-- miniBoss
-    personaje <|-- bossFinal
+    Enemigo <|-- miniBoss
+    Enemigo <|-- bossFinal
 
     %% Relaciones de Interfaz Gráfica (Composición)
     ventanaPrincipal *-- panelImagen
