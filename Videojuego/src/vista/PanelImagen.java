@@ -74,8 +74,16 @@ public class PanelImagen extends JPanel {
 			JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(this);
 			ventana.remove(this);
 
+			// Creamos objeto y añadimos a la ventana
+			PanelMapa mapa = new PanelMapa();
+			ventana.add(mapa, BorderLayout.CENTER); // Añadimos mapa y lo centramos para que cuadre con la pantalla
+
+			// Refrescar la ventana
 			ventana.revalidate();
 			ventana.repaint();
+
+			// Le damos foco al mapa para que se visualice
+			mapa.requestFocus();
 
 		});
 
