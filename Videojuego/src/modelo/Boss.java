@@ -1,5 +1,5 @@
 package modelo;
 
-public class Boss extends Personaje {
+public class Boss extends Enemigo {
 
 }
