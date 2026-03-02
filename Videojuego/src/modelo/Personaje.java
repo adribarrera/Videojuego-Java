@@ -6,19 +6,15 @@ public abstract class Personaje {
     protected int defensa;
     protected double critico;
 
+    public void atacar() {
+    }
 
-    public void atacar(ataque)
+    public void defensa() {
 
+    }
 
+    public void usarObjeto() {
 
-
-
-
-
-
-
-
-
+    }
 
 }
-
