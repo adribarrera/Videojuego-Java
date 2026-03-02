@@ -23,9 +23,11 @@ ________________________________________
 
 2.2 Exploración del Mapa
 •	Mapa cerrado en 2D.
-•	Movimiento libre con teclado (WASD o flechas).
-•	Encuentros aleatorios con enemigos al caminar.
-•	Posibles zonas con mini bosses fijos.
+•	Movimiento libre con teclado (WASD).
+•	Zonas con mini bosses fijos.
+•	Tiendas con pasivos y activos
+
+
 El mapa será único y compacto para mantener el alcance del proyecto realista.
 ________________________________________
 2.3 Sistema de Combate
@@ -33,7 +35,7 @@ Combate por turnos en pantalla separada.
 Opciones del jugador:
 •	Atacar
 •	Defender
-•	Usar objeto
+•	Usar objeto activo
 •	Huir (opcional)
 Sistema básico:
 1.	Turno del jugador.
@@ -62,7 +64,8 @@ ________________________________________
 Al derrotar enemigos, el jugador obtiene:
 •	Oro
 •	(Opcional) Experiencia
-El oro podrá usarse en una tienda para comprar mejoras permanentes:
+
+El oro podrá usarse en una tienda para comprar mejoras pasivas y activas:
 Ejemplos:
 •	+5 Ataque
 •	+10 Vida
@@ -92,17 +95,11 @@ El objetivo principal del juego.
 Características:
 •	Estadísticas superiores
 •	Habilidad especial
-•	Posible segunda fase
+•	(Opcional) Segunda fase
 Al derrotarlo:
 •	Opción de reiniciar partida
 •	(Opcional) Modo Nueva Partida+ con mayor dificultad
 ________________________________________
-
-
-
-
-
-
 
 
 3. 🎒 Sistema de Objetos
@@ -136,7 +133,7 @@ ________________________________________
 5. 🖥 Interfaz
 Pantallas necesarias:
 •	Menú principal
-•	Selección de personaje
+•	Selección de personaje (JDialog)
 •	Mapa
 •	Pantalla de combate
 •	Tienda
@@ -157,10 +154,6 @@ Modo Nueva Partida+:
 ________________________________________
 
 
-
-
-
-
 7. 🎯 Objetivo del Proyecto
 Desarrollar un RPG funcional con:
 •	Sistema completo de exploración
@@ -168,6 +161,7 @@ Desarrollar un RPG funcional con:
 •	Sistema de mejoras
 •	Mini bosses
 •	Boss final
+
 El enfoque principal será la jugabilidad funcional antes que el apartado visual.
 ________________________________________
 8. 🗓 Planificación
