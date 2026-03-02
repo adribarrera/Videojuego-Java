@@ -47,10 +47,6 @@ Posibilidad de:
 •	Golpe crítico
 •	Habilidades especiales en bosses
 ________________________________________
-
-
-
-
 2.4 Estadísticas del Personaje
 El jugador tendrá:
 •	Vida (HP)
@@ -73,13 +69,6 @@ Ejemplos:
 •	+5 Defensa
 Las mejoras serán acumulativas.
 ________________________________________
-
-
-
-
-
-
-
 2.6 Mini Bosses
 Habrá varios mini bosses distribuidos por el mapa.
 Características:
@@ -100,8 +89,6 @@ Al derrotarlo:
 •	Opción de reiniciar partida
 •	(Opcional) Modo Nueva Partida+ con mayor dificultad
 ________________________________________
-
-
 3. 🎒 Sistema de Objetos
 Habrá dos tipos de objetos:
 3.1 Objetos Activos
@@ -129,7 +116,6 @@ ________________________________________
 •	Máxima dificultad
 •	Mecánicas especiales
 ________________________________________
-
 5. 🖥 Interfaz
 Pantallas necesarias:
 •	Menú principal
@@ -152,8 +138,6 @@ Opcional:
 Modo Nueva Partida+:
 •	Enemigos con multiplicador de estadísticas.
 ________________________________________
-
-
 7. 🎯 Objetivo del Proyecto
 Desarrollar un RPG funcional con:
 •	Sistema completo de exploración
