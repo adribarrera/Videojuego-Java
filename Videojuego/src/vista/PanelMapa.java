@@ -12,7 +12,7 @@ private Clip musicaFondo;
 		setLayout(null); // para poner botones encima
 		
 		// Cargo y reproduzco la instrumental
-		URL urlMusica = getClass().getResource("/assets/audio/instrumentalPortada.wav");	// Obtengo su ruta
+		URL urlMusica = getClass().getResource("/assets/audio/mapaInst.wav");	// Obtengo su ruta
 		icon = new ImageIcon(getClass().getResource("/assets/imagenes/mapa.jpg")); 
 		try {
 			AudioInputStream audioInst = AudioSystem.getAudioInputStream(urlMusica);	// Marco la ruta
@@ -28,8 +28,8 @@ private Clip musicaFondo;
 		if (icon != null) {
 			g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), null); 
 		}
-		setOpaque(false); 
-		super.paintChildren(g); 
+		setOpaque(false);
+		super.paintChildren(g);
 	} 
 
 }
