@@ -1,32 +1,79 @@
 # Videojuego-Java
 ```mermaid
 classDiagram
-    %% Clases
-    class personaje
-    class Guerrero
-    class Enemigo
-    class miniBoss
-    class bossFinal
-    class item
-    class ventanaPrincipal
-    class panelImagen 
-    class panelCombate
-    class panelMapa
+    %% Clases del Modelo
+    class Personaje {
+        <<abstract>>
+        #int vida
+        #int daño
+        #int defensa
+        #double critico
+        +atacar()
+        +defensa()
+        +usarObjeto()
+    }
+    class Guerrero {
+    }
+    class Enemigo {
+        <<abstract>>
+        #int vida
+        #int daño
+        #int defensa
+        #double critico
+        +atacar()
+        +defensa()
+        +usarObjeto()
+    }
+    class miniBoss {
+    }
+    class Boss {
+    }
+    class item {
+    }
+
+    %% Clases de la Vista
+    class VentanaPrincipal {
+        ~PanelImagen portada
+        +VentanaPrincipal()
+    }
+    class PanelImagen {
+        -Clip musicaFondo
+        -ImageIcon icon
+        +PanelImagen()
+        #paintComponent(Graphics g)
+    }
+    class PanelMapa {
+        -Clip musicaFondo
+        -ImageIcon icon
+        +PanelMapa()
+        +paint(Graphics g)
+    }
+    class PanelCombate {
+    }
+    
+    %% Clase Principal
+    class Main {
+        +main(String[] args)$
+    }
 
     %% Herencias
-    personaje <|-- Guerrero
+    Personaje <|-- Guerrero
     Enemigo <|-- miniBoss
-    Enemigo <|-- bossFinal
+    Enemigo <|-- Boss
 
     %% Relaciones de Interfaz Gráfica (Composición)
-    ventanaPrincipal *-- panelImagen
-    ventanaPrincipal *-- panelCombate
-    ventanaPrincipal *-- panelMapa
+    VentanaPrincipal *-- PanelImagen
+    VentanaPrincipal *-- PanelCombate
+    VentanaPrincipal *-- PanelMapa
 
     %% Relaciones y Asociaciones del Juego
     Guerrero "1" --> "0..*" item : posee / usa
-    panelCombate --> Guerrero : utiliza
-    panelCombate --> miniBoss : enfrenta
-    panelCombate --> bossFinal : enfrenta
-    panelMapa --> Guerrero : ubica
+    PanelCombate --> Guerrero : utiliza
+    PanelCombate --> miniBoss : enfrenta
+    PanelCombate --> Boss : enfrenta
+    PanelMapa --> Guerrero : ubica
+    
+    %% Dependencias según el código actual
+    Main ..> VentanaPrincipal : instancia
+    PanelImagen ..> PanelMapa : navega a
 ```
