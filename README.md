@@ -51,10 +51,7 @@ classDiagram
     class PanelCombate {
     }
     
-    %% Clase Principal
-    class Main {
-        +main(String[] args)$
-    }
+
 
     %% Herencias
     Personaje <|-- Guerrero
@@ -74,6 +71,5 @@ classDiagram
     PanelMapa --> Guerrero : ubica
     
     %% Dependencias según el código actual
-    Main ..> VentanaPrincipal : instancia
     PanelImagen ..> PanelMapa : navega a
 ```
