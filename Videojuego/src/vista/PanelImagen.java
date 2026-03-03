@@ -3,6 +3,7 @@ package vista;
 import java.awt.*;
 
 import javax.swing.*;
+
 import java.net.URL;
 import javax.sound.sampled.*;
 
@@ -60,6 +61,21 @@ public class PanelImagen extends JPanel {
 		btnJugar.setBorderPainted(false); // Reemplaza BorderFactory
 		btnJugar.setFocusPainted(false); // No mostrar recuadro al hacer clic
 		btnJugar.setOpaque(false); // Transparencia
+
+		/*
+		 * btnJugar.addMouseListener(new MouseAdapter() {
+		 * 
+		 * @Override
+		 * public void mouseEntered(MouseEvent e) {
+		 * btnJugar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		 * }
+		 * 
+		 * @Override
+		 * public void mouseExited(MouseEvent e) {
+		 * btnJugar.setBackground(getBackground());
+		 * }
+		 * });
+		 */
 
 		// Definimos x,y,ancho y alto
 		btnJugar.setBounds(350, 550, anchoBoton, altoBoton);
