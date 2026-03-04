@@ -24,18 +24,17 @@ public class VentanaPrincipal extends JFrame {
 
         // 3. Añadimos las pantallas al contenedor y les ponemos una "Etiqueta" (un
         // nombre en texto)
-        PanelMapa mapa = new PanelMapa();
-        PanelImagen portada = new PanelImagen();
         panelContenedor.add(portada, "Menu Principal");
         panelContenedor.add(mapa, "Pantalla Juego");
 
         // 4. En lugar de añadir solo la portada, añadimos el contenedor a la ventana
-        add(panelContenedor);
-        setVisible(true);
+        this.add(panelContenedor);
     }
 
     public void cambiarPanel() { // Metodo para cambiar el panel
         gestorPantallas.show(panelContenedor, "Pantalla Juego");
+
+        mapa.requestFocus();
 
     }
 }
