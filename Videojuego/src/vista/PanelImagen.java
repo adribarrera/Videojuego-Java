@@ -62,21 +62,6 @@ public class PanelImagen extends JPanel {
 		btnJugar.setFocusPainted(false); // No mostrar recuadro al hacer clic
 		btnJugar.setOpaque(false); // Transparencia
 
-		/*
-		 * btnJugar.addMouseListener(new MouseAdapter() {
-		 * 
-		 * @Override
-		 * public void mouseEntered(MouseEvent e) {
-		 * btnJugar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		 * }
-		 * 
-		 * @Override
-		 * public void mouseExited(MouseEvent e) {
-		 * btnJugar.setBackground(getBackground());
-		 * }
-		 * });
-		 */
-
 		// Definimos x,y,ancho y alto
 		btnJugar.setBounds(350, 550, anchoBoton, altoBoton);
 
@@ -87,19 +72,14 @@ public class PanelImagen extends JPanel {
 				musicaFondo.stop();
 			}
 
-			JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(this);
-			ventana.remove(this);
+			VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(this);
 
 			// Creamos objeto y añadimos a la ventana
-			PanelMapa mapa = new PanelMapa();
-			ventana.add(mapa, BorderLayout.CENTER); // Añadimos mapa y lo centramos para que cuadre con la pantalla
+			ventana.cambiarPanel();
 
 			// Refrescar la ventana
 			ventana.revalidate();
 			ventana.repaint();
-
-			// Le damos foco al mapa para que se visualice
-			mapa.requestFocus();
 
 		});
 
@@ -134,7 +114,7 @@ public class PanelImagen extends JPanel {
 		btnSalir.setBounds(730, 550, anchoBoton, altoBoton);
 
 		// --- ACCIÓN DEL BOTÓN ---
-		btnSalir.addActionListener(e -> {
+		btnSalir.addActionListener(e -> { // Funcion lambda que resumen ActionEvent e
 			// Detenemos la música del menú principal
 			if (musicaFondo != null && musicaFondo.isRunning()) {
 				musicaFondo.stop();
