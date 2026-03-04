@@ -87,10 +87,6 @@ public class ControladorMovimiento {
                 // Si el panel dice TRUE (no hay muro), aplicamos el cambio
                 personaje.setPosX(nuevaX);
                 personaje.setPosY(nuevaY);
-            } else {
-                // Si dice FALSE (choca), no hacemos nada.
-                // Opcional: Podrías reproducir un sonido de choque aquí.
-                System.out.println("¡Chocaste contra un muro!");
             }
         }
     }
