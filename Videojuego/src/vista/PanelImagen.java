@@ -61,6 +61,7 @@ public class PanelImagen extends JPanel {
 		btnJugar.setBorderPainted(false); // Reemplaza BorderFactory
 		btnJugar.setFocusPainted(false); // No mostrar recuadro al hacer clic
 		btnJugar.setOpaque(false); // Transparencia
+		btnJugar.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
 		// Definimos x,y,ancho y alto
 		btnJugar.setBounds(350, 550, anchoBoton, altoBoton);
@@ -109,6 +110,7 @@ public class PanelImagen extends JPanel {
 		btnSalir.setBorderPainted(false); // Reemplaza BorderFactory
 		btnSalir.setFocusPainted(false); // No mostrar recuadro al hacer clic
 		btnSalir.setOpaque(false); // Transparencia
+		btnSalir.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
 		// Definimos x,y,ancho y alto
 		btnSalir.setBounds(730, 550, anchoBoton, altoBoton);

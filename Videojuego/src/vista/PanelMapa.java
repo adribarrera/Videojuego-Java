@@ -35,8 +35,7 @@ public class PanelMapa extends JPanel {
 		}
 
 		// 3. Activamos el Controlador de Movimiento
-		// Le pasamos: el guerrero, este panel, y el tamaño de la imagen (ej: 50x50
-		// píxeles)
+		// Le pasamos: el guerrero, este panel, y el tamaño de la imagen
 		controlador = new ControladorMovimiento(guerrero, this, 70, 50);
 
 		// Cargo y reproduzco la instrumental
