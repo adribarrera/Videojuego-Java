@@ -28,7 +28,7 @@ public class VentanaPrincipal extends JFrame {
         panelContenedor.add(mapa, "Pantalla Juego");
 
         // 4. En lugar de añadir solo la portada, añadimos el contenedor a la ventana
-        this.add(panelContenedor);
+        add(panelContenedor);
     }
 
     public void cambiarPanel() { // Metodo para cambiar el panel
