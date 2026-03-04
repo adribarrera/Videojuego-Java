@@ -1,5 +1,5 @@
 package vista;
-
+import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -7,6 +7,8 @@ import java.net.URL;
 import javax.sound.sampled.*;
 import modelo.Guerrero;
 import controlador.ControladorMovimiento;
+import java.awt.Rectangle; // Importante para las colisiones
+import java.util.ArrayList; // Para guardar la lista de muros
 
 public class PanelMapa extends JPanel {
 	private Clip musicaFondo;
@@ -14,17 +16,20 @@ public class PanelMapa extends JPanel {
 	private ImageIcon iconPersonaje;
 	private Guerrero guerrero;
 	private ControladorMovimiento controlador;
+	private ArrayList<Rectangle> muros;
+	private boolean modoDebug = true;
 
 	public PanelMapa() {
-
+		muros = new ArrayList<>();
+		crearMuros();
 		setLayout(null); // para poner botones encima
 
 		// 1. Inicializamos al Guerrero (Nombre, vida, ataque, defensa, critico,
 		// velocidad)
 		// Lo centramos en la pantalla de 1280x720 (aprox en 640x360)
-		guerrero = new Guerrero("Arthur", 100, 20, 10, 0.5, 15);
-		guerrero.setPosX(640);
-		guerrero.setPosY(360);
+		guerrero = new Guerrero("Arthur", 100, 20, 10, 0.5, 5);
+		guerrero.setPosX(610);
+		guerrero.setPosY(600);
 
 		// 2. Cargamos la imagen de "Pablete.png" para representar a nuestro guerrero
 		URL urlPersonaje = getClass().getResource("/assets/imagenes/Pablete.png");
@@ -52,6 +57,53 @@ public class PanelMapa extends JPanel {
 		}
 	}
 
+	private void crearMuros() {
+        // Ejemplo: Un muro en la parte superior
+		muros.add(new Rectangle(0, 0, 250, 340));
+		muros.add(new Rectangle(0, 0, 40, 700));
+		muros.add(new Rectangle(1230, 0, 40, 700)); 
+
+		muros.add(new Rectangle(0, 450, 250, 200)); 
+		muros.add(new Rectangle(0, 650, 1280, 30)); 
+		
+
+
+
+
+
+
+        muros.add(new Rectangle(709, 120, 10, 130)); 
+		muros.add(new Rectangle(709, 110, 50, 10)); 
+		muros.add(new Rectangle(759, 80, 10, 30)); 
+		muros.add(new Rectangle(759, 70, 390, 10)); 
+		muros.add(new Rectangle(1149, 70, 10, 30)); 
+		
+
+
+
+
+
+
+
+
+
+
+
+
+	}
+
+	public boolean verificarMovimiento(int x, int y, int ancho, int alto) {
+        // Creamos un rectángulo imaginario donde quiere ir el personaje
+        Rectangle futuroPersonaje = new Rectangle(x, y, ancho, alto);
+        
+        for (Rectangle muro : muros) {
+            if (futuroPersonaje.intersects(muro)) {
+                return false; // ¡CHOCA! No permitir movimiento
+            }
+        }
+        return true; // No choca con nada
+    }
+
 	// Metodo para dibujar la imagen del personaje
 	@Override
 
@@ -69,6 +121,15 @@ public class PanelMapa extends JPanel {
 
 		setOpaque(false);
 		super.paintChildren(g);
+
+		if (modoDebug) {
+        g.setColor(Color.RED);
+        for (Rectangle muro : muros) {
+            g.drawRect(muro.x, muro.y, muro.width, muro.height);
+            }
+    }
 	}
 
+	
+	
 }
