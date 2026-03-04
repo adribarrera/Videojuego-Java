@@ -2,7 +2,9 @@ package vista;
 
 import java.awt.CardLayout;
 import java.awt.Dimension;
-
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.net.URL;
 import javax.swing.*;
 
 public class VentanaPrincipal extends JFrame {
@@ -16,7 +18,20 @@ public class VentanaPrincipal extends JFrame {
     private JPanel panelContenedor = new JPanel(gestorPantallas);
 
     public VentanaPrincipal() {
-        this.setTitle("ELDAP");
+        this.setTitle("ELDAP"); // Título Ventana
+
+        URL rutaContenedor = getClass().getResource("/assets/imagenes/Pablete.png");
+
+        if (rutaContenedor != null) {
+            // Usamos Toolkit para cargar la imagen en un formato que la Ventana entienda
+            // como Icono
+            Image iconoPantalla = Toolkit.getDefaultToolkit().getImage(rutaContenedor);
+            // Se lo asignamos a este JFrame
+            this.setIconImage(iconoPantalla);
+        } else {
+            System.err.println("No se ha encontrado el icono de la ventana.");
+        }
+
         this.setSize(new Dimension(1280, 720));
         this.setLocationRelativeTo(null);
         this.setResizable(false);
