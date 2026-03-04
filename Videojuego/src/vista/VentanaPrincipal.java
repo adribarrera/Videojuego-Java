@@ -50,6 +50,9 @@ public class VentanaPrincipal extends JFrame {
         gestorPantallas.show(panelContenedor, "Pantalla Juego");
 
         mapa.requestFocus();
+    }
 
+    public void cambiarAMenu() {
+        gestorPantallas.show(panelContenedor, "Menu Principal");
     }
 }
