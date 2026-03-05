@@ -1,7 +1,7 @@
 package controlador;
 
 import modelo.Personaje;
-import vista.PanelMapa; // Importamos tu panel específico
+import vista.PanelMapa;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.ActionMap;
@@ -12,14 +12,16 @@ import java.awt.event.ActionEvent;
 public class ControladorMovimiento {
 
     private Personaje personaje;
-    private PanelMapa panel; // CAMBIO 1: Usamos PanelMapa en lugar de JPanel
+    private PanelMapa panel; 
+    private Colisiones colisiones;
     private int anchoPersonaje;
     private int altoPersonaje;
 
-    // El constructor recibe el Modelo (Personaje) y la Vista (PanelMapa)
-    public ControladorMovimiento(Personaje personaje, PanelMapa panel, int anchoPersonaje, int altoPersonaje) {
+    // AÑADIMOS Colisiones al constructor
+    public ControladorMovimiento(Personaje personaje, PanelMapa panel, Colisiones colisiones, int anchoPersonaje, int altoPersonaje) {
         this.personaje = personaje;
         this.panel = panel;
+        this.colisiones = colisiones; 
         this.anchoPersonaje = anchoPersonaje;
         this.altoPersonaje = altoPersonaje;
 
@@ -27,7 +29,6 @@ public class ControladorMovimiento {
     }
 
     private void configurarControles() {
-        // JPanel.WHEN_IN_FOCUSED_WINDOW es vital para que funcione sin tener que hacer clic antes
         InputMap inputMap = panel.getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = panel.getActionMap();
 
@@ -60,11 +61,9 @@ public class ControladorMovimiento {
 
         private void moverConLimites(String dir, int limiteX, int limiteY) {
             int vel = personaje.getVelocidad();
-            // Posición actual
             int actualX = personaje.getPosX();
             int actualY = personaje.getPosY();
             
-            // Calculamos la POSICIÓN FUTURA (Tentativa)
             int nuevaX = actualX;
             int nuevaY = actualY;
 
@@ -75,18 +74,19 @@ public class ControladorMovimiento {
                 case "d": nuevaX += vel; break;
             }
 
-            // --- FASE 1: LÍMITES DE PANTALLA (Corregir si se sale del marco) ---
+            // LÍMITES DE PANTALLA
             if (nuevaX < 0) nuevaX = 0;
             if (nuevaY < 0) nuevaY = 0;
             if (nuevaX > limiteX - anchoPersonaje) nuevaX = limiteX - anchoPersonaje;
             if (nuevaY > limiteY - altoPersonaje) nuevaY = limiteY - altoPersonaje;
 
-            // --- FASE 2: DETECCIÓN DE MUROS (La lógica nueva) ---
-            // Preguntamos al PanelMapa: "¿Puedo ponerme en nuevaX, nuevaY?"
-            if (panel.verificarMovimiento(nuevaX, nuevaY, anchoPersonaje, altoPersonaje)) {
-                // Si el panel dice TRUE (no hay muro), aplicamos el cambio
+            // --- LA MAGIA: Preguntamos DIRECTAMENTE a la clase Colisiones ---
+            if (colisiones.verificarMovimiento(nuevaX, nuevaY, anchoPersonaje, altoPersonaje)) {
                 personaje.setPosX(nuevaX);
                 personaje.setPosY(nuevaY);
+            } else {
+                // Si entra aquí, es que ha chocado. Te saldrá este mensaje en la consola inferior
+                System.out.println("¡BAM! Choque detectado intentando ir a X:" + nuevaX + " Y:" + nuevaY);
             }
         }
     }
