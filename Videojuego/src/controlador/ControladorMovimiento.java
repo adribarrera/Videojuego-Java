@@ -61,6 +61,7 @@ public class ControladorMovimiento {
             moverConLimites(direccion, anchoMapa, altoMapa);
             // Le pedimos al panel que se vuelva a dibujar
             panel.repaint();
+
         }
 
         private void moverConLimites(String dir, int limiteX, int limiteY) {

@@ -39,7 +39,7 @@ public class PanelMapa extends JPanel {
 		// 1. Inicializamos al Guerrero (Nombre, vida, ataque, defensa, critico,
 		// velocidad)
 		// Lo centramos en la pantalla de 1280x720 (aprox en 640x360)
-		guerrero = new Guerrero("Arthur", 100, 20, 10, 0.5, 15);
+		guerrero = new Guerrero("Pablo", 100, 20, 10, 0.5, 15);
 		guerrero.setPosX(640);
 		guerrero.setPosY(360);
 

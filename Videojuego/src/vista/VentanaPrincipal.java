@@ -52,7 +52,7 @@ public class VentanaPrincipal extends JFrame {
         mapa.requestFocus();
     }
 
-    public void cambiarAMenu() {
+    public void cambiarAMenu() { // Metodo para cambiar a Menu
         gestorPantallas.show(panelContenedor, "Menu Principal");
     }
 }
