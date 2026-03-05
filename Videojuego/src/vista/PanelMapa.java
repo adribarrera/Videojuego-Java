@@ -1,6 +1,7 @@
 package vista;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -78,12 +79,35 @@ public class PanelMapa extends JPanel {
 		dialogoPausa.setSize(400, 250);
 		dialogoPausa.setLocationRelativeTo(ventana); // Centrado
 		dialogoPausa.setUndecorated(true); // Quitamos barra superior
-		dialogoPausa.getContentPane().setBackground(new Color(40, 40, 40)); // Fondo oscuro
-		dialogoPausa.setLayout(null); // Layout Libre
+		dialogoPausa.setBackground(new Color(0, 0, 0, 0));
+		JPanel panelFondoPausa = new JPanel() {
+			ImageIcon iconFondo = new ImageIcon(getClass().getResource("/assets/imagenes/panelEscape.png"));
+			
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				if (iconFondo != null) {
+					// Dibuja la imagen ajustada al tamaño del panel
+					g.drawImage(iconFondo.getImage(), 0, 0, getWidth(), getHeight(), this);
+				}
+			}
+		};
+		panelFondoPausa.setOpaque(false); // Para que sea transparente
+		panelFondoPausa.setLayout(null); // Layout Libre
 
 		// --- BOTON SEGUIR ---
-		JButton btnSeguir = new JButton("SEGUIR");
-		btnSeguir.setBounds(100, 50, 200, 60);
+		JButton btnSeguir = new JButton();
+		ImageIcon iconSeguir = new ImageIcon(getClass().getResource("/assets/imagenes/botonContinuarEscape.png"));
+		btnSeguir.setIcon(iconSeguir);
+		btnSeguir.setBounds(100, 60, 200, 60);
+
+		btnSeguir.setContentAreaFilled(false);
+		btnSeguir.setBorderPainted(false);
+		btnSeguir.setFocusPainted(false);
+		btnSeguir.setOpaque(false);
+		btnSeguir.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+
 		btnSeguir.addActionListener(e -> {
 			dialogoPausa.dispose();
 			juegoPausado = false;
@@ -91,13 +115,23 @@ public class PanelMapa extends JPanel {
 		});
 
 		// --- BOTON SALIR DEL JUEGO ---
-		JButton btnSalirPausa = new JButton("SALIR DEL JUEGO");
-		btnSalirPausa.setBounds(100, 150, 200, 60);
+		JButton btnSalirPausa = new JButton();
+		ImageIcon iconSalir = new ImageIcon(getClass().getResource("/assets/imagenes/botonSalirEscape.png"));
+		btnSalirPausa.setIcon(iconSalir);
+		btnSalirPausa.setBounds(100, 130, 200, 60);
+
+		btnSalirPausa.setContentAreaFilled(false);
+		btnSalirPausa.setBorderPainted(false);
+		btnSalirPausa.setFocusPainted(false);
+		btnSalirPausa.setOpaque(false);
+		btnSalirPausa.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
 		btnSalirPausa.addActionListener(e -> System.exit(0));
 
-		dialogoPausa.add(btnSeguir);
-		dialogoPausa.add(btnSalirPausa);
+		panelFondoPausa.add(btnSeguir);
+		panelFondoPausa.add(btnSalirPausa);
 
+		dialogoPausa.setContentPane(panelFondoPausa); //Para que use el panel como contenido principal
 		dialogoPausa.setVisible(true);
 	}
 
