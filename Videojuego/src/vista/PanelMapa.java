@@ -1,6 +1,5 @@
 package vista;
 
-import java.awt.color.*;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
@@ -32,7 +31,7 @@ public class PanelMapa extends JPanel {
 	private boolean juegoPausado = false;
 
 	public PanelMapa() {
-
+		colisiones = new Colisiones();
 		setLayout(null); // para poner botones encima
 
 		addKeyListener(new KeyAdapter() {
