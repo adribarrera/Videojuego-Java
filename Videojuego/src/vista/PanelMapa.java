@@ -46,7 +46,7 @@ public class PanelMapa extends JPanel {
 		// 1. Inicializamos al Guerrero (Nombre, vida, ataque, defensa, critico,
 		// velocidad)
 		// Lo centramos en la pantalla de 1280x720 (aprox en 640x360)
-		guerrero = new Guerrero("Pablo", 100, 20, 10, 0.5, 15);
+		guerrero = new Guerrero("Pablo", 100, 20, 10, 0.5, 10);
 		guerrero.setPosX(640);
 		guerrero.setPosY(360);
 
@@ -60,7 +60,7 @@ public class PanelMapa extends JPanel {
 		// 3. Activamos el Controlador de Movimiento
 		// Le pasamos: el guerrero, este panel, y el tamaño de la imagen (ej: 50x50
 		// píxeles)
-		controlador = new ControladorMovimiento(guerrero, this, colisiones, 70, 50);
+		controlador = new ControladorMovimiento(guerrero, this, colisiones, 70, 70);
 
 		// Cargo y reproduzco la instrumental
 		URL urlMusica = getClass().getResource("/assets/audio/mapaInst.wav"); // Obtengo su ruta
@@ -84,7 +84,7 @@ public class PanelMapa extends JPanel {
 		dialogoPausa.setSize(400, 250);
 		dialogoPausa.setLocationRelativeTo(ventana); // Centrado
 		dialogoPausa.setUndecorated(true); // Quitamos barra superior
-		dialogoPausa.getContentPane().setBackground(new Color(40, 40, 40)); // Fondo oscuro
+		dialogoPausa.setBackground(new Color(0, 0, 0, 0));// Fondo transparente
 		dialogoPausa.setLayout(null); // Layout Libre
 
 		// --- BOTON SEGUIR ---
@@ -154,7 +154,7 @@ public class PanelMapa extends JPanel {
 		if (iconPersonaje != null && guerrero != null) {
 			// Dibujamos la imagen elegida en las coordenadas X e Y que tenga el guerrero en
 			// ese momento
-			g.drawImage(iconPersonaje.getImage(), guerrero.getPosX(), guerrero.getPosY(), 50, 50, null);
+			g.drawImage(iconPersonaje.getImage(), guerrero.getPosX(), guerrero.getPosY(), 70, 70, null);
 		}
 
 		setOpaque(false);
