@@ -35,7 +35,7 @@ public class VentanaPrincipal extends JFrame {
         this.setSize(new Dimension(1280, 720));
         this.setLocationRelativeTo(null);
         this.setResizable(false);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         // 3. Añadimos las pantallas al contenedor y les ponemos una "Etiqueta" (un
         // nombre en texto)
