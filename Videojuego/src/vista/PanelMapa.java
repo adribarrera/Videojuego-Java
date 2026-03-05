@@ -2,6 +2,7 @@ package vista;
 
 import java.awt.color.*;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -26,17 +27,27 @@ public class PanelMapa extends JPanel {
 	private ImageIcon iconPersonaje;
 	private Guerrero guerrero;
 	private ControladorMovimiento controlador;
-	private boolean modoDebug = false;
+	private boolean modoDebug = true;
 	private Colisiones colisiones;
+	private boolean juegoPausado = false;
 
 	public PanelMapa() {
 
 		setLayout(null); // para poner botones encima
 
+		addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ESCAPE && !juegoPausado) {
+					mostrarDialogoPausa();
+				}
+			}
+		});
+
 		// 1. Inicializamos al Guerrero (Nombre, vida, ataque, defensa, critico,
 		// velocidad)
 		// Lo centramos en la pantalla de 1280x720 (aprox en 640x360)
-		guerrero = new Guerrero("Arthur", 100, 20, 10, 0.5, 15);
+		guerrero = new Guerrero("Pablo", 100, 20, 10, 0.5, 15);
 		guerrero.setPosX(640);
 		guerrero.setPosY(360);
 
@@ -63,6 +74,73 @@ public class PanelMapa extends JPanel {
 		} catch (Exception e) {
 			e.printStackTrace(); // Capturar excepciones que puedan salir
 		}
+	}
+
+	public void mostrarDialogoPausa() { // Metodo que creamos botones y dialogoPausa
+		juegoPausado = true;
+
+		VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(this);
+
+		JDialog dialogoPausa = new JDialog(ventana, "Pausa", true);
+		dialogoPausa.setSize(400, 250);
+		dialogoPausa.setLocationRelativeTo(ventana); // Centrado
+		dialogoPausa.setUndecorated(true); // Quitamos barra superior
+		dialogoPausa.getContentPane().setBackground(new Color(40, 40, 40)); // Fondo oscuro
+		dialogoPausa.setLayout(null); // Layout Libre
+
+		// --- BOTON SEGUIR ---
+		JPanel panelFondoPausa = new JPanel() {
+			ImageIcon iconFondo = new ImageIcon(getClass().getResource("/assets/imagenes/panelEscape.png"));
+
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				if (iconFondo != null) {
+					// Dibuja la imagen ajustada al tamaño del panel
+					g.drawImage(iconFondo.getImage(), 0, 0, getWidth(), getHeight(), this);
+				}
+			}
+		};
+		panelFondoPausa.setOpaque(false); // Para que sea transparente
+		panelFondoPausa.setLayout(null); // Layout Libre
+
+		// --- BOTON SEGUIR ---
+		JButton btnSeguir = new JButton();
+		ImageIcon iconSeguir = new ImageIcon(getClass().getResource("/assets/imagenes/botonContinuarEscape.png"));
+		btnSeguir.setIcon(iconSeguir);
+		btnSeguir.setBounds(100, 60, 200, 60);
+
+		btnSeguir.setContentAreaFilled(false);
+		btnSeguir.setBorderPainted(false);
+		btnSeguir.setFocusPainted(false);
+		btnSeguir.setOpaque(false);
+		btnSeguir.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+		btnSeguir.addActionListener(e -> {
+			dialogoPausa.dispose();
+			juegoPausado = false;
+			this.requestFocus();
+		});
+
+		// --- BOTON SALIR DEL JUEGO ---
+		JButton btnSalirPausa = new JButton();
+		ImageIcon iconSalir = new ImageIcon(getClass().getResource("/assets/imagenes/botonSalirEscape.png"));
+		btnSalirPausa.setIcon(iconSalir);
+		btnSalirPausa.setBounds(100, 130, 200, 60);
+
+		btnSalirPausa.setContentAreaFilled(false);
+		btnSalirPausa.setBorderPainted(false);
+		btnSalirPausa.setFocusPainted(false);
+		btnSalirPausa.setOpaque(false);
+		btnSalirPausa.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+		btnSalirPausa.addActionListener(e -> System.exit(0));
+
+		panelFondoPausa.add(btnSeguir);
+		panelFondoPausa.add(btnSalirPausa);
+
+		dialogoPausa.setContentPane(panelFondoPausa); // Para que use el panel como contenido principal
+		dialogoPausa.setVisible(true);
 	}
 
 	// Metodo para dibujar la imagen del personaje

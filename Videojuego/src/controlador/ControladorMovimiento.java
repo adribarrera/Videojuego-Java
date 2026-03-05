@@ -12,16 +12,17 @@ import java.awt.event.ActionEvent;
 public class ControladorMovimiento {
 
     private Personaje personaje;
-    private PanelMapa panel; 
+    private PanelMapa panel;
     private Colisiones colisiones;
     private int anchoPersonaje;
     private int altoPersonaje;
 
     // AÑADIMOS Colisiones al constructor
-    public ControladorMovimiento(Personaje personaje, PanelMapa panel, Colisiones colisiones, int anchoPersonaje, int altoPersonaje) {
+    public ControladorMovimiento(Personaje personaje, PanelMapa panel, Colisiones colisiones, int anchoPersonaje,
+            int altoPersonaje) {
         this.personaje = personaje;
         this.panel = panel;
-        this.colisiones = colisiones; 
+        this.colisiones = colisiones;
         this.anchoPersonaje = anchoPersonaje;
         this.altoPersonaje = altoPersonaje;
 
@@ -57,36 +58,48 @@ public class ControladorMovimiento {
 
             moverConLimites(direccion, anchoMapa, altoMapa);
             panel.repaint();
-
         }
 
         private void moverConLimites(String dir, int limiteX, int limiteY) {
             int vel = personaje.getVelocidad();
             int actualX = personaje.getPosX();
             int actualY = personaje.getPosY();
-            
+
             int nuevaX = actualX;
             int nuevaY = actualY;
 
             switch (dir.toLowerCase()) {
-                case "w": nuevaY -= vel; break;
-                case "s": nuevaY += vel; break;
-                case "a": nuevaX -= vel; break;
-                case "d": nuevaX += vel; break;
+                case "w":
+                    nuevaY -= vel;
+                    break;
+                case "s":
+                    nuevaY += vel;
+                    break;
+                case "a":
+                    nuevaX -= vel;
+                    break;
+                case "d":
+                    nuevaX += vel;
+                    break;
             }
 
             // LÍMITES DE PANTALLA
-            if (nuevaX < 0) nuevaX = 0;
-            if (nuevaY < 0) nuevaY = 0;
-            if (nuevaX > limiteX - anchoPersonaje) nuevaX = limiteX - anchoPersonaje;
-            if (nuevaY > limiteY - altoPersonaje) nuevaY = limiteY - altoPersonaje;
+            if (nuevaX < 0)
+                nuevaX = 0;
+            if (nuevaY < 0)
+                nuevaY = 0;
+            if (nuevaX > limiteX - anchoPersonaje)
+                nuevaX = limiteX - anchoPersonaje;
+            if (nuevaY > limiteY - altoPersonaje)
+                nuevaY = limiteY - altoPersonaje;
 
             // --- LA MAGIA: Preguntamos DIRECTAMENTE a la clase Colisiones ---
             if (colisiones.verificarMovimiento(nuevaX, nuevaY, anchoPersonaje, altoPersonaje)) {
                 personaje.setPosX(nuevaX);
                 personaje.setPosY(nuevaY);
             } else {
-                // Si entra aquí, es que ha chocado. Te saldrá este mensaje en la consola inferior
+                // Si entra aquí, es que ha chocado. Te saldrá este mensaje en la consola
+                // inferior
                 System.out.println("¡BAM! Choque detectado intentando ir a X:" + nuevaX + " Y:" + nuevaY);
             }
         }
