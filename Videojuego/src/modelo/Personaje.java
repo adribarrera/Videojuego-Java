@@ -1,8 +1,9 @@
 package modelo;
 
-public abstract class Personaje implements Entidad {
+public class Personaje implements Entidad {
     // 1. Atributos de Identidad y Combate
     protected String nombre;
+    protected String claseElegida;
     protected int vida;
     protected int ataque;
     protected int defensa;
@@ -14,17 +15,42 @@ public abstract class Personaje implements Entidad {
     protected int velocidad;
 
     // Constructor base
-    public Personaje(String nombre, int vida, int ataque, int defensa, double critico, int velocidad) {
+    public Personaje(String nombre, String claseElegida) {
         this.nombre = nombre;
-        this.vida = vida;
-        this.ataque = ataque;
-        this.defensa = defensa;
-        this.critico = critico;
-        this.velocidad = velocidad;
-
-        // Valores iniciales por defecto
+        this.claseElegida = claseElegida;
         this.posX = 0;
         this.posY = 0;
+
+        switch (claseElegida.toLowerCase()) {
+            case "guerrero":
+                this.vida = 100;
+                this.ataque = 100;
+                this.defensa = 75;
+                this.critico = 0.20;
+                this.velocidad = 5;
+                break;
+            case "arquero":
+                this.vida = 80;
+                this.ataque = 120;
+                this.defensa = 40;
+                this.critico = 0.40;
+                this.velocidad = 10;
+                break;
+            case "asesino":
+                this.vida = 70;
+                this.ataque = 150;
+                this.defensa = 30;
+                this.critico = 0.50;
+                this.velocidad = 15;
+                break;
+            default:
+                this.vida = 100;
+                this.ataque = 100;
+                this.defensa = 50;
+                this.critico = 0.10;
+                this.velocidad = 5;
+                break;
+        }
     }
 
     // --- MÉTODOS DE MOVIMIENTO ---
@@ -55,9 +81,10 @@ public abstract class Personaje implements Entidad {
 
     // --- MÉTODOS DE COMBATE ---
 
-    // Hacemos atacar() abstracto porque cada clase heredada atacará distinto.
-
-    public abstract void atacar();
+    @Override
+    public void atacar() {
+        System.out.println(this.nombre + " el " + this.claseElegida + " ataca haciendo " + this.ataque + " puntos de daño.");
+    }
 
     // Métodos comunes para todos los personajes
 
@@ -84,6 +111,7 @@ public abstract class Personaje implements Entidad {
 
     public String getNombre() {
         return nombre;
+
     }
 
     public void setNombre(String nombre) {

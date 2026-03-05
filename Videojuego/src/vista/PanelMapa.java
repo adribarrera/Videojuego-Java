@@ -1,7 +1,6 @@
 package vista;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -16,7 +15,7 @@ import java.net.URL;
 import javax.sound.sampled.*;
 import java.awt.Rectangle;
 
-import modelo.Guerrero;
+import modelo.Personaje;
 import controlador.Boton;
 import controlador.Colisiones; // Importamos nuestra nueva clase
 import controlador.ControladorMovimiento;
@@ -25,7 +24,7 @@ public class PanelMapa extends JPanel {
 	private Clip musicaFondo;
 	private ImageIcon icon;
 	private ImageIcon iconPersonaje;
-	private Guerrero guerrero;
+	private Personaje personaje;
 	private ControladorMovimiento controlador;
 	private boolean modoDebug = true;
 	private Colisiones colisiones;
@@ -44,12 +43,10 @@ public class PanelMapa extends JPanel {
 			}
 		});
 
-		// 1. Inicializamos al Guerrero (Solo pasamos el nombre, los stats ya están
-		// fijados en la clase)
-		//
-		guerrero = new Guerrero("Pablo");
-		guerrero.setPosX(640);
-		guerrero.setPosY(360);
+		// 1. Inicializamos al Personaje (Pasamos nombre y clase)
+		personaje = new Personaje("Pablo", "Guerrero");
+		personaje.setPosX(640);
+		personaje.setPosY(360);
 
 		URL urlPersonaje = getClass().getResource("/assets/imagenes/Pablete.png");
 		if (urlPersonaje != null) {
@@ -59,9 +56,9 @@ public class PanelMapa extends JPanel {
 		}
 
 		// 3. Activamos el Controlador de Movimiento
-		// Le pasamos: el guerrero, este panel, y el tamaño de la imagen (ej: 50x50
+		// Le pasamos: el personaje, este panel, y el tamaño de la imagen (ej: 50x50
 		// píxeles)
-		controlador = new ControladorMovimiento(guerrero, this, colisiones, 70, 70);
+		controlador = new ControladorMovimiento(personaje, this, colisiones, 70, 70);
 
 		// Cargo y reproduzco la instrumental
 		URL urlMusica = getClass().getResource("/assets/audio/mapaInst.wav"); // Obtengo su ruta
@@ -135,11 +132,11 @@ public class PanelMapa extends JPanel {
 		if (icon != null) {
 			g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), null);
 		}
-		// DIBUJAR AL GUERRERO
-		if (iconPersonaje != null && guerrero != null) {
-			// Dibujamos la imagen elegida en las coordenadas X e Y que tenga el guerrero en
-			// ese momento
-			g.drawImage(iconPersonaje.getImage(), guerrero.getPosX(), guerrero.getPosY(), 70, 70, null);
+		// DIBUJAR AL PERSONAJE
+		if (iconPersonaje != null && personaje != null) {
+			// Dibujamos la imagen elegida en las coordenadas X e Y que tenga el personaje
+			// en ese momento
+			g.drawImage(iconPersonaje.getImage(), personaje.getPosX(), personaje.getPosY(), 70, 70, null);
 		}
 
 		setOpaque(false);
