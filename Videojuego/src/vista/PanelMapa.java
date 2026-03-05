@@ -17,6 +17,7 @@ import javax.sound.sampled.*;
 import java.awt.Rectangle;
 
 import modelo.Guerrero;
+import controlador.Boton;
 import controlador.Colisiones; // Importamos nuestra nueva clase
 import controlador.ControladorMovimiento;
 
@@ -87,7 +88,6 @@ public class PanelMapa extends JPanel {
 		dialogoPausa.setBackground(new Color(0, 0, 0, 0));// Fondo transparente
 		dialogoPausa.setLayout(null); // Layout Libre
 
-		// --- BOTON SEGUIR ---
 		JPanel panelFondoPausa = new JPanel() {
 			ImageIcon iconFondo = new ImageIcon(getClass().getResource("/assets/imagenes/panelEscape.png"));
 
@@ -104,16 +104,8 @@ public class PanelMapa extends JPanel {
 		panelFondoPausa.setLayout(null); // Layout Libre
 
 		// --- BOTON SEGUIR ---
-		JButton btnSeguir = new JButton();
-		ImageIcon iconSeguir = new ImageIcon(getClass().getResource("/assets/imagenes/botonContinuarEscape.png"));
-		btnSeguir.setIcon(iconSeguir);
-		btnSeguir.setBounds(100, 60, 200, 60);
-
-		btnSeguir.setContentAreaFilled(false);
-		btnSeguir.setBorderPainted(false);
-		btnSeguir.setFocusPainted(false);
-		btnSeguir.setOpaque(false);
-		btnSeguir.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		JButton btnSeguir = Boton.crearBotonImagen("/assets/imagenes/botonContinuarEscape.png", 200, 60);
+		btnSeguir.setBounds(100, 60, 200, 60); // X, Y, Ancho, Alto
 
 		btnSeguir.addActionListener(e -> {
 			dialogoPausa.dispose();
@@ -122,23 +114,16 @@ public class PanelMapa extends JPanel {
 		});
 
 		// --- BOTON SALIR DEL JUEGO ---
-		JButton btnSalirPausa = new JButton();
-		ImageIcon iconSalir = new ImageIcon(getClass().getResource("/assets/imagenes/botonSalirEscape.png"));
-		btnSalirPausa.setIcon(iconSalir);
-		btnSalirPausa.setBounds(100, 130, 200, 60);
-
-		btnSalirPausa.setContentAreaFilled(false);
-		btnSalirPausa.setBorderPainted(false);
-		btnSalirPausa.setFocusPainted(false);
-		btnSalirPausa.setOpaque(false);
-		btnSalirPausa.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		JButton btnSalirPausa = Boton.crearBotonImagen("/assets/imagenes/botonSalirEscape.png", 200, 60);
+		btnSalirPausa.setBounds(100, 130, 200, 60); // X, Y, Ancho, Alto
 
 		btnSalirPausa.addActionListener(e -> System.exit(0));
 
+		// Añadimos al panel y mostramos
 		panelFondoPausa.add(btnSeguir);
 		panelFondoPausa.add(btnSalirPausa);
 
-		dialogoPausa.setContentPane(panelFondoPausa); // Para que use el panel como contenido principal
+		dialogoPausa.setContentPane(panelFondoPausa);
 		dialogoPausa.setVisible(true);
 	}
 

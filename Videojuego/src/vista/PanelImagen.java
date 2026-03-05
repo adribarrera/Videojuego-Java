@@ -1,11 +1,10 @@
 package vista;
 
 import java.awt.*;
-
 import javax.swing.*;
-
 import java.net.URL;
 import javax.sound.sampled.*;
+import controlador.Boton;
 
 public class PanelImagen extends JPanel {
 
@@ -39,34 +38,11 @@ public class PanelImagen extends JPanel {
 			e.printStackTrace();
 		}
 
-		// --- CREACIÓN DEL BOTÓN INCIO ---
-		// Creamos la imagen original y obtener su objeto 'Image'
-		URL rutaImagenEntrada = getClass().getResource("/assets/imagenes/botonComenzar.png");
-		Image imagenOriginal = new ImageIcon(rutaImagenEntrada).getImage();
+		// --- CREACIÓN DEL BOTÓN INICIO (Con tu clase Boton) ---
+		JButton btnJugar = Boton.crearBotonImagen("/assets/imagenes/botonComenzar.png", 200, 120);
+		btnJugar.setBounds(350, 550, 200, 120); // X, Y, Ancho, Alto
 
-		// Definimos dos variables para el ancho y alto del boton
-		int anchoBoton = 200;
-		int altoBoton = 120;
-
-		// El parámetro 'Image.SCALE_SMOOTH' asegura la máxima calidad visual.
-		Image imagenEscalada = imagenOriginal.getScaledInstance(anchoBoton, altoBoton, Image.SCALE_SMOOTH);
-
-		// Crear el nuevo ImageIcon con la imagen reescalada
-		ImageIcon iconoEscalado = new ImageIcon(imagenEscalada);
-
-		// Creacion del botón
-		JButton btnJugar = new JButton(iconoEscalado);
-
-		btnJugar.setContentAreaFilled(false); // Hacemos que no tenga fondo
-		btnJugar.setBorderPainted(false); // Reemplaza BorderFactory
-		btnJugar.setFocusPainted(false); // No mostrar recuadro al hacer clic
-		btnJugar.setOpaque(false); // Transparencia
-		btnJugar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-		// Definimos x,y,ancho y alto
-		btnJugar.setBounds(350, 550, anchoBoton, altoBoton);
-
-		// --- ACCIÓN DEL BOTÓN ---
+		// --- ACCIÓN DEL BOTÓN JUGAR ---
 		btnJugar.addActionListener(e -> {
 			// Detenemos la música del menú principal
 			if (musicaFondo != null && musicaFondo.isRunning()) {
@@ -75,55 +51,29 @@ public class PanelImagen extends JPanel {
 
 			VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(this);
 
-			// Creamos objeto y añadimos a la ventana
+			// Cambiamos al panel del mapa
 			ventana.cambiarPanel();
 
 			// Refrescar la ventana
 			ventana.revalidate();
 			ventana.repaint();
-
 		});
 
 		// Añadimos el botón al panel
 		this.add(btnJugar);
 
-		// --- CREACIÓN DEL BOTÓN SALIDA ---
-		// Creamos la imagen original y obtener su objeto 'Image'
-		URL rutaImagenSalida = getClass().getResource("/assets/imagenes/botonSalir.png");
-		Image imagenOriginalSalida = new ImageIcon(rutaImagenSalida).getImage();
+		// --- CREACIÓN DEL BOTÓN SALIDA (Con tu clase Boton) ---
+		JButton btnSalir = Boton.crearBotonImagen("/assets/imagenes/botonSalir.png", 200, 120);
+		btnSalir.setBounds(730, 550, 200, 120); // X, Y, Ancho, Alto
 
-		// Definimos dos variables para el ancho y alto del boton
-		int anchoBotonSalida = 200;
-		int altoBotonSalida = 120;
-
-		// El parámetro 'Image.SCALE_SMOOTH' asegura la máxima calidad visual.
-		Image imagenEscaladaSalida = imagenOriginalSalida.getScaledInstance(anchoBotonSalida, altoBotonSalida,
-				Image.SCALE_SMOOTH);
-
-		// Crear el nuevo ImageIcon con la imagen reescalada
-		ImageIcon iconoEscaladoSalida = new ImageIcon(imagenEscaladaSalida);
-
-		// Creacion del botón
-		JButton btnSalir = new JButton(iconoEscaladoSalida);
-
-		btnSalir.setContentAreaFilled(false); // Hacemos que no tenga fondo
-		btnSalir.setBorderPainted(false); // Reemplaza BorderFactory
-		btnSalir.setFocusPainted(false); // No mostrar recuadro al hacer clic
-		btnSalir.setOpaque(false); // Transparencia
-		btnSalir.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-		// Definimos x,y,ancho y alto
-		btnSalir.setBounds(730, 550, anchoBoton, altoBoton);
-
-		// --- ACCIÓN DEL BOTÓN ---
-		btnSalir.addActionListener(e -> { // Funcion lambda que resumen ActionEvent e
+		// --- ACCIÓN DEL BOTÓN SALIR ---
+		btnSalir.addActionListener(e -> {
 			// Detenemos la música del menú principal
 			if (musicaFondo != null && musicaFondo.isRunning()) {
 				musicaFondo.stop();
 			}
 
-			System.exit(0); // Para cuando pulsemos el boton "Salir" cierre el videoJuego
-
+			System.exit(0); // Cierra el videoJuego
 		});
 
 		// Añadimos el botón al panel
