@@ -12,19 +12,19 @@ public class Colisiones {
     }
 
     private void crearMuros() {
-        muros.add(new Rectangle(0, 0, 230, 300));           // Esquina superior izquierda
-        muros.add(new Rectangle(20, 430, 210, 200));        // Esquina inferior izquierda
+        muros.add(new Rectangle(0, 0, 230, 300));           // Esquina superior izquierdaaa
+        muros.add(new Rectangle(20, 450, 210, 180));        // Esquina inferior izquierda
         muros.add(new Rectangle(1200, 0, 60, 330));         // Esquina superior derecha
-        muros.add(new Rectangle(1035, 470,225, 160));       // Esquina inferior derecha
+        muros.add(new Rectangle(1035, 490,225, 140));       // Esquina inferior derecha
 
-        muros.add(new Rectangle(1045, 220, 155, 110));      // Hueco derecho inferior a Sala Boss
-        muros.add(new Rectangle(990, 220, 55, 135));        // Hueco derecho inferior a Sala Boss 2
+        muros.add(new Rectangle(1045, 240, 155, 90));      // Hueco derecho inferior a Sala Boss
+        muros.add(new Rectangle(990, 240, 55, 115));        // Hueco derecho inferior a Sala Boss 2
 
-        muros.add(new Rectangle(820, 220, 50, 140));        // Hueco izquierdo inferior a Sala Boss
-        muros.add(new Rectangle(695, 220, 125, 90));        // Hueco izquierdo inferior a Sala Boss 2
+        muros.add(new Rectangle(820, 240, 50, 120));        // Hueco izquierdo inferior a Sala Boss
+        muros.add(new Rectangle(695, 240, 125, 70));        // Hueco izquierdo inferior a Sala Boss 2
 
         muros.add(new Rectangle(490, 0, 205, 310));         // Hueco centro
-        muros.add(new Rectangle(400, 220, 45, 300));        // Hueco de la izquierda de la sala central
+        muros.add(new Rectangle(400, 240, 45, 280));        // Hueco de la izquierda de la sala central
 
         muros.add(new Rectangle(0, 300, 20, 380));          // Borde izquierdo
         muros.add(new Rectangle(0, 630, 1270, 50));         // Borde inferior
@@ -32,18 +32,18 @@ public class Colisiones {
 
         muros.add(new Rectangle(230, 0, 260, 105));         // Muro superior Sala Servidores
 
-        muros.add(new Rectangle(695, 0, 55, 70));           // Sala Boss esquina izquierda
-        muros.add(new Rectangle(1145, 0, 55, 70));          // Sala Boss esquina derecha
+        muros.add(new Rectangle(695, 0, 55, 50));           // Sala Boss esquina izquierda
+        muros.add(new Rectangle(1145, 0, 55, 50));          // Sala Boss esquina derecha
         muros.add(new Rectangle(750, 0, 395, 40));          // Sala Boss muro superior
 
-        muros.add(new Rectangle(265, 220, 10, 95));         // Pared esquina superior Sala Izquierda
-        muros.add(new Rectangle(265, 390, 10, 125));        // Pared esquina inferior Sala Izquierda
+        muros.add(new Rectangle(265, 240, 10, 75));         // Pared esquina superior Sala Izquierda
+        muros.add(new Rectangle(265, 415, 10, 110));        // Pared esquina inferior Sala Izquierda
 
-        muros.add(new Rectangle(445, 470,125, 50));         // Pared inferior izquierda Sala Central
-        muros.add(new Rectangle(695, 470,175, 50));         // Pared inferior derecha Sala Central
-        muros.add(new Rectangle(825, 430,45, 40));          // Pared inferior derecha Sala Central 2
+        muros.add(new Rectangle(445, 490,125, 30));         // Pared inferior izquierda Sala Central
+        muros.add(new Rectangle(695, 490,175, 30));         // Pared inferior derecha Sala Central
+        muros.add(new Rectangle(825, 450,45, 20));          // Pared inferior derecha Sala Central 2
 
-        muros.add(new Rectangle(990, 430,45, 90));          // Pared inferior esquina derecha
+        muros.add(new Rectangle(990, 450,45, 70));          // Pared inferior esquina derecha
 
         muros.add(new Rectangle(920, 40,60, 50));           // Portal
     }

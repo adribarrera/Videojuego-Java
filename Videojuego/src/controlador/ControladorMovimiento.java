@@ -97,10 +97,6 @@ public class ControladorMovimiento {
             if (colisiones.verificarMovimiento(nuevaX, nuevaY, anchoPersonaje, altoPersonaje)) {
                 personaje.setPosX(nuevaX);
                 personaje.setPosY(nuevaY);
-            } else {
-                // Si entra aquí, es que ha chocado. Te saldrá este mensaje en la consola
-                // inferior
-                System.out.println("¡BAM! Choque detectado intentando ir a X:" + nuevaX + " Y:" + nuevaY);
             }
         }
     }
