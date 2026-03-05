@@ -1,6 +1,6 @@
 package modelo;
 
-public abstract class Personaje {
+public abstract class Personaje implements Entidad {
     // 1. Atributos de Identidad y Combate
     protected String nombre;
     protected int vida;
@@ -59,9 +59,6 @@ public abstract class Personaje {
 
     public abstract void atacar();
 
-    // Lo mismo con la defensa o habilidades especiales
-    public abstract void defenderse();
-
     // Métodos comunes para todos los personajes
 
     public void recibirDaño(int cantidad) {
@@ -95,6 +92,10 @@ public abstract class Personaje {
 
     public int getVida() {
         return vida;
+    }
+
+    public boolean estaVivo() {
+        return this.vida > 0;
     }
 
     public void setVida(int vida) {

@@ -1,20 +1,30 @@
 package modelo;
 
-public abstract class Enemigo {
+public abstract class Enemigo implements Entidad {
     protected int vida;
-    protected int daño;
-    protected int defensa;
+    protected int ataque;
     protected double critico;
 
-    public void atacar() {
+    public Enemigo(int vida, int ataque, double critico) {
+        this.vida = vida;
+        this.ataque = ataque;
+        this.critico = critico;
     }
 
-    public void defensa() {
+    @Override
+    public abstract void atacar();
 
+    @Override
+    public void recibirDaño(int cantidad) {
+        this.vida -= cantidad;
+        if (this.vida < 0)
+            this.vida = 0;
+        System.out.println("El enemigo recibe " + cantidad + " de daño. Vida restante: " + this.vida);
     }
 
-    public void usarObjeto() {
-
+    @Override
+    public boolean estaVivo() {
+        return this.vida > 0;
     }
 
 }
