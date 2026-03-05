@@ -16,6 +16,9 @@ public class ControladorMovimiento {
     private Colisiones colisiones;
     private int anchoPersonaje;
     private int altoPersonaje;
+    
+    // Variables para controlar la animación
+    private int ticAnimacion = 0;
 
     // AÑADIMOS Colisiones al constructor
     public ControladorMovimiento(Personaje personaje, PanelMapa panel, Colisiones colisiones, int anchoPersonaje,
@@ -97,6 +100,13 @@ public class ControladorMovimiento {
             if (colisiones.verificarMovimiento(nuevaX, nuevaY, anchoPersonaje, altoPersonaje)) {
                 personaje.setPosX(nuevaX);
                 personaje.setPosY(nuevaY);
+                
+                // Actualizamos la Animación
+                ticAnimacion++;
+                if (ticAnimacion > 4) {
+                    ticAnimacion = 1;
+                }
+                panel.actualizarAnimacion(dir, ticAnimacion);
             }
         }
     }

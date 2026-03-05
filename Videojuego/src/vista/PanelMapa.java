@@ -11,6 +11,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import java.util.HashMap;
 import java.net.URL;
 import javax.sound.sampled.*;
 import java.awt.Rectangle;
@@ -23,7 +24,12 @@ import controlador.ControladorMovimiento;
 public class PanelMapa extends JPanel {
 	private Clip musicaFondo;
 	private ImageIcon icon;
-	private ImageIcon iconPersonaje;
+
+	// Variables para la Animación
+	private HashMap<String, ImageIcon> spritesPersonaje;
+	private String direccionActual = "S";
+	private int frameActual = 1;
+
 	private Personaje personaje;
 	private ControladorMovimiento controlador;
 	private boolean modoDebug = true;
@@ -48,12 +54,8 @@ public class PanelMapa extends JPanel {
 		personaje.setPosX(640);
 		personaje.setPosY(360);
 
-		URL urlPersonaje = getClass().getResource("/assets/imagenes/Pablete.png");
-		if (urlPersonaje != null) {
-			iconPersonaje = new ImageIcon(urlPersonaje);
-		} else {
-			System.err.println("Imagen del personaje no encontrada");
-		}
+		// 2. Cargar todos los sprites de animación
+		cargarSprites();
 
 		// 3. Activamos el Controlador de Movimiento
 		// Le pasamos: el personaje, este panel, y el tamaño de la imagen (ej: 50x50
@@ -71,6 +73,31 @@ public class PanelMapa extends JPanel {
 		} catch (Exception e) {
 			e.printStackTrace(); // Capturar excepciones que puedan salir
 		}
+	}
+
+	private void cargarSprites() {
+		spritesPersonaje = new HashMap<>();
+		String[] direcciones = { "W", "A", "S", "D" };
+
+		for (String dir : direcciones) {
+			for (int i = 1; i <= 4; i++) {
+				
+				String nombreArchivo = "/assets/imagenes/Sprites/Caminar/Pablo/" + dir + "/Sprite" + i + ".png";
+
+				URL url = getClass().getResource(nombreArchivo);
+				if (url != null) {
+					spritesPersonaje.put(dir + i, new ImageIcon(url));
+				} else {
+					System.err.println("No se encontró el sprite: " + nombreArchivo);
+				}
+			}
+		}
+	}
+
+	public void actualizarAnimacion(String direccion, int frame) {
+		this.direccionActual = direccion.toUpperCase();
+		this.frameActual = frame;
+		repaint();
 	}
 
 	public void mostrarDialogoPausa() { // Metodo que creamos botones y dialogoPausa
@@ -132,11 +159,14 @@ public class PanelMapa extends JPanel {
 		if (icon != null) {
 			g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), null);
 		}
-		// DIBUJAR AL PERSONAJE
-		if (iconPersonaje != null && personaje != null) {
-			// Dibujamos la imagen elegida en las coordenadas X e Y que tenga el personaje
-			// en ese momento
-			g.drawImage(iconPersonaje.getImage(), personaje.getPosX(), personaje.getPosY(), 70, 70, null);
+		// DIBUJAR AL PERSONAJE ANIMADO
+		if (spritesPersonaje != null) {
+			String claveSprite = direccionActual + frameActual;
+			ImageIcon spriteFoco = spritesPersonaje.get(claveSprite);
+
+			if (spriteFoco != null) {
+				g.drawImage(spriteFoco.getImage(), personaje.getPosX(), personaje.getPosY(), 70, 70, null);
+			}
 		}
 
 		setOpaque(false);
