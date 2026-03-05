@@ -51,8 +51,8 @@ public class PanelMapa extends JPanel {
 
 		// 1. Inicializamos al Personaje (Pasamos nombre y clase)
 		personaje = new Personaje("Pablo", "Guerrero");
-		personaje.setPosX(640);
-		personaje.setPosY(360);
+		personaje.setPosX(600);
+		personaje.setPosY(500);
 
 		// 2. Cargar todos los sprites de animación
 		cargarSprites();

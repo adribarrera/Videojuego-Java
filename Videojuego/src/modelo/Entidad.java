@@ -2,9 +2,9 @@ package modelo;
 
 public interface Entidad {
 
-    void atacar();
+    void atacar(Entidad objetivo);
 
-    void recibirDaño(int cantidad);
+    void recibirDanio(int cantidad);
 
     boolean estaVivo();
 }

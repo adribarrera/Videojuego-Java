@@ -1,18 +1,28 @@
 package modelo;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class Personaje implements Entidad {
     // 1. Atributos de Identidad y Combate
     protected String nombre;
     protected String claseElegida;
-    protected int vida;
+    protected int vidaMaxima;
+    protected int vidaActual;
     protected int ataque;
     protected int defensa;
-    protected double critico;
+    protected double probCritico;
+    protected double probCriticoActual;
+    protected int dinero;
 
     // 2. Atributos de Movimiento
     protected int posX;
     protected int posY;
     protected int velocidad;
+
+    // 3. Atributos de Inventario
+    protected List<Item> inventario;
+    protected final int MAX_OBJETOS = 2;
 
     // Constructor base
     public Personaje(String nombre, String claseElegida) {
@@ -20,37 +30,42 @@ public class Personaje implements Entidad {
         this.claseElegida = claseElegida;
         this.posX = 0;
         this.posY = 0;
+        this.inventario = new ArrayList<>();
 
         switch (claseElegida.toLowerCase()) {
             case "guerrero":
-                this.vida = 100;
-                this.ataque = 100;
-                this.defensa = 75;
-                this.critico = 0.20;
+                this.vidaMaxima = 250;
+                this.ataque = 250;
+                this.defensa = 150;
+                this.probCritico = 0.10;
                 this.velocidad = 5;
                 break;
-            case "arquero":
-                this.vida = 80;
-                this.ataque = 120;
-                this.defensa = 40;
-                this.critico = 0.40;
+            case "mago":
+                this.vidaMaxima = 200;
+                this.ataque = 300;
+                this.defensa = 100;
+                this.probCritico = 0.30;
                 this.velocidad = 10;
                 break;
             case "asesino":
-                this.vida = 70;
-                this.ataque = 150;
-                this.defensa = 30;
-                this.critico = 0.50;
+                this.vidaMaxima = 250;
+                this.ataque = 350;
+                this.defensa = 75;
+                this.probCritico = 0.50;
                 this.velocidad = 15;
                 break;
             default:
-                this.vida = 100;
+                this.vidaMaxima = 100;
                 this.ataque = 100;
                 this.defensa = 50;
-                this.critico = 0.10;
+                this.probCritico = 0.10;
                 this.velocidad = 5;
                 break;
         }
+
+        this.vidaActual = this.vidaMaxima; // Así la vida del personaje al nacer es igual a su vida máxima.
+        this.probCriticoActual = this.probCritico;
+        this.dinero = 0;
     }
 
     // --- MÉTODOS DE MOVIMIENTO ---
@@ -82,68 +97,118 @@ public class Personaje implements Entidad {
     // --- MÉTODOS DE COMBATE ---
 
     @Override
-    public void atacar() {
+    public void atacar(Entidad enemigo) {
+        int danioFinal = this.ataque;
+
+        if (Math.random() < this.probCriticoActual) {
+            System.out.println(nombre + " asesta un GOLPE CRÍTICO");
+            danioFinal = danioFinal * 2;
+
+            if (this.probCriticoActual >= 1.0) {  //Si se han usado las gafas de Soraya, hay que devolverlo a lo normal
+                this.probCriticoActual = this.probCritico; //Se resetea
+            }
+        }
         System.out.println(this.nombre + " el " + this.claseElegida + " ataca haciendo " + this.ataque + " puntos de daño.");
     }
 
     // Métodos comunes para todos los personajes
 
-    public void recibirDaño(int cantidad) {
+    @Override
+    public void recibirDanio(int cantidad) {
 
         // La defensa reduce el daño recibido
 
         int danioReal = Math.max(0, cantidad - this.defensa);
-        this.vida = this.vida - danioReal;
+        this.vidaActual = this.vidaActual - danioReal;
 
         System.out.println(nombre + " recibe " + danioReal + " puntos de daño.");
 
-        if (this.vida <= 0) {
-            this.vida = 0;
+        if (this.vidaActual <= 0) {
+            this.vidaActual = 0;
             System.out.println(nombre + " ha sido derrotado...");
         }
     }
 
-    public void usarObjeto() {
-        System.out.println(nombre + " usó un objeto misterioso.");
+    @Override
+    public boolean estaVivo() {
+        if (this.vidaActual > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    // === GETTERS y SETTERS ===
 
+    // --- METODOS DE ITEMS ---
+        
+    public void recibirDanioDirecto(int cantidad) { // Para el Chatto y el Guantón de Juan Carlos
+        this.vidaActual = this.vidaActual - cantidad;
+         if (this.vidaActual < 0) {
+            this.vidaActual = 0;
+        }
+        System.out.println(nombre + " sufre " + cantidad + " de DAÑO DIRECTO");
+    }
+
+    public void curar(int cantidad) {
+        this.vidaActual = this.vidaActual + cantidad;
+        if (this.vidaActual > this.vidaMaxima) {
+            this.vidaActual = this.vidaMaxima;
+        }
+        System.out.println(nombre + " se cura.");
+    }
+
+    public void aumentarDefensa(int cantidad) {
+        this.defensa = this.defensa + cantidad;
+        System.out.println("La defensa de " + nombre + " sube a " + this.defensa);
+    }
+
+    // METODOS DE INVENTARIO
+    public boolean recogerItem(Item nuevoItem) {
+        if (inventario.size() < MAX_OBJETOS) {
+            inventario.add(nuevoItem);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void usarItem(int indice, Enemigo enemigoEnCombate) {
+        if (indice >= 0 && indice < inventario.size()) {
+            Item item = inventario.get(indice);
+            item.aplicarA(this, enemigoEnCombate);
+            inventario.remove(indice);
+        } else {
+            System.out.println("No hay objeto en ese hueco");
+        }
+    }
+
+    //Getters y Settets
     public String getNombre() {
         return nombre;
-
     }
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
-    public int getVida() {
-        return vida;
+    public String getClaseElegida() {
+        return claseElegida;
     }
 
-    public boolean estaVivo() {
-        return this.vida > 0;
+    public void setClaseElegida(String claseElegida) {
+        this.claseElegida = claseElegida;
     }
 
-    public void setVida(int vida) {
-        this.vida = vida;
+    public int getVidaMaxima() {
+        return vidaMaxima;
     }
 
-    public int getPosX() {
-        return posX;
+    public void setVidaMaxima(int vidaMaxima) {
+        this.vidaMaxima = vidaMaxima;
     }
 
-    public void setPosX(int posX) {
-        this.posX = posX;
-    }
-
-    public int getPosY() {
-        return posY;
-    }
-
-    public void setPosY(int posY) {
-        this.posY = posY;
+    public int getVidaActual() {
+        return vidaActual;
     }
 
     public int getAtaque() {
@@ -162,12 +227,45 @@ public class Personaje implements Entidad {
         this.defensa = defensa;
     }
 
-    public double getCritico() {
-        return critico;
+    public double getProbCritico() {
+        return probCritico;
     }
 
-    public void setCritico(double critico) {
-        this.critico = critico;
+    public void setProbCritico(double probCritico) {
+        this.probCritico = probCritico;
+    }
+    
+    public double getProbCriticoActual() {
+        return probCriticoActual;
+    }
+
+    public void setProbCriticoActual(double probCriticoActual) {
+        this.probCriticoActual = probCriticoActual;
+    }
+    
+
+    public int getDinero() {
+        return dinero;
+    }
+
+    public void setDinero(int dinero) {
+        this.dinero = dinero;
+    }
+
+    public int getPosX() {
+        return posX;
+    }
+
+    public void setPosX(int posX) {
+        this.posX = posX;
+    }
+
+    public int getPosY() {
+        return posY;
+    }
+
+    public void setPosY(int posY) {
+        this.posY = posY;
     }
 
     public int getVelocidad() {
@@ -176,6 +274,10 @@ public class Personaje implements Entidad {
 
     public void setVelocidad(int velocidad) {
         this.velocidad = velocidad;
+    }
+
+    public List<Item> getInventario() {
+        return inventario;
     }
 
 }

@@ -1,59 +1,128 @@
 package modelo;
 
 public class Enemigo implements Entidad {
-    protected String tipoEnemigo;
-    protected int vida;
+    protected String nombre;
+    protected int vidaMaxima;
+    protected int vidaActual;
     protected int ataque;
-    protected double critico;
+    protected double probCritico;
 
     public Enemigo(String tipoEnemigo) {
-        this.tipoEnemigo = tipoEnemigo;
+        this.nombre = tipoEnemigo;
 
         switch (tipoEnemigo.toLowerCase()) {
-            case "boss":
-                this.vida = 500;
-                this.ataque = 250;
-                this.critico = 0.50;
-                break;
-            case "slime":
-                this.vida = 50;
-                this.ataque = 10;
-                this.critico = 0.05;
-                break;
-            case "esqueleto":
-                this.vida = 80;
+            case "soraya":
+                this.vidaMaxima = 2000;
                 this.ataque = 25;
-                this.critico = 0.15;
+                this.probCritico = 0.50;
+                break;
+            case "jessica":
+                this.vidaMaxima = 1000;
+                this.ataque = 10;
+                this.probCritico = 0.05;
+                break;
+            case "juancarlos":
+                this.vidaMaxima = 3000;
+                this.ataque = 30;
+                this.probCritico = 0.15;
+                break;
+            case "sergio":
+                this.vidaMaxima = 5000;
+                this.ataque = 50;
+                this.probCritico = 0.4;
                 break;
             default:
-                this.vida = 100;
+                this.vidaMaxima = 100;
                 this.ataque = 20;
-                this.critico = 0.10;
+                this.probCritico = 0.10;
                 break;
         }
+        this.vidaActual = this.vidaMaxima;
     }
 
     @Override
-    public void atacar() {
-        if (this.tipoEnemigo.equalsIgnoreCase("boss")) {
-            System.out.println("¡El Boss hace un ataque devastador en área de " + this.ataque + " puntos!");
-        } else {
-            System.out.println("El " + this.tipoEnemigo + " ataca haciendo " + this.ataque + " puntos de daño.");
+    public void atacar(Entidad objetivo) {
+        int danioFinal = this.ataque;
+
+        if (Math.random() < this.probCritico) {
+            System.out.println(nombre + " asesta un GOLPE CRÍTICO");
+            danioFinal = danioFinal * 2;
         }
+
+        objetivo.recibirDanio(danioFinal);
     }
 
     @Override
-    public void recibirDaño(int cantidad) {
-        this.vida -= cantidad;
-        if (this.vida < 0)
-            this.vida = 0;
-        System.out.println(
-                "El " + this.tipoEnemigo + " ha recibido " + cantidad + " puntos de daño. Vida restante: " + this.vida);
+    public void recibirDanio(int cantidad) {
+        this.vidaActual = this.vidaActual - cantidad;
+
+        if (this.vidaActual < 0) {
+            this.vidaActual = 0;
+        }
+
+        System.out.println(nombre + " ha recibido " + cantidad + " puntos de daño.");
     }
 
     @Override
     public boolean estaVivo() {
-        return this.vida > 0;
+        if (this.vidaActual > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
+    public void recibirDanioDirecto(int cantidad) {
+        this.vidaActual = this.vidaActual - cantidad;
+
+        if (this.vidaActual < 0) {
+            this.vidaActual = 0;
+        }
+
+        System.out.println(nombre + " ha recibido " + cantidad + " puntos de DAÑO DIRECTO.");
+    }
+
+    // --- Getters y Setters --- 
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public int getVidaMaxima() {
+        return vidaMaxima;
+    }
+
+    public void setVidaMaxima(int vidaMaxima) {
+        this.vidaMaxima = vidaMaxima;
+    }
+
+    public int getVidaActual() {
+        return vidaActual;
+    }
+
+    public void setVidaActual(int vidaActual) {
+        this.vidaActual = vidaActual;
+    }
+
+    public int getAtaque() {
+        return ataque;
+    }
+
+    public void setAtaque(int ataque) {
+        this.ataque = ataque;
+    }
+
+    public double getProbCritico() {
+        return probCritico;
+    }
+
+    public void setProbCritico(double probCritico) {
+        this.probCritico = probCritico;
+    }
+
+    
 }
