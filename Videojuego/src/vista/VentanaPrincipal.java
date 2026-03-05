@@ -10,7 +10,7 @@ import javax.swing.*;
 public class VentanaPrincipal extends JFrame {
 
     // 1. Instanciamos TODAS las pantallas de tu juego
-    public PanelImagen portada = new PanelImagen();
+    public PanelPortada portada = new PanelPortada();
     public PanelMapa mapa = new PanelMapa();
 
     // 2. Creamos el CardLayout y el panel que servirá como "mesa" para las cartas
@@ -44,12 +44,15 @@ public class VentanaPrincipal extends JFrame {
 
         // 4. En lugar de añadir solo la portada, añadimos el contenedor a la ventana
         add(panelContenedor);
+        portada.reproducirMusica(); // Reproduzco su musica
     }
 
     public void cambiarPanel() { // Metodo para cambiar el panel
+        portada.detenerMusica();
         gestorPantallas.show(panelContenedor, "Pantalla Juego");
 
         mapa.requestFocus();
+        mapa.reproducirMusica();
     }
 
     public void cambiarAMenu() { // Metodo para cambiar a Menu

@@ -6,77 +6,89 @@ import java.net.URL;
 import javax.sound.sampled.*;
 import controlador.Boton;
 
-public class PanelImagen extends JPanel {
+public class PanelPortada extends JPanel {
 
 	private Clip musicaFondo;
-	private ImageIcon icon;
+	private ImageIcon imagenFondo;
 
-	public PanelImagen() {
+	public PanelPortada() {
 		// Usamos null layout para posicionar libremente
 		this.setLayout(null);
 
-		// --- CARGA DE RECURSOS (Música e Imagen) ---
-		URL urlMusica = getClass().getResource("/assets/audio/instrumentalPortada.wav");
-		URL urlImagen = getClass().getResource("/assets/imagenes/portada.jpg");
+		cargarRecursos();
 
-		if (urlImagen != null) {
-			icon = new ImageIcon(urlImagen);
-		} else {
-			System.err.println("No se encontró la imagen de portada.");
-		}
+		configurarBotones();
+	}
 
+	private void cargarRecursos() {
+		// Cargar fondo
 		try {
+			URL urlImagen = getClass().getResource("/assets/imagenes/portada.jpg");
+			if (urlImagen != null) {
+				imagenFondo = new ImageIcon(urlImagen);
+			} else {
+				System.err.println("ERROR: No se encuentró la imagen de portada.");
+			}
+
+			// Cargar Música
+			URL urlMusica = getClass().getResource("/assets/audio/instrumentalPortada.wav");
 			if (urlMusica != null) {
 				AudioInputStream audioInst = AudioSystem.getAudioInputStream(urlMusica);
 				musicaFondo = AudioSystem.getClip();
 				musicaFondo.open(audioInst);
-				musicaFondo.loop(Clip.LOOP_CONTINUOUSLY); // Bucle infinito para la musica
 			} else {
-				System.err.println("No se encontró el audio.");
+				System.err.println("ERROR: No se encontró el audio de la portada.");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
 
-		// --- CREACIÓN DEL BOTÓN INICIO (Con tu clase Boton) ---
+	public void reproducirMusica() {
+		if (musicaFondo != null) {
+			musicaFondo.setFramePosition(0);
+			musicaFondo.loop(Clip.LOOP_CONTINUOUSLY);
+		}
+	}
+
+	public void detenerMusica() {
+		if (musicaFondo != null && musicaFondo.isRunning()) {
+			musicaFondo.stop();
+		}
+	}
+
+	private void configurarBotones() {
+		// --- CREACIÓN DEL BOTÓN INICIO ---
 		JButton btnJugar = Boton.crearBotonImagen("/assets/imagenes/botonComenzar.png", 200, 120);
 		btnJugar.setBounds(350, 550, 200, 120); // X, Y, Ancho, Alto
 
 		// --- ACCIÓN DEL BOTÓN JUGAR ---
 		btnJugar.addActionListener(e -> {
 			// Detenemos la música del menú principal
-			if (musicaFondo != null && musicaFondo.isRunning()) {
-				musicaFondo.stop();
-			}
+			detenerMusica();
 
 			VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(this);
 
-			// Cambiamos al panel del mapa
-			ventana.cambiarPanel();
-
-			// Refrescar la ventana
-			ventana.revalidate();
-			ventana.repaint();
+			if (ventana != null) {
+				ventana.cambiarPanel();
+				ventana.revalidate();
+				ventana.repaint();
+			}
 		});
 
-		// Añadimos el botón al panel
 		this.add(btnJugar);
 
-		// --- CREACIÓN DEL BOTÓN SALIDA (Con tu clase Boton) ---
+
+		// --- CREACIÓN DEL BOTÓN SALIDA ---
 		JButton btnSalir = Boton.crearBotonImagen("/assets/imagenes/botonSalir.png", 200, 120);
 		btnSalir.setBounds(730, 550, 200, 120); // X, Y, Ancho, Alto
 
 		// --- ACCIÓN DEL BOTÓN SALIR ---
 		btnSalir.addActionListener(e -> {
-			// Detenemos la música del menú principal
-			if (musicaFondo != null && musicaFondo.isRunning()) {
-				musicaFondo.stop();
-			}
-
-			System.exit(0); // Cierra el videoJuego
+			detenerMusica();
+			System.exit(0);
 		});
 
-		// Añadimos el botón al panel
 		this.add(btnSalir);
 	}
 
@@ -86,8 +98,8 @@ public class PanelImagen extends JPanel {
 		super.paintComponent(g);
 
 		// Dibujamos la imagen de fondo si se cargó correctamente
-		if (icon != null) {
-			g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), this);
+		if (imagenFondo != null) {
+			g.drawImage(imagenFondo.getImage(), 0, 0, getWidth(), getHeight(), this);
 		}
 	}
 }

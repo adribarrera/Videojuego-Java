@@ -23,7 +23,7 @@ import controlador.ControladorMovimiento;
 
 public class PanelMapa extends JPanel {
 	private Clip musicaFondo;
-	private ImageIcon icon;
+	private ImageIcon imagenMapa;
 
 	// Variables para la Animación
 	private HashMap<String, ImageIcon> spritesPersonaje;
@@ -62,17 +62,7 @@ public class PanelMapa extends JPanel {
 		// píxeles)
 		controlador = new ControladorMovimiento(personaje, this, colisiones, 70, 70);
 
-		// Cargo y reproduzco la instrumental
-		URL urlMusica = getClass().getResource("/assets/audio/mapaInst.wav"); // Obtengo su ruta
-		icon = new ImageIcon(getClass().getResource("/assets/imagenes/mapa.jpg"));
-		try {
-			AudioInputStream audioInst = AudioSystem.getAudioInputStream(urlMusica); // Marco la ruta
-			musicaFondo = AudioSystem.getClip(); // Obtengo la instrumental
-			musicaFondo.open(audioInst); // Abre la instrumental
-			musicaFondo.loop(Clip.LOOP_CONTINUOUSLY); // Para que suene en bucle
-		} catch (Exception e) {
-			e.printStackTrace(); // Capturar excepciones que puedan salir
-		}
+		cargarRecursos();
 	}
 
 	private void cargarSprites() {
@@ -156,8 +146,8 @@ public class PanelMapa extends JPanel {
 
 	public void paint(Graphics g) {
 		super.paint(g); // Importante llamar al super.paint(g) al inicio
-		if (icon != null) {
-			g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), null);
+		if (imagenMapa != null) {
+			g.drawImage(imagenMapa.getImage(), 0, 0, getWidth(), getHeight(), null);
 		}
 		// DIBUJAR AL PERSONAJE ANIMADO
 		if (spritesPersonaje != null) {
@@ -180,4 +170,41 @@ public class PanelMapa extends JPanel {
 			}
 		}
 	}
+
+	private void cargarRecursos() {
+        // Cargar Fondo del Mapa
+        URL urlMapa = getClass().getResource("/assets/imagenes/mapa.jpg");
+        if (urlMapa != null) {
+            imagenMapa = new ImageIcon(urlMapa);
+        } else {
+            System.err.println("ERROR: No se encontró la imagen del mapa.");
+        }
+
+        // Cargar Música
+        try {
+            URL urlMusica = getClass().getResource("/assets/audio/mapaInst.wav");
+            if (urlMusica != null) {
+                AudioInputStream audioInst = AudioSystem.getAudioInputStream(urlMusica);
+                musicaFondo = AudioSystem.getClip();
+                musicaFondo.open(audioInst);
+            } else {
+                System.err.println("ERROR: No se encontró el audio del mapa.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+	public void reproducirMusica() {
+        if (musicaFondo != null) {
+            musicaFondo.setFramePosition(0);
+            musicaFondo.loop(Clip.LOOP_CONTINUOUSLY);
+        }
+    }
+
+    public void detenerMusica() {
+        if (musicaFondo != null && musicaFondo.isRunning()) {
+            musicaFondo.stop();
+        }
+    }
 }
