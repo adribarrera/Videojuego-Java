@@ -66,10 +66,8 @@ public class PanelMapa extends JPanel {
 						ventana.iniciarCombate(bossCercano.nombre);
 					} else if (cercaDeDelikia) {
 						// LOGICA DE TIENDA
-						System.out.println("Has abierto la tienda Delikia!");
-						// TODO VentanaPrincipal ventana = (VentanaPrincipal)
-						// SwingUtilities.getWindowAncestor(PanelMapa.this);
-						// TODO ventana.abrirTienda();
+						VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(PanelMapa.this);
+						ventana.abrirTienda("Delik.IA");
 					}
 				}
 			}

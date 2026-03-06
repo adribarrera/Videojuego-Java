@@ -80,4 +80,13 @@ public class VentanaPrincipal extends JFrame {
         // correcto.
     }
 
+    public void abrirTienda(String tienda) {
+        PanelTienda delikia = new PanelTienda();
+
+        panelContenedor.add(delikia, "Delik.IA");
+        gestorPantallas.show(panelContenedor,"Delik.IA");
+
+        delikia.requestFocus();
+    }
+
 }
