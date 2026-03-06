@@ -61,7 +61,7 @@ public class Item {
                 break;
 
             case DANIO_PORCENTAJE_ENEMIGO: // M.L.P.E
-                System.out.println("Abres la mantequilla y le lanzas tropezones al enemigo. Inglinges un "
+                System.out.println("Abres la mantequilla y le lanzas tropezones al enemigo. Inflinges un "
                         + this.modificador + "% de daño de la vida del enemigo.");
                 int danioMantequilla = (enemigo.getVidaMaxima() * this.modificador) / 100;
                 enemigo.recibirDanioDirecto(danioMantequilla);
