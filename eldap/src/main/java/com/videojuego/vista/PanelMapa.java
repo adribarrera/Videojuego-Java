@@ -31,7 +31,6 @@ public class PanelMapa extends JPanel {
 	private int frameActual = 1;
 
 	private Personaje personaje;
-	private ControladorMovimiento controlador;
 	private boolean modoDebug = true;
 	private Colisiones colisiones;
 	private boolean juegoPausado = false;
@@ -58,9 +57,9 @@ public class PanelMapa extends JPanel {
 		cargarSprites();
 
 		// 3. Activamos el Controlador de Movimiento
-		// Le pasamos: el personaje, este panel, y el tamaño de la imagen (ej: 50x50
-		// píxeles)
-		controlador = new ControladorMovimiento(personaje, this, colisiones, 70, 70);
+		// Le pasamos: el personaje, este panel, y el tamaño de la imagen
+
+		new ControladorMovimiento(personaje, this, colisiones, 70, 70);
 
 		cargarRecursos();
 	}
