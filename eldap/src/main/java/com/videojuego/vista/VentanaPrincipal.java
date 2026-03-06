@@ -58,4 +58,26 @@ public class VentanaPrincipal extends JFrame {
     public void cambiarAMenu() { // Metodo para cambiar a Menu
         gestorPantallas.show(panelContenedor, "Menu Principal");
     }
+
+    public void iniciarCombate(String nombreBossEnemigo) {
+        mapa.detenerMusica(); // Quitamos la musiquita pacifista del mapa
+
+        // Instanciamos un Panel de combate NUEVO cada vez que peleemos
+        // (para que no te se te guarde la vida baja de un combate anterior)
+        PanelCombate combate = new PanelCombate();
+
+        // Lo "pegamos" en la baraja de tu CardLayout
+        panelContenedor.add(combate, "Pantalla Combate");
+
+        // Hacemos que se muestre en primer plano
+        gestorPantallas.show(panelContenedor, "Pantalla Combate");
+
+        // Le pasamos el foco a esa pantalla por si hiciera falta escuchar teclas
+        combate.requestFocus();
+
+        // TODO para después: modificar el PanelCombate para que se entere que se
+        // está peleando exactamente contra 'nombreBossEnemigo' e inicialice al Enemigo
+        // correcto.
+    }
+
 }
