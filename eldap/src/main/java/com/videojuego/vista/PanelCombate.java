@@ -12,7 +12,6 @@ public class PanelCombate extends JPanel {
     private JTextArea areaTexto;
 
     private JButton botonAtacar;
-    private JButton botonDefender;
     private JButton botonUsarObjeto;
 
     public PanelCombate() {
@@ -96,18 +95,13 @@ public class PanelCombate extends JPanel {
 
         // Aquí usamos la clase Boton en lugar del método interno que hemos borrado
         botonAtacar = Boton.crearBotonImagen("/assets/imagenes/botonAtacar.png", ancho, alto);
-        botonDefender = Boton.crearBotonImagen("/assets/imagenes/botonDefender.png", ancho, alto);
-        botonUsarObjeto = Boton.crearBotonImagen("/assets/imagenes/botonObjeto.png", ancho, alto);
 
+        botonUsarObjeto = Boton.crearBotonImagen("/assets/imagenes/botonObjeto.png", ancho, alto);
         botonAtacar.setBounds(xInicio, yFila1, ancho, alto);
-        botonDefender.setBounds(xInicio + ancho + separacion, yFila1, ancho, alto);
         botonUsarObjeto.setBounds(xCentro, yFila2, ancho, alto);
 
         botonAtacar.addActionListener(e -> areaTexto.setText("Has atacado"));
         panel.add(botonAtacar);
-
-        botonDefender.addActionListener(e -> areaTexto.setText("Te has defendido."));
-        panel.add(botonDefender);
 
         botonUsarObjeto.addActionListener(e -> areaTexto.setText("Buscando en el inventario..."));
         panel.add(botonUsarObjeto);
