@@ -11,14 +11,11 @@ El objetivo final es derrotar al Boss Final del mapa.
 ________________________________________
 2. 🎮 Mecánicas Principales
 2.1 Elección de Personaje
-Al comenzar la partida, el jugador podrá elegir entre distintos personajes (inicialmente 1, ampliable a 3 si el desarrollo avanza bien).
-Cada personaje tendrá:
-•	Estadísticas base distintas
-•	Posible diferencia visual (skin)
-Ejemplo de clases:
-•	Guerrero (más vida y defensa)
-•	Mago (más daño)
-•	Asesino (más crítico)
+Al comenzar la partida, el jugador podrá elegir entre distintos personajes.
+Cada personaje tiene atributos propios en base a la clase elegida:
+• Guerrero: Vida Max: 250 | Ataque: 250 | Defensa: 150 | Crítico: 10% | Velocidad en el mapa: 5
+• Mago: Vida Max: 200 | Ataque: 300 | Defensa: 100 | Crítico: 30% | Velocidad en el mapa: 10
+• Asesino: Vida Max: 250 | Ataque: 350 | Defensa: 75 | Crítico: 50% | Velocidad en el mapa: 15
 ________________________________________
 
 2.2 Exploración del Mapa
@@ -41,27 +38,26 @@ Sistema básico:
 1.	Turno del jugador.
 2.	Turno del enemigo.
 3.	Se repite hasta que uno llegue a 0 HP.
-Cálculo de daño base:
-Daño = Ataque – Defensa + variación aleatoria
-Posibilidad de:
-•	Golpe crítico
-•	Habilidades especiales en bosses
+Cálculo de daño neto:
+Daño Final = Ataque – Defensa del enemigo (el daño recibido no baja de 0).
+Posibilidades en el ataque:
+• Golpe Crítico: Basado en la `probCritico` del combatiente, que duplica el daño final por turno.
+• Daño directo: Mediante el uso de objetos como *El Chatto* o *El Guantón*.
 ________________________________________
 2.4 Estadísticas del Personaje
-El jugador tendrá:
-•	Vida (HP)
-•	Ataque
-•	Defensa
-•	Probabilidad de crítico
-Opcional:
-•	Experiencia y nivel
-________________________________________
+El jugador administrará:
+• Vida Máxima y Actual
+• Ataque base y Defensa base
+• Probabilidad de Golpe Crítico
+• Velocidad de movimiento en el mapa (WASD)
+• Dinero (para gastar en tiendas del mapa)
+• Inventario limitado (Máx. 2 objetos permitidos)
 2.5 Sistema de Mejoras
 Al derrotar enemigos, el jugador obtiene:
 •	Oro
 •	(Opcional) Experiencia
 
-El oro podrá usarse en una tienda para comprar mejoras pasivas y activas:
+El oro podrá usarse en tiendas fijas del mapa (ej. Tienda Delik.IA, activable con la letra 'E') para comprar mejoras permanentes y objetos activos:
 Ejemplos:
 •	+5 Ataque
 •	+10 Vida
@@ -69,15 +65,16 @@ Ejemplos:
 •	+5 Defensa
 Las mejoras serán acumulativas.
 ________________________________________
-2.6 Mini Bosses
-Habrá varios mini bosses distribuidos por el mapa.
-Características:
-•	Más vida que enemigos normales
-•	Habilidad especial
-•	Recompensa especial al derrotarlos
-Recompensas posibles:
-•	Aumento permanente de estadísticas
-•	Objeto único
+2.6 Sistema de Bosses del Mapa (Enemigos)
+Habrá varios Bosses de historia distribuidos por áreas o "salas" del mapa. El combate se activa al interactuar con ellos ('E').
+Características actuales implementadas en los Bosses:
+• Soraya: Vida 2000 | Ataque 25 | Crítico 50% (Sala izquierda)
+• Jessica: Vida 1000 | Ataque 10 | Crítico 5% (Sala derecha)
+• Juan Carlos: Vida 3000 | Ataque 30 | Crítico 15% (Sala arriba-izquierda)
+• Sergio: Vida 5000 | Ataque 50 | Crítico 40% (Sala arriba-derecha)
+
+Opcional (Futuro desarrollo):
+• Recompensas especiales para potenciar atributos base.
 ________________________________________
 2.7 Boss Final
 El objetivo principal del juego.
@@ -89,19 +86,17 @@ Al derrotarlo:
 •	Opción de reiniciar partida
 •	(Opcional) Modo Nueva Partida+ con mayor dificultad
 ________________________________________
-3. 🎒 Sistema de Objetos
-Habrá dos tipos de objetos:
-3.1 Objetos Activos
-Se usan en combate.
-Ejemplos:
-•	Poción → Recupera 30 HP
-•	Suero → Aumenta ataque temporalmente
-3.2 Objetos Pasivos
-Otorgan mejoras permanentes o efectos constantes.
-Ejemplos creativos:
-•	Gafas de Soraya → Mayor visión en el mapa
-•	M.L.P.E (Mantequilla Lista Para Enfoscar) → Aumenta daño crítico
-•	Amuleto extraño → Probabilidad de esquivar ataques
+3. 🎒 Sistema de Objetos limitados (Inventario)
+El jugador puede llevar un máximo de 2 opciones. Existen diferentes ítems, basados en los elementos del panel de la tienda:
+
+Objetos Implementados en la Tienda Delik.IA (En Desarrollo):
+• Vaper: Elemento curativo
+• Mantequilla (M.L.P.E.): Elemento que incrementa la armadura/defensa en 10.
+• Gabardina: Mejora los stats o recuperación 
+• Gafas de Soraya: Modifican el golpe crítico temporalmente al 100% y luego se resetea.
+• El Chatto: Objeto ofensivo. Causa daño directo y letal, omitiendo armadura del enemigo.
+• Guantón (de Juan Carlos): Daño directo que escala por estadística base.
+Todos los objetos se usan mediante la acción de "Buscando en el inventario" durante el Panel de Combate contra cualquier Boss.
 ________________________________________
 4. 🧠 Enemigos
 4.1 Enemigos Normales
