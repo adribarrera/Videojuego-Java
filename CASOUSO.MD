@@ -1,7 +1,5 @@
 ## Diagrama de Casos de Uso
 
-A continuación se presenta el diagrama de Casos de Uso generado a partir de la lógica actual del juego:
-
 ```mermaid
 graph LR
     %% Actor(es)
