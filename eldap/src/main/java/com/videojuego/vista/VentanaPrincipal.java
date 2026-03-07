@@ -89,4 +89,9 @@ public class VentanaPrincipal extends JFrame {
         delikia.requestFocus();
     }
 
+    public void volverAMapaDesdeTienda() {  //Método "especial" para volver al mapa y que la musica siga fluyendo sin que se corte.
+        gestorPantallas.show(panelContenedor, "Pantalla Juego");
+        mapa.requestFocus();
+    }
+
 }
