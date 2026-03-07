@@ -4,6 +4,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.net.URL;
 import javax.sound.sampled.*;
+import com.videojuego.controlador.Boton;
 
 public class PanelCombate extends JPanel {
     private Clip musicaCombate;
@@ -82,30 +83,6 @@ public class PanelCombate extends JPanel {
         areaTexto.setBounds(30, 30, 600, 140); // Posicion y dimensiones // Se añade al JPanel inferior
     }
 
-    private JButton crearBoton(String ruta, int ancho, int alto) {
-        URL url = getClass().getResource(ruta);
-
-        if (url == null) {
-            System.err.println("ERROR: No se encuentra la imagen: " + ruta);
-            JButton botonError = new JButton("ERROR");
-            botonError.setBackground(Color.RED);
-            botonError.setBounds(0, 0, ancho, alto);
-            return botonError; // Creo este "boton de error" por si falla que no rompa
-        }
-
-        ImageIcon fotoBoton = new ImageIcon(url); // Cargo imagen
-
-        JButton boton = new JButton(fotoBoton);
-
-        boton.setContentAreaFilled(false);
-        boton.setBorderPainted(false);
-        boton.setFocusPainted(false);
-        boton.setOpaque(false);
-        boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        return boton;
-    }
-
     private void configurarBotones(JPanel panel) {
         int ancho = 200;
         int alto = 80;
@@ -117,9 +94,10 @@ public class PanelCombate extends JPanel {
         int yFila1 = 15;
         int yFila2 = yFila1 + alto + separacion;
 
-        botonAtacar = crearBoton("/assets/imagenes/botonAtacar.png", ancho, alto);
-        botonDefender = crearBoton("/assets/imagenes/botonDefender.png", ancho, alto);
-        botonUsarObjeto = crearBoton("/assets/imagenes/botonObjeto.png", ancho, alto);
+        // Aquí usamos la clase Boton en lugar del método interno que hemos borrado
+        botonAtacar = Boton.crearBotonImagen("/assets/imagenes/botonAtacar.png", ancho, alto);
+        botonDefender = Boton.crearBotonImagen("/assets/imagenes/botonDefender.png", ancho, alto);
+        botonUsarObjeto = Boton.crearBotonImagen("/assets/imagenes/botonObjeto.png", ancho, alto);
 
         botonAtacar.setBounds(xInicio, yFila1, ancho, alto);
         botonDefender.setBounds(xInicio + ancho + separacion, yFila1, ancho, alto);
