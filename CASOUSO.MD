@@ -1,7 +1,3 @@
-# Casos de Uso del Videojuego
-
-Tras analizar el código fuente de los paquetes `com.videojuego.modelo`, `com.videojuego.vista` y `com.videojuego.controlador`, he identificado las principales interacciones (Casos de Uso) del jugador con el sistema.
-
 ## Diagrama de Casos de Uso
 
 A continuación se presenta el diagrama de Casos de Uso generado a partir de la lógica actual del juego:
