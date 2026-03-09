@@ -124,7 +124,8 @@ public class PanelMapa extends JPanel {
 
 		// 4. JUAN CARLOS (Sala arriba a la izquierda)
 		Rectangle areaJuanCarlos = new Rectangle(335, 125, 80, 80);
-		BossEnMapa juancarlos = new BossEnMapa("Juan Carlos", 340, 130, "/assets/imagenes/JuanCarlosMapa.png", areaJuanCarlos);
+		BossEnMapa juancarlos = new BossEnMapa("Juan Carlos", 340, 130, "/assets/imagenes/JuanCarlosMapa.png",
+				areaJuanCarlos);
 		bossesEnMapa.add(juancarlos);
 	}
 
@@ -320,4 +321,9 @@ public class PanelMapa extends JPanel {
 			musicaFondo.stop();
 		}
 	}
+
+	public Personaje getPersonaje() {
+		return personaje;
+	}
+
 }

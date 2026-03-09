@@ -64,7 +64,7 @@ public class VentanaPrincipal extends JFrame {
 
         // Instanciamos un Panel de combate NUEVO cada vez que peleemos
         // (para que no te se te guarde la vida baja de un combate anterior)
-        PanelCombate combate = new PanelCombate();
+        PanelCombate combate = new PanelCombate(mapa.getPersonaje(), nombreBossEnemigo);
 
         // Lo "pegamos" en la baraja de tu CardLayout
         panelContenedor.add(combate, "Pantalla Combate");
@@ -84,14 +84,21 @@ public class VentanaPrincipal extends JFrame {
         PanelTienda delikia = new PanelTienda();
 
         panelContenedor.add(delikia, "Delik.IA");
-        gestorPantallas.show(panelContenedor,"Delik.IA");
+        gestorPantallas.show(panelContenedor, "Delik.IA");
 
         delikia.requestFocus();
     }
 
-    public void volverAMapaDesdeTienda() {  //Método "especial" para volver al mapa y que la musica siga fluyendo sin que se corte.
+    public void volverAMapaDesdeTienda() { // Método "especial" para volver al mapa y que la musica siga fluyendo sin
+                                           // que se corte.
         gestorPantallas.show(panelContenedor, "Pantalla Juego");
         mapa.requestFocus();
+    }
+
+    public void volverAMapaDesdeCombate() {
+        gestorPantallas.show(panelContenedor, "Pantalla Juego");
+        mapa.requestFocus();
+        mapa.reproducirMusica(); // Volvemos a poner la música pacifista
     }
 
 }

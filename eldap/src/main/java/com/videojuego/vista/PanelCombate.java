@@ -5,6 +5,8 @@ import javax.swing.*;
 import java.net.URL;
 import javax.sound.sampled.*;
 import com.videojuego.controlador.Boton;
+import com.videojuego.modelo.Enemigo;
+import com.videojuego.modelo.Personaje;
 
 public class PanelCombate extends JPanel {
     private Clip musicaCombate;
@@ -13,8 +15,15 @@ public class PanelCombate extends JPanel {
 
     private JButton botonAtacar;
     private JButton botonUsarObjeto;
+    private JButton botonSalir;
 
-    public PanelCombate() {
+    private Personaje jugador;
+    private Enemigo enemigo;
+
+    public PanelCombate(Personaje jugador, String nombreBossEnemigo) {
+
+        this.jugador = jugador;
+        this.enemigo = new Enemigo(nombreBossEnemigo);
 
         this.setLayout(new BorderLayout());
 
@@ -100,11 +109,74 @@ public class PanelCombate extends JPanel {
         botonAtacar.setBounds(xInicio, yFila1, ancho, alto);
         botonUsarObjeto.setBounds(xCentro, yFila2, ancho, alto);
 
-        botonAtacar.addActionListener(e -> areaTexto.setText("Has atacado"));
-        panel.add(botonAtacar);
+        botonAtacar.addActionListener(e -> {
 
-        botonUsarObjeto.addActionListener(e -> areaTexto.setText("Buscando en el inventario..."));
+            // 1. El jugador ataca al enemigo
+            this.jugador.atacar(this.enemigo);
+
+            // 2. Comprobamos si el enemigo ha muerto (¡HAS GANADO!)
+            if (!this.enemigo.estaVivo()) {
+                areaTexto.setText("¡Has derrotado a " + this.enemigo.getNombre() + "!\nHas ganado 100 monedas.");
+
+                // Bonificación (Ejemplo: damos 100 monedas)
+                this.jugador.setDinero(this.jugador.getDinero() + 100);
+
+                // Deshabilitamos los botones de pelea
+
+                botonAtacar.setEnabled(false);
+                botonUsarObjeto.setEnabled(false);
+
+                // Revelamos el botón para salir
+                botonSalir.setVisible(true);
+
+                // Salimos de la comprobación para evitar contraataque
+                return;
+            }
+
+            // 3. Si el enemigo sigue vivo, es su turno. Ataca al jugador.
+            this.enemigo.atacar(this.jugador);
+
+            // 4. Actualizamos el texto para mostrar cómo ha quedado la cosa
+            areaTexto.setText("Has atacado a " + this.enemigo.getNombre() + ". Le queda " + this.enemigo.getVidaActual()
+                    + " de vida.\n" +
+                    this.enemigo.getNombre() + " contraataca! Te queda " + this.jugador.getVidaActual() + " de vida.");
+
+            // 5. Comprobamos si ha ganado el enemigo (¡GAME OVER!)
+            if (!this.jugador.estaVivo()) {
+                areaTexto.setText("¡Has sido derrotado! Fin del juego...");
+                botonAtacar.setEnabled(false);
+                botonUsarObjeto.setEnabled(false);
+
+                // Aunque pierdas, tienes que poder salir (mandarlo a la portada después en la
+                // lógica)
+                botonSalir.setVisible(true);
+            }
+        });
+
+        panel.add(botonAtacar);
         panel.add(botonUsarObjeto);
+
+        // Calculamos otra posición
+        int yFila3 = yFila2 + alto + separacion;
+
+        // Creamos el botón (puedes usar la imagen que prefieras)
+        botonSalir = Boton.crearBotonImagen("/assets/imagenes/botonSalirEscape.png", ancho, alto);
+        botonSalir.setBounds(xInicio, yFila3, ancho, alto);
+
+        // ¡Magia aquí! Lo ocultamos nada más empezar el combate
+        botonSalir.setVisible(false);
+
+        botonSalir.addActionListener(e -> {
+            if (musicaCombate != null)
+                musicaCombate.stop();
+
+            // Hablamos con VentanaPrincipal para que nos saque de aquí
+            VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(PanelCombate.this);
+            ventana.volverAMapaDesdeCombate();
+        });
+
+        panel.add(botonSalir);
+        // Aquí finaliza el método configurarBotones
 
     }
 
