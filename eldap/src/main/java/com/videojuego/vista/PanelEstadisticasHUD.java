@@ -13,9 +13,8 @@ public class PanelEstadisticasHUD extends JPanel {
     private JLabel labelMonedas;
 
     public PanelEstadisticasHUD() {
-        this.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 5)); // Alineación horizontal con separación
-        this.setBackground(Color.decode("#123038"));
-        this.setBorder(BorderFactory.createLineBorder(Color.decode("#00CBD1"), 2));
+        this.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 10)); // Alineación horizontal con separación
+        setOpaque(false);
 
         // Inicializar los Labels con sus Iconos (Escalados a 30x30)
         labelVida = crearLabelConIcono("/assets/imagenes/Iconos/Vida.png", "0/0");

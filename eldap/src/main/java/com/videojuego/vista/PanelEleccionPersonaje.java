@@ -57,13 +57,13 @@ public class PanelEleccionPersonaje extends JPanel {
 
         // --- BOTONES DE SELECCIÓN ---
         // Asegúrate de tener estas imágenes en tu carpeta assets
-        JButton btnGuerrero = Boton.crearBotonImagen("/assets/imagenes/botonGuerrero.png", anchoBtn, altoBtn);
+        JButton btnGuerrero = Boton.crearBotonImagen("/assets/imagenes/BotonPablo.png", anchoBtn, altoBtn);
         btnGuerrero.setBounds(100, 100, anchoBtn, altoBtn);
 
-        JButton btnMago = Boton.crearBotonImagen("/assets/imagenes/botonMago.png", anchoBtn, altoBtn);
+        JButton btnMago = Boton.crearBotonImagen("/assets/imagenes/BotonAdri.png", anchoBtn, altoBtn);
         btnMago.setBounds(100, 220, anchoBtn, altoBtn);
 
-        JButton btnAsesino = Boton.crearBotonImagen("/assets/imagenes/botonAsesino.png", anchoBtn, altoBtn);
+        JButton btnAsesino = Boton.crearBotonImagen("/assets/imagenes/BotonDani.png", anchoBtn, altoBtn);
         btnAsesino.setBounds(100, 340, anchoBtn, altoBtn);
 
         // --- ACCIONES DE LOS BOTONES ---
@@ -93,7 +93,7 @@ public class PanelEleccionPersonaje extends JPanel {
         panelEstadisticas.add(areaEstadisticas);
 
         // --- BOTÓN CONFIRMAR Y JUGAR ---
-        JButton btnConfirmar = Boton.crearBotonImagen("/assets/imagenes/botonComenzar.png", 200, 120);
+        JButton btnConfirmar = Boton.crearBotonImagen("/assets/imagenes/botonComenzar.png", 200, 80);
         btnConfirmar.setBounds(575, 450, 250, 80);
 
         btnConfirmar.addActionListener(e -> {

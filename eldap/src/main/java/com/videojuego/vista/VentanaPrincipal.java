@@ -1,9 +1,15 @@
 package com.videojuego.vista;
 
+import java.awt.AlphaComposite;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.URL;
 import javax.swing.*;
 
@@ -11,28 +17,25 @@ import com.videojuego.modelo.Personaje;
 
 public class VentanaPrincipal extends JFrame {
 
-    // 1. Instanciamos TODAS las pantallas de tu juego
     public PanelPortada portada = new PanelPortada();
     public PanelMapa mapa = new PanelMapa();
     public PanelEleccionPersonaje seleccion = new PanelEleccionPersonaje();
 
-    // 2. Creamos el CardLayout y el panel que servirá como "mesa" para las cartas
     private CardLayout gestorPantallas = new CardLayout();
     private JPanel panelContenedor = new JPanel(gestorPantallas);
 
+    // --- VARIABLES PARA LA TRANSICIÓN ---
+    private JPanel panelTransicion;
+    private float opacidadTransicion = 0.0f;
+    private Timer timerTransicion;
+
     public VentanaPrincipal() {
-        this.setTitle("ELDAP"); // Título Ventana
+        this.setTitle("ELDAP");
 
         URL rutaContenedor = getClass().getResource("/assets/imagenes/Iconos/IconoJuego.png");
-
         if (rutaContenedor != null) {
-            // Usamos Toolkit para cargar la imagen en un formato que la Ventana entienda
-            // como Icono
             Image iconoPantalla = Toolkit.getDefaultToolkit().getImage(rutaContenedor);
-            // Se lo asignamos a este JFrame
             this.setIconImage(iconoPantalla);
-        } else {
-            System.err.println("No se ha encontrado el icono de la ventana.");
         }
 
         this.setSize(new Dimension(1280, 720));
@@ -40,90 +43,115 @@ public class VentanaPrincipal extends JFrame {
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // 3. Añadimos las pantallas al contenedor y les ponemos una "Etiqueta" (un
-        // nombre en texto)
         panelContenedor.add(portada, "Menu Principal");
         panelContenedor.add(mapa, "Pantalla Juego");
         panelContenedor.add(seleccion, "Seleccion de Personaje");
 
-        // 4. En lugar de añadir solo la portada, añadimos el contenedor a la ventana
         add(panelContenedor);
-        portada.reproducirMusica(); // Reproduzco su musica
+        
+        // --- CONFIGURACIÓN DEL PANEL CRISTAL (TRANSICIONES) ---
+        panelTransicion = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                // Aplicamos la opacidad actual al "pincel"
+                g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacidadTransicion));  //Controla la transparencia
+                g2d.setColor(Color.BLACK);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+            }
+        };
+        panelTransicion.setOpaque(false);
+        this.setGlassPane(panelTransicion); // Lo ponemos por encima de toda la ventana
+
+        portada.reproducirMusica();
     }
 
-    public void iniciarCombate(String nombreBossEnemigo) {
-        mapa.detenerMusica(); // Quitamos la musiquita pacifista del mapa
+    // --- TRANSICIÓN ---
+    // Recibe el nombre del panel al que vamos, y un "Runnable" (un bloque de código) para ejecutar cuando la pantalla esté 100% negra.
+    private void cambiarPanelConTransicion(String nombrePanelDestino, Runnable accionIntermedia) {
+        panelTransicion.setVisible(true); // Encendemos el cristal
+        
+        // El Timer se ejecuta cada 20 milisegundos para crear la animación
+        timerTransicion = new Timer(20, new ActionListener() {
+            boolean oscureciendo = true;
 
-        // Instanciamos un Panel de combate NUEVO cada vez que peleemos
-        // (para que no te se te guarde la vida baja de un combate anterior)
-        PanelCombate combate = new PanelCombate(mapa.getPersonaje(), nombreBossEnemigo);
-
-        // Lo "pegamos" en la baraja de tu CardLayout
-        panelContenedor.add(combate, "Pantalla Combate");
-
-        // Hacemos que se muestre en primer plano
-        gestorPantallas.show(panelContenedor, "Pantalla Combate");
-
-        // Le pasamos el foco a esa pantalla por si hiciera falta escuchar teclas
-        combate.requestFocus();
-
-        // TODO para después: modificar el PanelCombate para que se entere que se
-        // está peleando exactamente contra 'nombreBossEnemigo' e inicialice al Enemigo
-        // correcto.
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (oscureciendo) {
+                    opacidadTransicion = opacidadTransicion + 0.05f; // Aumentamos la oscuridad poco a poco
+                    if (opacidadTransicion >= 1.0f) {
+                        opacidadTransicion = 1.0f;
+                        oscureciendo = false; // Empieza a aclarar
+                        
+                        // --- ¡MOMENTO DE CAMBIAR LAS COSAS A OSCURAS! ---
+                        gestorPantallas.show(panelContenedor, nombrePanelDestino);
+                        if (accionIntermedia != null) {
+                            accionIntermedia.run(); // Reproducir música, dar foco, etc.
+                        }
+                    }
+                } else {
+                    opacidadTransicion -= 0.05f; // Quitamos oscuridad
+                    if (opacidadTransicion <= 0.0f) {
+                        opacidadTransicion = 0.0f;
+                        panelTransicion.setVisible(false); // Apagamos el cristal
+                        timerTransicion.stop(); // Terminamos la animación
+                    }
+                }
+                panelTransicion.repaint(); // Pedimos que redibuje el cristal con la nueva opacidad
+            }
+        });
+        timerTransicion.start();
     }
 
-    public void cambiarPanel() { // Metodo para cambiar el panel
-        portada.detenerMusica();
-        gestorPantallas.show(panelContenedor, "Pantalla Juego");
-
-        mapa.requestFocus();
-        mapa.reproducirMusica();
-    }
+    // --- MÉTODOS DE CAMBIO DE PANTALLA ACTUALIZADOS ---
 
     public void irEleccionPersonaje() {
-        gestorPantallas.show(panelContenedor, "Seleccion de Personaje");
+        cambiarPanelConTransicion("Seleccion de Personaje", null);
     }
 
     public void iniciarJuegoConPersonaje(Personaje elegido) {
-        // 1. Le pasamos el personaje elegido a tu clase PanelMapa
-        mapa.setPersonajeJugador(elegido);
-
-        // 2. Encendemos la música del mapa
-        mapa.reproducirMusica();
-
-        // 3. Cambiamos el CardLayout para que se vea el mapa
-        // (Asegúrate de que la etiqueta "PantallaJuego" coincide con cómo añadiste el
-        // mapa al contenedor)
-        gestorPantallas.show(panelContenedor, "Pantalla Juego");
-
-        // 4. Le damos el foco al mapa para que el jugador pueda moverse al instante
-        mapa.requestFocus();
+        cambiarPanelConTransicion("Pantalla Juego", () -> { //De esta manera, queda que voy a Pantalla Juego y que se ejecute: DetenerMusica, setPersonaje, reproducirMusica...
+            portada.detenerMusica();
+            mapa.setPersonajeJugador(elegido);
+            mapa.reproducirMusica();
+            mapa.requestFocus();
+        });
     }
 
-    public void abrirTienda(String tienda) {
-        PanelTienda delikia = new PanelTienda();
-        delikia.setJugadorActivo(mapa.getPersonaje()); // Pasamos el jugador a la tienda
-
-        panelContenedor.add(delikia, "Delik.IA");
-        gestorPantallas.show(panelContenedor, "Delik.IA");
-
-        delikia.requestFocus();
-    }
-
-    public void volverAMapaDesdeTienda() { // Método "especial" para volver al mapa y que la musica siga fluyendo sin
-                                           // que se corte.
-        gestorPantallas.show(panelContenedor, "Pantalla Juego");
-        mapa.requestFocus();
+    public void iniciarCombate(String nombreBossEnemigo) {
+        PanelCombate combate = new PanelCombate(mapa.getPersonaje(), nombreBossEnemigo);
+        panelContenedor.add(combate, "Pantalla Combate");
+        cambiarPanelConTransicion("Pantalla Combate", () -> {
+            mapa.detenerMusica();
+            
+            combate.requestFocus();
+        });
     }
 
     public void volverAMapaDesdeCombate() {
+        cambiarPanelConTransicion("Pantalla Juego", () -> {
+            mapa.requestFocus();
+            mapa.reproducirMusica();
+        });
+    }
+
+    public void cambiarAMenu() {
+        cambiarPanelConTransicion("Menu Principal", () -> {
+            portada.reproducirMusica();
+        });
+    }
+    
+    public void abrirTienda(String tienda, Personaje jugadorActivo) {
+        PanelTienda delikia = new PanelTienda();
+        delikia.setJugadorActivo(jugadorActivo); 
+        panelContenedor.add(delikia, "Delik.IA");
+        gestorPantallas.show(panelContenedor, "Delik.IA");
+        delikia.requestFocus();
+    }
+
+    public void volverAMapaDesdeTienda() { 
         gestorPantallas.show(panelContenedor, "Pantalla Juego");
         mapa.requestFocus();
-        mapa.reproducirMusica(); // Volvemos a poner la música pacifista
     }
-
-    public void cambiarAMenu() { // Metodo para cambiar a Menu
-        gestorPantallas.show(panelContenedor, "Menu Principal");
-    }
-
 }

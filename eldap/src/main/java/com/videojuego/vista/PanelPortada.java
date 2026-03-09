@@ -59,27 +59,23 @@ public class PanelPortada extends JPanel {
 
 	private void configurarBotones() {
 		// --- CREACIÓN DEL BOTÓN INICIO ---
-		JButton btnJugar = Boton.crearBotonImagen("/assets/imagenes/botonComenzar.png", 200, 120);
+		JButton btnJugar = Boton.crearBotonImagen("/assets/imagenes/botonComenzar.png", 200, 80);
 		btnJugar.setBounds(350, 550, 200, 120); // X, Y, Ancho, Alto
 
 		// --- ACCIÓN DEL BOTÓN JUGAR ---
 		btnJugar.addActionListener(e -> {
-			// Detenemos la música del menú principal
-			detenerMusica();
 
 			VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(this);
 
 			if (ventana != null) {
 				ventana.irEleccionPersonaje();
-				ventana.revalidate();
-				ventana.repaint();
 			}
 		});
 
 		this.add(btnJugar);
 
 		// --- CREACIÓN DEL BOTÓN SALIDA ---
-		JButton btnSalir = Boton.crearBotonImagen("/assets/imagenes/botonSalir.png", 200, 120);
+		JButton btnSalir = Boton.crearBotonImagen("/assets/imagenes/botonSalir.png", 200, 80);
 		btnSalir.setBounds(730, 550, 200, 120); // X, Y, Ancho, Alto
 
 		// --- ACCIÓN DEL BOTÓN SALIR ---

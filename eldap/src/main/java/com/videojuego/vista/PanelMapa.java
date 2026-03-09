@@ -72,7 +72,7 @@ public class PanelMapa extends JPanel {
 					} else if (cercaDeDelikia) {
 						// LOGICA DE TIENDA
 						VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(PanelMapa.this);
-						ventana.abrirTienda("Delik.IA");
+						ventana.abrirTienda("Delik.IA", personaje);
 					}
 				}
 			}
@@ -241,7 +241,7 @@ public class PanelMapa extends JPanel {
 			cercaDeDelikia = true;
 			g.setColor(Color.WHITE);
 			g.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14));
-			g.drawString("Pulsa E para comprar (Delikia)", personaje.getPosX() - 50, personaje.getPosY() - 15);
+			g.drawString("Pulsa E para comprar (Delik.IA)", personaje.getPosX() - 50, personaje.getPosY() - 15);
 		} else {
 			// Comprobar Bosses (solo si no estamos ya interactuando con la tienda)
 			for (BossEnMapa boss : bossesEnMapa) {

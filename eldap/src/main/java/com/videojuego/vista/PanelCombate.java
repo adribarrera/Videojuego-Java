@@ -231,7 +231,7 @@ public class PanelCombate extends JPanel {
             g.drawImage(imagenFondo.getImage(), 0, 0, getWidth(), getHeight(), this);
         }
         if (imagenEnemigo != null) {
-            g.drawImage(imagenEnemigo.getImage(), 820, 40, 270, 250, this);
+            g.drawImage(imagenEnemigo.getImage(), 820, 40, 300, 270, this);
         }
     }
 }
