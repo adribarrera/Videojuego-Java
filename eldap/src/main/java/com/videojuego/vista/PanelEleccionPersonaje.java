@@ -3,13 +3,14 @@ package com.videojuego.vista;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.net.URL;
+
+import javax.swing.BorderFactory; // Añadido para poder usar el borde
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-
-import java.net.URL;
 
 import com.videojuego.controlador.Boton;
 import com.videojuego.modelo.Personaje;
@@ -70,16 +71,29 @@ public class PanelEleccionPersonaje extends JPanel {
         btnMago.addActionListener(e -> seleccionarPersonaje(muestraMago));
         btnAsesino.addActionListener(e -> seleccionarPersonaje(muestraAsesino));
 
+        // --- NUEVO: PANEL DE ESTADÍSTICAS (ESTILO COMBATE) ---
+        JPanel panelEstadisticas = new JPanel();
+        panelEstadisticas.setBounds(500, 100, 400, 320); // Mismos bounds que tenía antes tu area de texto
+        panelEstadisticas.setBackground(Color.decode("#123038")); // Color de fondo sólido
+        panelEstadisticas.setLayout(null); // Para posicionar el texto libremente dentro de este panel
+        panelEstadisticas.setBorder(BorderFactory.createLineBorder(Color.decode("#00CBD1"), 3)); // El borde cyan
+
         // --- ÁREA DE ESTADÍSTICAS ---
         areaEstadisticas = new JTextArea("\n\n   Selecciona una clase para ver sus estadísticas...");
         areaEstadisticas.setFont(new Font("Monospaced", Font.BOLD, 18));
-        areaEstadisticas.setBackground(new Color(18, 48, 56, 200)); // Fondo oscuro semi-transparente
+        areaEstadisticas.setBackground(Color.decode("#123038")); // Mismo fondo que el panel para que se fusione
         areaEstadisticas.setForeground(Color.WHITE);
         areaEstadisticas.setEditable(false);
-        areaEstadisticas.setBounds(500, 100, 400, 320); // Posicionado a la derecha de los botones
+        areaEstadisticas.setLineWrap(true); // Añadido para que se comporte como en combate
+
+        // Posicionamos el texto dentro del panelEstadisticas (dejando un margen)
+        areaEstadisticas.setBounds(20, 20, 360, 280);
+
+        // Metemos el area de texto DENTRO de la caja que hace de borde
+        panelEstadisticas.add(areaEstadisticas);
 
         // --- BOTÓN CONFIRMAR Y JUGAR ---
-        JButton btnConfirmar = Boton.crearBotonImagen("/assets/imagenes/botonConfirmar.png", 250, 80);
+        JButton btnConfirmar = Boton.crearBotonImagen("/assets/imagenes/botonComenzar.png", 200, 120);
         btnConfirmar.setBounds(575, 450, 250, 80);
 
         btnConfirmar.addActionListener(e -> {
@@ -100,7 +114,9 @@ public class PanelEleccionPersonaje extends JPanel {
         this.add(btnGuerrero);
         this.add(btnMago);
         this.add(btnAsesino);
-        this.add(areaEstadisticas);
+
+        // Ahora añadimos el PANEL que contiene el texto, en lugar del texto suelto
+        this.add(panelEstadisticas);
         this.add(btnConfirmar);
 
     }
@@ -111,7 +127,7 @@ public class PanelEleccionPersonaje extends JPanel {
         // Formateamos el texto leyendo los getters de tu clase Personaje
         String texto = "\n" +
                 "  Clase: " + p.getClaseElegida().toUpperCase() + "\n" +
-                "  ====================================\n" +
+                "  ==============================\n" +
                 "  Vida Max:  " + p.getVidaMaxima() + "\n" +
                 "  Ataque:    " + p.getAtaque() + "\n" +
                 "  Defensa:   " + p.getDefensa() + "\n" +
