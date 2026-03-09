@@ -77,7 +77,7 @@ public class PanelMapa extends JPanel {
 		personaje = new Personaje("Pablo", "Guerrero");
 		personaje.setPosX(600);
 		personaje.setPosY(500);
-		
+
 		// 2. Cargar todos los sprites de animación
 		cargarSprites();
 
@@ -144,7 +144,7 @@ public class PanelMapa extends JPanel {
 				} else if (personaje.getClaseElegida().equalsIgnoreCase("asesino")) {
 					nombreArchivo = "/assets/imagenes/Sprites/Caminar/Dani/" + dir + "/Sprite" + i + ".png";
 				}
-				
+
 				URL url = getClass().getResource(nombreArchivo);
 				if (url != null) {
 					spritesPersonaje.put(dir + i, new ImageIcon(url));
@@ -339,6 +339,8 @@ public class PanelMapa extends JPanel {
 		// Lo posicionamos en el centro inicial
 		this.personaje.setPosX(600);
 		this.personaje.setPosY(500);
+
+		cargarSprites();
 
 		// ¡Súper Importante! Creamos el ControladorMovimiento AHORA, no en el
 		// constructor,
