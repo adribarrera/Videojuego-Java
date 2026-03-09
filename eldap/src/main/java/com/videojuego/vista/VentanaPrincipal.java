@@ -102,6 +102,7 @@ public class VentanaPrincipal extends JFrame {
 
     public void abrirTienda(String tienda) {
         PanelTienda delikia = new PanelTienda();
+        delikia.setJugadorActivo(mapa.getPersonaje()); // Pasamos el jugador a la tienda
 
         panelContenedor.add(delikia, "Delik.IA");
         gestorPantallas.show(panelContenedor, "Delik.IA");

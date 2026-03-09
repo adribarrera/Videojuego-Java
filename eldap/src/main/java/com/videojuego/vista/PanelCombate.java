@@ -20,6 +20,7 @@ public class PanelCombate extends JPanel {
     private Personaje jugador;
     private Enemigo enemigo;
     private ImageIcon imagenEnemigo;
+    private PanelEstadisticasHUD hudEstadisticas; // Añadimos el HUD
 
     public PanelCombate(Personaje jugador, String nombreBossEnemigo) {
 
@@ -34,6 +35,15 @@ public class PanelCombate extends JPanel {
 
         this.add(panelInferior, BorderLayout.SOUTH); // Añado el panelInferior a PanelCombate y lo pongo abajo.
 
+        // Añadimos el HUD en la zona superior, forzado a la izquierda usando un
+        // FlowLayout
+        JPanel panelSuperior = new JPanel(new FlowLayout(FlowLayout.LEFT, 30, 20));
+        panelSuperior.setOpaque(false); // Transparente para que el fondo de combate no se tape
+        hudEstadisticas = new PanelEstadisticasHUD();
+        hudEstadisticas.actualizarEstadisticas(jugador); // Se carga con los stats vivos del jugador al empezar
+        panelSuperior.add(hudEstadisticas);
+
+        this.add(panelSuperior, BorderLayout.NORTH); // Lo ponemos en el norte
     }
 
     // Metodo para cargar los recursos en el constructor
@@ -139,6 +149,11 @@ public class PanelCombate extends JPanel {
                 // Escalado de estadísticas tras derrotar al boss
                 this.jugador.mejorarAtributosAlDerrotarBoss();
 
+                // Actualizar el HUD al ganar
+                if (hudEstadisticas != null) {
+                    hudEstadisticas.actualizarEstadisticas(jugador);
+                }
+
                 // Deshabilitamos y ocultamos los botones de pelea
                 botonAtacar.setVisible(false);
                 botonUsarObjeto.setVisible(false);
@@ -152,6 +167,11 @@ public class PanelCombate extends JPanel {
 
             // 3. Si el enemigo sigue vivo, es su turno. Ataca al jugador.
             this.enemigo.atacar(this.jugador);
+
+            // Actualizamos el HUD porque el jugador ha recibido daño
+            if (hudEstadisticas != null) {
+                hudEstadisticas.actualizarEstadisticas(jugador);
+            }
 
             // 4. Actualizamos el texto para mostrar cómo ha quedado la cosa
             areaTexto.setText("Has atacado a " + this.enemigo.getNombre() + ". Le queda " + this.enemigo.getVidaActual()

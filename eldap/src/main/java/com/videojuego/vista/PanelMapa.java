@@ -44,9 +44,17 @@ public class PanelMapa extends JPanel {
 	private Rectangle areaInteraccionDelikia; // Area para interactuar
 	private boolean cercaDeDelikia = false;
 
+	// Panel HUD de estadísticas
+	private PanelEstadisticasHUD hudEstadisticas;
+
 	public PanelMapa() {
 		colisiones = new Colisiones();
 		setLayout(null); // para poner botones encima
+
+		// Inicializamos el HUD y lo colocamos arriba a la izquierda
+		hudEstadisticas = new PanelEstadisticasHUD();
+		hudEstadisticas.setBounds(30, 20, 560, 45); // X cambiado a 30
+		this.add(hudEstadisticas);
 
 		addKeyListener(new KeyAdapter() {
 			@Override
@@ -183,6 +191,11 @@ public class PanelMapa extends JPanel {
 		super.paint(g); // Importante llamar al super.paint(g) al inicio
 		if (imagenMapa != null) {
 			g.drawImage(imagenMapa.getImage(), 0, 0, getWidth(), getHeight(), null);
+		}
+
+		// Actualizamos el HUD en cada pintado si hay personaje
+		if (personaje != null && hudEstadisticas != null) {
+			hudEstadisticas.actualizarEstadisticas(personaje);
 		}
 		// DIBUJAR AL PERSONAJE ANIMADO
 		if (spritesPersonaje != null) {
