@@ -98,13 +98,18 @@ public class PanelEleccionPersonaje extends JPanel {
 
         btnConfirmar.addActionListener(e -> {
             if (personajeSeleccionado != null) {
+                // Instanciamos un Personaje NUEVO basado en la elección para resetear stats si
+                // venimos de morir
+                Personaje nuevoPersonaje = new Personaje(personajeSeleccionado.getNombre(),
+                        personajeSeleccionado.getClaseElegida());
+
                 // Obtenemos la ventana principal
                 VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(this);
 
-                System.out.println("¡Has elegido jugar como: " + personajeSeleccionado.getClaseElegida() + "!");
+                System.out.println("¡Has elegido jugar como: " + nuevoPersonaje.getClaseElegida() + "!");
 
                 // Usamos el método puente que acabamos de crear en VentanaPrincipal
-                ventana.iniciarJuegoConPersonaje(personajeSeleccionado);
+                ventana.iniciarJuegoConPersonaje(nuevoPersonaje);
 
             } else {
                 areaEstadisticas.setText("\n\n  ¡ERROR!\n  Debes seleccionar un personaje primero.");

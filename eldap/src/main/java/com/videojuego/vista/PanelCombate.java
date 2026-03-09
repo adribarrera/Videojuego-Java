@@ -130,15 +130,18 @@ public class PanelCombate extends JPanel {
 
             // 2. Comprobamos si el enemigo ha muerto (¡HAS GANADO!)
             if (!this.enemigo.estaVivo()) {
-                areaTexto.setText("¡Has derrotado a " + this.enemigo.getNombre() + "!\nHas ganado 100 monedas.");
+                areaTexto.setText("¡Has derrotado a " + this.enemigo.getNombre()
+                        + "!\nHas ganado 100 monedas.\n¡Tus estadísticas han aumentado y te has curado!");
 
                 // Bonificación (Ejemplo: damos 100 monedas)
                 this.jugador.setDinero(this.jugador.getDinero() + 100);
 
-                // Deshabilitamos los botones de pelea
+                // Escalado de estadísticas tras derrotar al boss
+                this.jugador.mejorarAtributosAlDerrotarBoss();
 
-                botonAtacar.setEnabled(false);
-                botonUsarObjeto.setEnabled(false);
+                // Deshabilitamos y ocultamos los botones de pelea
+                botonAtacar.setVisible(false);
+                botonUsarObjeto.setVisible(false);
 
                 // Revelamos el botón para salir
                 botonSalir.setVisible(true);
@@ -158,8 +161,8 @@ public class PanelCombate extends JPanel {
             // 5. Comprobamos si ha ganado el enemigo (¡GAME OVER!)
             if (!this.jugador.estaVivo()) {
                 areaTexto.setText("¡Has sido derrotado! Fin del juego...");
-                botonAtacar.setEnabled(false);
-                botonUsarObjeto.setEnabled(false);
+                botonAtacar.setVisible(false);
+                botonUsarObjeto.setVisible(false);
 
                 // Aunque pierdas, tienes que poder salir (mandarlo a la portada después en la
                 // lógica)
@@ -170,12 +173,12 @@ public class PanelCombate extends JPanel {
         panel.add(botonAtacar);
         panel.add(botonUsarObjeto);
 
-        // Calculamos otra posición
-        int yFila3 = yFila2 + alto + separacion;
+        // Calculamos la posición del botón de Salir (A la derecha de Atacar)
+        int xSalir = xInicio + ancho + separacion;
 
         // Creamos el botón (puedes usar la imagen que prefieras)
         botonSalir = Boton.crearBotonImagen("/assets/imagenes/botonSalirEscape.png", ancho, alto);
-        botonSalir.setBounds(xInicio, yFila3, ancho, alto);
+        botonSalir.setBounds(xSalir, yFila1, ancho, alto);
 
         // ¡Magia aquí! Lo ocultamos nada más empezar el combate
         botonSalir.setVisible(false);
@@ -186,7 +189,14 @@ public class PanelCombate extends JPanel {
 
             // Hablamos con VentanaPrincipal para que nos saque de aquí
             VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(PanelCombate.this);
-            ventana.volverAMapaDesdeCombate();
+
+            if (!this.jugador.estaVivo()) {
+                // GAME OVER: Volver al menú de inicio
+                ventana.cambiarAMenu();
+            } else {
+                // GANAR: Volver al mapa normal
+                ventana.volverAMapaDesdeCombate();
+            }
         });
 
         panel.add(botonSalir);

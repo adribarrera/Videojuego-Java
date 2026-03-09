@@ -36,28 +36,28 @@ public class Personaje implements Entidad {
             case "guerrero":
                 this.vidaMaxima = 250;
                 this.ataque = 250;
-                this.defensa = 150;
+                this.defensa = 40; // 40% de reducción de daño
                 this.probCritico = 0.10;
                 this.velocidad = 5;
                 break;
             case "mago":
                 this.vidaMaxima = 200;
                 this.ataque = 300;
-                this.defensa = 100;
+                this.defensa = 15; // 15% de reducción de daño
                 this.probCritico = 0.30;
                 this.velocidad = 10;
                 break;
             case "asesino":
                 this.vidaMaxima = 250;
                 this.ataque = 350;
-                this.defensa = 75;
+                this.defensa = 25; // 25% de reducción de daño
                 this.probCritico = 0.50;
                 this.velocidad = 15;
                 break;
             default:
                 this.vidaMaxima = 100;
                 this.ataque = 100;
-                this.defensa = 50;
+                this.defensa = 10;
                 this.probCritico = 0.10;
                 this.velocidad = 5;
                 break;
@@ -109,7 +109,9 @@ public class Personaje implements Entidad {
             }
         }
         System.out.println(
-                this.nombre + " el " + this.claseElegida + " ataca haciendo " + this.ataque + " puntos de daño.");
+                this.nombre + " el " + this.claseElegida + " ataca haciendo " + danioFinal + " puntos de daño.");
+
+        enemigo.recibirDanio(danioFinal);
     }
 
     // Métodos comunes para todos los personajes
@@ -117,9 +119,14 @@ public class Personaje implements Entidad {
     @Override
     public void recibirDanio(int cantidad) {
 
-        // La defensa reduce el daño recibido
+        // La defensa reduce el daño recibido de forma porcentual (Ej: 30 de defensa =
+        // 30% menos daño)
+        double porcentajeReduccion = Math.min(this.defensa, 90) / 100.0; // Cap a 90% para nunca ser invencible
+        int danioReducido = (int) (cantidad * (1.0 - porcentajeReduccion));
 
-        int danioReal = Math.max(0, cantidad - this.defensa);
+        // Siempre nos harán al menos 1 punto de daño si nos golpean de forma normal
+        int danioReal = Math.max(1, danioReducido);
+
         this.vidaActual = this.vidaActual - danioReal;
 
         System.out.println(nombre + " recibe " + danioReal + " puntos de daño.");
@@ -128,6 +135,22 @@ public class Personaje implements Entidad {
             this.vidaActual = 0;
             System.out.println(nombre + " ha sido derrotado...");
         }
+    }
+
+    // --- ESCALADO DE ESTADÍSTICAS ---
+    public void mejorarAtributosAlDerrotarBoss() {
+        this.vidaMaxima += 100;
+        this.ataque += 50;
+
+        // La defensa la subimos muy poco a poco porque escala porcentualmente
+        if (this.defensa < 85) {
+            this.defensa += 5;
+        }
+
+        // Curación total al derrotar al jefe
+        this.vidaActual = this.vidaMaxima;
+
+        System.out.println(nombre + " se hace más fuerte. ¡Sus estadísticas han aumentado!");
     }
 
     @Override

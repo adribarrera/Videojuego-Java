@@ -26,6 +26,9 @@ public class Boton {
             boton.setBorderPainted(false);
             boton.setFocusPainted(false);
             boton.setOpaque(false);
+
+            // Si el botón se deshabilita, evitamos que pinte un fondo raro
+            boton.setDisabledIcon(new ImageIcon(imgEscalada));
         } else {
             System.err.println("Error: No se encontró la imagen del botón: " + rutaImagen);
             // Mantenemos tu lógica de seguridad original por si la imagen falla
