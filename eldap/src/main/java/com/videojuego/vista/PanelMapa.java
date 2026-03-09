@@ -6,8 +6,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -19,7 +17,6 @@ import java.awt.Rectangle;
 
 import com.videojuego.modelo.Personaje;
 import com.videojuego.modelo.BossEnMapa;
-import com.videojuego.controlador.Boton;
 import com.videojuego.controlador.Colisiones; // Importamos nuestra nueva clase
 import com.videojuego.controlador.ControladorMovimiento;
 
@@ -166,50 +163,16 @@ public class PanelMapa extends JPanel {
 
 		VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(this);
 
-		JDialog dialogoPausa = new JDialog(ventana, "Pausa", true);
-		dialogoPausa.setSize(400, 250);
-		dialogoPausa.setLocationRelativeTo(ventana); // Centrado
-		dialogoPausa.setUndecorated(true); // Quitamos barra superior
-		dialogoPausa.setBackground(new Color(0, 0, 0, 0));// Fondo transparente
-		dialogoPausa.setLayout(null); // Layout Libre
-
-		JPanel panelFondoPausa = new JPanel() {
-			ImageIcon iconFondo = new ImageIcon(getClass().getResource("/assets/imagenes/panelEscape.png"));
-
-			@Override
-			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				if (iconFondo != null) {
-					// Dibuja la imagen ajustada al tamaño del panel
-					g.drawImage(iconFondo.getImage(), 0, 0, getWidth(), getHeight(), this);
-				}
-			}
-		};
-		panelFondoPausa.setOpaque(false); // Para que sea transparente
-		panelFondoPausa.setLayout(null); // Layout Libre
-
-		// --- BOTON SEGUIR ---
-		JButton btnSeguir = Boton.crearBotonImagen("/assets/imagenes/botonContinuarEscape.png", 200, 60);
-		btnSeguir.setBounds(100, 60, 200, 60); // X, Y, Ancho, Alto
-
-		btnSeguir.addActionListener(e -> {
-			dialogoPausa.dispose();
+		// Instanciamos nuestro nuevo menú reutilizable.
+		// Le pasamos la ventana, y lo que tiene que hacer cuando le demos a "Continuar"
+		MenuEscape menu = new MenuEscape(ventana, () -> {
 			juegoPausado = false;
 			this.requestFocus();
 		});
 
-		// --- BOTON SALIR DEL JUEGO ---
-		JButton btnSalirPausa = Boton.crearBotonImagen("/assets/imagenes/botonSalirEscape.png", 200, 60);
-		btnSalirPausa.setBounds(100, 130, 200, 60); // X, Y, Ancho, Alto
-
-		btnSalirPausa.addActionListener(e -> System.exit(0));
-
-		// Añadimos al panel y mostramos
-		panelFondoPausa.add(btnSeguir);
-		panelFondoPausa.add(btnSalirPausa);
-
-		dialogoPausa.setContentPane(panelFondoPausa);
-		dialogoPausa.setVisible(true);
+		// Lo hacemos visible (al ser modal, el código se pausa aquí hasta que el menú
+		// se cierre)
+		menu.setVisible(true);
 	}
 
 	// Metodo para dibujar la imagen del personaje
