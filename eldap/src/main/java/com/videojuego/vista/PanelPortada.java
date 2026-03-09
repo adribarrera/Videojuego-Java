@@ -70,7 +70,7 @@ public class PanelPortada extends JPanel {
 			VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(this);
 
 			if (ventana != null) {
-				ventana.cambiarPanel();
+				ventana.irEleccionPersonaje();
 				ventana.revalidate();
 				ventana.repaint();
 			}

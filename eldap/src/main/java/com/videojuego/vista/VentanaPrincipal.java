@@ -7,11 +7,14 @@ import java.awt.Toolkit;
 import java.net.URL;
 import javax.swing.*;
 
+import com.videojuego.modelo.Personaje;
+
 public class VentanaPrincipal extends JFrame {
 
     // 1. Instanciamos TODAS las pantallas de tu juego
     public PanelPortada portada = new PanelPortada();
     public PanelMapa mapa = new PanelMapa();
+    public PanelEleccionPersonaje seleccion = new PanelEleccionPersonaje();
 
     // 2. Creamos el CardLayout y el panel que servirá como "mesa" para las cartas
     private CardLayout gestorPantallas = new CardLayout();
@@ -41,22 +44,11 @@ public class VentanaPrincipal extends JFrame {
         // nombre en texto)
         panelContenedor.add(portada, "Menu Principal");
         panelContenedor.add(mapa, "Pantalla Juego");
+        panelContenedor.add(seleccion, "Seleccion de Personaje");
 
         // 4. En lugar de añadir solo la portada, añadimos el contenedor a la ventana
         add(panelContenedor);
         portada.reproducirMusica(); // Reproduzco su musica
-    }
-
-    public void cambiarPanel() { // Metodo para cambiar el panel
-        portada.detenerMusica();
-        gestorPantallas.show(panelContenedor, "Pantalla Juego");
-
-        mapa.requestFocus();
-        mapa.reproducirMusica();
-    }
-
-    public void cambiarAMenu() { // Metodo para cambiar a Menu
-        gestorPantallas.show(panelContenedor, "Menu Principal");
     }
 
     public void iniciarCombate(String nombreBossEnemigo) {
@@ -80,6 +72,34 @@ public class VentanaPrincipal extends JFrame {
         // correcto.
     }
 
+    public void cambiarPanel() { // Metodo para cambiar el panel
+        portada.detenerMusica();
+        gestorPantallas.show(panelContenedor, "Pantalla Juego");
+
+        mapa.requestFocus();
+        mapa.reproducirMusica();
+    }
+
+    public void irEleccionPersonaje() {
+        gestorPantallas.show(panelContenedor, "Seleccion de Personaje");
+    }
+
+    public void iniciarJuegoConPersonaje(Personaje elegido) {
+        // 1. Le pasamos el personaje elegido a tu clase PanelMapa
+        mapa.setPersonajeJugador(elegido);
+
+        // 2. Encendemos la música del mapa
+        mapa.reproducirMusica();
+
+        // 3. Cambiamos el CardLayout para que se vea el mapa
+        // (Asegúrate de que la etiqueta "PantallaJuego" coincide con cómo añadiste el
+        // mapa al contenedor)
+        gestorPantallas.show(panelContenedor, "Pantalla Juego");
+
+        // 4. Le damos el foco al mapa para que el jugador pueda moverse al instante
+        mapa.requestFocus();
+    }
+
     public void abrirTienda(String tienda) {
         PanelTienda delikia = new PanelTienda();
 
@@ -99,6 +119,10 @@ public class VentanaPrincipal extends JFrame {
         gestorPantallas.show(panelContenedor, "Pantalla Juego");
         mapa.requestFocus();
         mapa.reproducirMusica(); // Volvemos a poner la música pacifista
+    }
+
+    public void cambiarAMenu() { // Metodo para cambiar a Menu
+        gestorPantallas.show(panelContenedor, "Menu Principal");
     }
 
 }

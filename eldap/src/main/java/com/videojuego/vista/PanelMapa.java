@@ -326,4 +326,20 @@ public class PanelMapa extends JPanel {
 		return personaje;
 	}
 
+	public void setPersonajeJugador(Personaje nuevoPersonaje) {
+		this.personaje = nuevoPersonaje;
+
+		// Lo posicionamos en el centro inicial
+		this.personaje.setPosX(600);
+		this.personaje.setPosY(500);
+
+		// ¡Súper Importante! Creamos el ControladorMovimiento AHORA, no en el
+		// constructor,
+		// porque antes el personaje era null.
+		new ControladorMovimiento(this.personaje, this, colisiones, 70, 70);
+
+		// Refrescamos la pantalla para dibujarlo
+		repaint();
+	}
+
 }

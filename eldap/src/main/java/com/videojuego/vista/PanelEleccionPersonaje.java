@@ -7,6 +7,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+
 import java.net.URL;
 
 import com.videojuego.controlador.Boton;
@@ -82,13 +84,14 @@ public class PanelEleccionPersonaje extends JPanel {
 
         btnConfirmar.addActionListener(e -> {
             if (personajeSeleccionado != null) {
-                // 1. Obtenemos la ventana principal
-                // VentanaPrincipal ventana = (VentanaPrincipal)
-                // SwingUtilities.getWindowAncestor(this);
+                // Obtenemos la ventana principal
+                VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(this);
 
-                // 2. Aquí le pasaremos el personaje al mapa y cambiaremos de pantalla
                 System.out.println("¡Has elegido jugar como: " + personajeSeleccionado.getClaseElegida() + "!");
-                // ventana.cambiarAlMapa(personajeSeleccionado);
+
+                // Usamos el método puente que acabamos de crear en VentanaPrincipal
+                ventana.iniciarJuegoConPersonaje(personajeSeleccionado);
+
             } else {
                 areaEstadisticas.setText("\n\n  ¡ERROR!\n  Debes seleccionar un personaje primero.");
             }
