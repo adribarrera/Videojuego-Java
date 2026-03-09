@@ -19,6 +19,7 @@ public class PanelCombate extends JPanel {
 
     private Personaje jugador;
     private Enemigo enemigo;
+    private ImageIcon imagenEnemigo;
 
     public PanelCombate(Personaje jugador, String nombreBossEnemigo) {
 
@@ -61,6 +62,19 @@ public class PanelCombate extends JPanel {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        // Imagen del enemigo
+
+        String nombreBossEnemigo = this.enemigo.getNombre();
+        nombreBossEnemigo = nombreBossEnemigo.replace(" ", "");
+
+        String rutaImagenEnemigo = "/assets/imagenes/" + nombreBossEnemigo + ".png";
+        URL urlEnemigo = getClass().getResource(rutaImagenEnemigo);
+        if (urlEnemigo != null) {
+            imagenEnemigo = new ImageIcon(urlEnemigo);
+        } else {
+            System.err.println("ERROR: No se encuentra la imagen del enemigo: " + rutaImagenEnemigo);
         }
     }
 
@@ -185,6 +199,9 @@ public class PanelCombate extends JPanel {
         super.paintComponent(g);
         if (imagenFondo != null) {
             g.drawImage(imagenFondo.getImage(), 0, 0, getWidth(), getHeight(), this);
+        }
+        if (imagenEnemigo != null) {
+            g.drawImage(imagenEnemigo.getImage(), 820, 40, 270, 250, this);
         }
     }
 }
