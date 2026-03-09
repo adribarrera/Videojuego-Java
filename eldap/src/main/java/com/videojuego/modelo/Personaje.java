@@ -34,31 +34,31 @@ public class Personaje implements Entidad {
 
         switch (claseElegida.toLowerCase()) {
             case "guerrero":
-                this.vidaMaxima = 250;
-                this.ataque = 250;
+                this.vidaMaxima = 500;
+                this.ataque = 75;
                 this.defensa = 40; // 40% de reducción de daño
-                this.probCritico = 0.10;
+                this.probCritico = 0.05;
                 this.velocidad = 5;
                 break;
             case "mago":
-                this.vidaMaxima = 200;
-                this.ataque = 300;
+                this.vidaMaxima = 350;
+                this.ataque = 120;
                 this.defensa = 15; // 15% de reducción de daño
-                this.probCritico = 0.30;
-                this.velocidad = 10;
+                this.probCritico = 0.10;
+                this.velocidad = 7;
                 break;
             case "asesino":
-                this.vidaMaxima = 250;
-                this.ataque = 350;
+                this.vidaMaxima = 400;
+                this.ataque = 90;
                 this.defensa = 25; // 25% de reducción de daño
-                this.probCritico = 0.50;
-                this.velocidad = 15;
+                this.probCritico = 0.20;
+                this.velocidad = 10;
                 break;
             default:
-                this.vidaMaxima = 100;
-                this.ataque = 100;
-                this.defensa = 10;
-                this.probCritico = 0.10;
+                this.vidaMaxima = 500;
+                this.ataque = 75;
+                this.defensa = 40;
+                this.probCritico = 0.05;
                 this.velocidad = 5;
                 break;
         }
@@ -139,8 +139,8 @@ public class Personaje implements Entidad {
 
     // --- ESCALADO DE ESTADÍSTICAS ---
     public void mejorarAtributosAlDerrotarBoss() {
-        this.vidaMaxima += 100;
-        this.ataque += 50;
+        this.vidaMaxima += 200;
+        this.ataque += 35;
 
         // La defensa la subimos muy poco a poco porque escala porcentualmente
         if (this.defensa < 85) {
