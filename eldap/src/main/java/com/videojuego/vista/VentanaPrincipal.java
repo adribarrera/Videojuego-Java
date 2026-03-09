@@ -23,7 +23,7 @@ public class VentanaPrincipal extends JFrame {
     public VentanaPrincipal() {
         this.setTitle("ELDAP"); // Título Ventana
 
-        URL rutaContenedor = getClass().getResource("/assets/imagenes/Pablete.png");
+        URL rutaContenedor = getClass().getResource("/assets/imagenes/Iconos/IconoJuego.png");
 
         if (rutaContenedor != null) {
             // Usamos Toolkit para cargar la imagen en un formato que la Ventana entienda
