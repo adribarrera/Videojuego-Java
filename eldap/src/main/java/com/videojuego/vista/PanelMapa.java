@@ -77,7 +77,7 @@ public class PanelMapa extends JPanel {
 		personaje = new Personaje("Pablo", "Guerrero");
 		personaje.setPosX(600);
 		personaje.setPosY(500);
-
+		
 		// 2. Cargar todos los sprites de animación
 		cargarSprites();
 
@@ -136,8 +136,15 @@ public class PanelMapa extends JPanel {
 		for (String dir : direcciones) {
 			for (int i = 1; i <= 4; i++) {
 
-				String nombreArchivo = "/assets/imagenes/Sprites/Caminar/Pablo/" + dir + "/Sprite" + i + ".png";
-
+				String nombreArchivo = "";
+				if (personaje.getClaseElegida().equalsIgnoreCase("guerrero")) {
+					nombreArchivo = "/assets/imagenes/Sprites/Caminar/Pablo/" + dir + "/Sprite" + i + ".png";
+				} else if (personaje.getClaseElegida().equalsIgnoreCase("mago")) {
+					nombreArchivo = "/assets/imagenes/Sprites/Caminar/Adri/" + dir + "/Sprite" + i + ".png";
+				} else if (personaje.getClaseElegida().equalsIgnoreCase("asesino")) {
+					nombreArchivo = "/assets/imagenes/Sprites/Caminar/Dani/" + dir + "/Sprite" + i + ".png";
+				}
+				
 				URL url = getClass().getResource(nombreArchivo);
 				if (url != null) {
 					spritesPersonaje.put(dir + i, new ImageIcon(url));
