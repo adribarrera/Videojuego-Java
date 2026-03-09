@@ -1,14 +1,20 @@
 package com.videojuego.vista;
-
 import java.awt.*;
 import javax.swing.*;
 import java.net.URL;
 import javax.sound.sampled.*;
 import com.videojuego.controlador.Boton;
+import com.videojuego.modelo.Personaje;
+import com.videojuego.modelo.Tienda;
+
+
 
 public class PanelTienda extends JPanel {
     private Clip musicaFondo;
     private ImageIcon imagenFondo;
+
+    private Tienda maquinaDelikia = new Tienda("Delik.IA");
+    private Personaje jugadorActivo;
 
     private JPanel panelMenu;
     private JTextArea areaDescripcion;
@@ -23,6 +29,10 @@ public class PanelTienda extends JPanel {
         this.setLayout(null);
         cargarRecursos();
         configurarMenuDerecho();
+    }
+
+    public void setJugadorActivo(Personaje jugador) {
+        this.jugadorActivo = jugador;
     }
 
     public void cargarRecursos() {
@@ -163,16 +173,21 @@ public class PanelTienda extends JPanel {
        
         itemSeleccionado=indice;
         //Texto temporal hasta que tengamos la clase Tienda
-        areaDescripcion.setText("Has seleccionado el Item " + (indice + 1) + ". Descripción del objeto. Precio: X");
+        areaDescripcion.setText(maquinaDelikia.obtenerInfoItems(indice));    
     }
     
     private void accionComprar() {
         if (itemSeleccionado == -1) {
             areaDescripcion.setText("¡Primero debes seleccionar un objeto!");
-            return;     //Corto aqui para que no pueda comprar un objeto "fantasma"
+            return; 
         }
-        //Texto temporal hasta que tengamos la clase Tienda
-        areaDescripcion.setText("¡Has comprado el Item " + (itemSeleccionado + 1) + "!");
+        if (jugadorActivo == null) {
+            areaDescripcion.setText("Error: No se ha detectado ningún jugador.");
+            return;
+        }
+        
+        String resultadoCompra = maquinaDelikia.procesarCompra(itemSeleccionado, jugadorActivo);
+        areaDescripcion.setText(resultadoCompra);
     }
 
     private void accionVolver() {
