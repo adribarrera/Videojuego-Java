@@ -30,7 +30,7 @@ public class PanelMapa extends JPanel {
 	private int frameActual = 1;
 
 	private Personaje personaje;
-	private boolean modoDebug = true;
+	private boolean modoDebug = false;
 	private Colisiones colisiones;
 	private boolean juegoPausado = false;
 

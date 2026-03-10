@@ -46,6 +46,18 @@ public class Colisiones {
         muros.add(new Rectangle(990, 450, 45, 70)); // Pared inferior esquina derecha
 
         muros.add(new Rectangle(920, 40, 60, 50)); // Portal
+
+        muros.add(new Rectangle(115, 355, 20, 60)); // Soraya
+
+        muros.add(new Rectangle(940, 145, 20, 60)); // Sergio
+
+        muros.add(new Rectangle(365, 135, 20, 60)); // Juan Carlos
+
+        muros.add(new Rectangle(1130, 355, 20, 60)); // Jessica
+
+        muros.add(new Rectangle(675, 320, 35, 25)); // Tienda
+
+        
     }
 
     public boolean verificarMovimiento(int x, int y, int ancho, int alto) {
