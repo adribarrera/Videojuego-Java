@@ -22,6 +22,7 @@ public class PanelCombate extends JPanel {
     private Personaje jugador;
     private Enemigo enemigo;
     private ImageIcon imagenEnemigo;
+    private ImageIcon imagenJugador;
     private PanelEstadisticasHUD hudEstadisticas; // Añadimos el HUD
 
     // -- Animaciones --
@@ -101,6 +102,32 @@ public class PanelCombate extends JPanel {
             imagenEnemigo = new ImageIcon(urlEnemigo);
         } else {
             System.err.println("ERROR: No se encuentra la imagen del enemigo: " + rutaImagenEnemigo);
+        }
+
+        // Imagen del jugador dependiendo de su clase
+        String claseElegida = this.jugador.getClaseElegida();
+        String nombreImgJugador = "Pablo"; // Por defecto guerrero
+
+        if (claseElegida != null) {
+            switch (claseElegida.toLowerCase()) {
+                case "guerrero":
+                    nombreImgJugador = "Pablo";
+                    break;
+                case "mago":
+                    nombreImgJugador = "Adri";
+                    break;
+                case "asesino":
+                    nombreImgJugador = "Dani";
+                    break;
+            }
+        }
+
+        String rutaImagenJugador = "/assets/imagenes/Sprites/Combate/" + nombreImgJugador + ".png";
+        URL urlJugador = getClass().getResource(rutaImagenJugador);
+        if (urlJugador != null) {
+            imagenJugador = new ImageIcon(urlJugador);
+        } else {
+            System.err.println("ERROR: No se encuentra la imagen del jugador: " + rutaImagenJugador);
         }
     }
 
@@ -477,6 +504,13 @@ public class PanelCombate extends JPanel {
         if (imagenFondo != null) {
             g2d.drawImage(imagenFondo.getImage(), 0, 0, getWidth(), getHeight(), this);
         }
+
+        // Dibujamos al jugador primero para que quede bien posicionado sobre el disco
+        // rúnico izquierdo
+        if (imagenJugador != null) {
+            g2d.drawImage(imagenJugador.getImage(), 160, 140, 500, 500, this);
+        }
+
         if (imagenEnemigo != null) {
             g2d.drawImage(imagenEnemigo.getImage(), 820 + offsetXEnemigo, 40 + offsetYEnemigo, 300, 270, this);
 
