@@ -12,7 +12,7 @@ public class Enemigo implements Entidad {
 
         switch (tipoEnemigo.toLowerCase()) {
             case "soraya":
-                this.vidaMaxima = 2000;
+                this.vidaMaxima = 1500;
                 this.ataque = 120;
                 this.probCritico = 0.15;
                 break;
@@ -22,12 +22,12 @@ public class Enemigo implements Entidad {
                 this.probCritico = 0.05;
                 break;
             case "juancarlos":
-                this.vidaMaxima = 1200;
-                this.ataque = 80;
+                this.vidaMaxima = 1000;
+                this.ataque = 100;
                 this.probCritico = 0.05;
                 break;
             case "sergio":
-                this.vidaMaxima = 4000;
+                this.vidaMaxima = 3000;
                 this.ataque = 200;
                 this.probCritico = 0.10;
                 break;

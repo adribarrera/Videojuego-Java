@@ -139,12 +139,12 @@ public class Personaje implements Entidad {
 
     // --- ESCALADO DE ESTADÍSTICAS ---
     public void mejorarAtributosAlDerrotarBoss() {
-        this.vidaMaxima += 200;
-        this.ataque += 35;
+        this.vidaMaxima += 100;
+        this.ataque += 20;
 
         // La defensa la subimos muy poco a poco porque escala porcentualmente
         if (this.defensa < 85) {
-            this.defensa += 5;
+            this.defensa += 2;
         }
 
         // Curación total al derrotar al jefe

@@ -73,24 +73,22 @@ public class Item {
                 break;
 
             case DANIO_PORCENTAJE_ENEMIGO: // M.L.P.E
-                System.out.println("Abres la mantequilla y le lanzas tropezones al enemigo. Inflinges un "
-                        + this.modificador + "% de daño de la vida del enemigo.");
-                int danioMantequilla = (enemigo.getVidaMaxima() * this.modificador) / 100;
-                enemigo.recibirDanioDirecto(danioMantequilla);
+                System.out.println("Abres la mantequilla y le lanzas tropezones al enemigo.");
+                System.out.println("Infliges " + this.modificador + " puntos de daño fijo de puro enfoscamiento.");
+                enemigo.recibirDanioDirecto(this.modificador);
                 break;
 
             case DUPLICAR_DEFENSA: // GABARDINA DE SERGIO
-                System.out.println(
-                        "Te pones la gabardina de Sergio. Ahora si que no hay quien te pare. Duplica el valor de tu escudo.");
-                jugador.aumentarDefensa(jugador.getDefensa());
+                System.out.println("Te pones la gabardina de Sergio. Ahora si que no hay quien te pare.");
+                System.out.println("Tu escudo aumenta un " + this.modificador + "% extra permanentemente.");
+                jugador.aumentarDefensa(this.modificador);
                 break;
 
             case ROBAR_VIDA: // EL CHATTO
-                System.out.println("El Chatto le roba las ideas al enemigo. Le quitas al enemigo el " + this.modificador
-                        + "% de su vida y te la curas con ella");
-                int vidaRobada = (enemigo.getVidaMaxima() * this.modificador) / 100;
-                enemigo.recibirDanioDirecto(vidaRobada);
-                jugador.curar(vidaRobada);
+                System.out.println("El Chatto le roba las ideas al enemigo. Le quitas al enemigo " + this.modificador
+                        + " puntos de su vida y te curas con ella");
+                enemigo.recibirDanioDirecto(this.modificador);
+                jugador.curar(this.modificador);
                 break;
 
             case CRITICO_SEGURO: // GAFAS DE SORAYA
@@ -100,12 +98,12 @@ public class Item {
                 jugador.setProbCriticoActual(1.0); // 100% de probabilidad
                 break;
 
-            case TRAMPA_GUANTON: // GUANTÓN DE JUAN CARLOS
-                System.out.println("¡Usas el Guantón de Juan Carlos! Esas manos han vivido mucho...");
-                System.out.println("Infliges un 200% de daño asegurado a... ");
+            case TRAMPA_GUANTON: // GUANTÓN DE JUAN CARLOS O VIRUS DE LINUX
+                System.out.println("¡Usas el objeto que acabas de comprar!");
+                System.out.println("Infliges 1000 de daño asegurado al enemigo, de una.");
+                enemigo.recibirDanioDirecto(1000);
                 System.out.println("¡OH NO, ESPERA!");
-                System.out.println("¡Te la ha liado! ¡La mano te ha metido el guantón a ti!");
-                // El jugador se come un % de su propia vida máxima (Ej: 20%)
+                System.out.println("¡Esto tenía truco! ¡El rebote te hace daño a ti!");
                 int danioGuanton = (jugador.getVidaMaxima() * this.modificador) / 100;
                 jugador.recibirDanioDirecto(danioGuanton);
                 break;
