@@ -1,8 +1,7 @@
 package com.videojuego.modelo;
 
 public interface Entidad {
-
-    void atacar(Entidad objetivo);
+    boolean atacar(Entidad objetivo);
 
     void recibirDanio(int cantidad);
 

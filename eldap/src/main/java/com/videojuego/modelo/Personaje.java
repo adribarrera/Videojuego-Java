@@ -97,12 +97,16 @@ public class Personaje implements Entidad {
     // --- MÉTODOS DE COMBATE ---
 
     @Override
-    public void atacar(Entidad enemigo) {
-        int danioFinal = this.ataque;
+    public boolean atacar(Entidad enemigo) {
+        // RNG: el ataque variará entre un 85% y un 115% de su valor base
+        double multiplicadorRNG = 0.85 + (Math.random() * 0.30);
+        int danioFinal = (int) (this.ataque * multiplicadorRNG);
+        boolean esCritico = false;
 
         if (Math.random() < this.probCriticoActual) {
             System.out.println(nombre + " asesta un GOLPE CRÍTICO");
             danioFinal = danioFinal * 2;
+            esCritico = true;
 
             if (this.probCriticoActual >= 1.0) { // Si se han usado las gafas de Soraya, hay que devolverlo a lo normal
                 this.probCriticoActual = this.probCritico; // Se resetea
@@ -112,6 +116,7 @@ public class Personaje implements Entidad {
                 this.nombre + " el " + this.claseElegida + " ataca haciendo " + danioFinal + " puntos de daño.");
 
         enemigo.recibirDanio(danioFinal);
+        return esCritico;
     }
 
     // Métodos comunes para todos los personajes
@@ -139,18 +144,24 @@ public class Personaje implements Entidad {
 
     // --- ESCALADO DE ESTADÍSTICAS ---
     public void mejorarAtributosAlDerrotarBoss() {
-        this.vidaMaxima += 100;
-        this.ataque += 20;
+        // RNG para el aumento de estadísticas
+        int gananciaVida = 80 + (int) (Math.random() * 41); // Entre 80 y 120
+        int gananciaAtaque = 15 + (int) (Math.random() * 11); // Entre 15 y 25
+
+        this.vidaMaxima += gananciaVida;
+        this.ataque += gananciaAtaque;
 
         // La defensa la subimos muy poco a poco porque escala porcentualmente
         if (this.defensa < 85) {
-            this.defensa += 2;
+            int gananciaDefensa = 1 + (int) (Math.random() * 3); // Entre 1 y 3
+            this.defensa += gananciaDefensa;
         }
 
         // Curación total al derrotar al jefe
         this.vidaActual = this.vidaMaxima;
 
         System.out.println(nombre + " se hace más fuerte. ¡Sus estadísticas han aumentado!");
+        System.out.println("Vida +" + gananciaVida + " | Ataque +" + gananciaAtaque);
     }
 
     @Override

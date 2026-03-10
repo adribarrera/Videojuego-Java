@@ -41,15 +41,20 @@ public class Enemigo implements Entidad {
     }
 
     @Override
-    public void atacar(Entidad objetivo) {
-        int danioFinal = this.ataque;
+    public boolean atacar(Entidad objetivo) {
+        // RNG: el ataque variará entre un 85% y un 115% de su valor base
+        double multiplicadorRNG = 0.85 + (Math.random() * 0.30);
+        int danioFinal = (int) (this.ataque * multiplicadorRNG);
+        boolean esCritico = false;
 
         if (Math.random() < this.probCritico) {
             System.out.println(nombre + " asesta un GOLPE CRÍTICO");
             danioFinal = danioFinal * 2;
+            esCritico = true;
         }
 
         objetivo.recibirDanio(danioFinal);
+        return esCritico;
     }
 
     @Override
