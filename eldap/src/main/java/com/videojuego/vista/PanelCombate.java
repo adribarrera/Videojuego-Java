@@ -24,6 +24,12 @@ public class PanelCombate extends JPanel {
     private ImageIcon imagenEnemigo;
     private PanelEstadisticasHUD hudEstadisticas; // Añadimos el HUD
 
+    // -- Animaciones --
+    private int offsetXEnemigo = 0;
+    private int offsetYEnemigo = 0;
+    private int offsetXPantalla = 0;
+    private int offsetYPantalla = 0;
+
     // --- Componentes para Objetos ---
     private JButton[] botonesItems = new JButton[2];
     private int itemSeleccionadoCombate = -1;
@@ -174,62 +180,17 @@ public class PanelCombate extends JPanel {
 
         // --- Fin botones Submenú ---
 
+        // Acción al atacar (Ahora enlazada a la función de turnos temporizados)
         botonAtacar.addActionListener(e -> {
-
-            // 1. El jugador ataca al enemigo
-            this.jugador.atacar(this.enemigo);
-            repaint(); // Actualizar interfaz (barra de vida del enemigo)
-
-            // 2. Comprobamos si el enemigo ha muerto (¡HAS GANADO!)
-            if (!this.enemigo.estaVivo()) {
-                areaTexto.setText("¡Has derrotado a " + this.enemigo.getNombre()
-                        + "!\nHas ganado 100 monedas.\n¡Tus estadísticas han aumentado y te has curado!");
-
-                // Bonificación (Ejemplo: damos 100 monedas)
-                this.jugador.setDinero(this.jugador.getDinero() + 100);
-
-                // Escalado de estadísticas tras derrotar al boss
-                this.jugador.mejorarAtributosAlDerrotarBoss();
-
-                // Actualizar el HUD al ganar
-                if (hudEstadisticas != null) {
-                    hudEstadisticas.actualizarEstadisticas(jugador);
+            ejecutarTurnoJugador(() -> {
+                int vidaEnemigoAntes = enemigo.getVidaActual();
+                this.jugador.atacar(this.enemigo);
+                if (enemigo.getVidaActual() < vidaEnemigoAntes) {
+                    animarVibracionEnemigo();
                 }
-
-                // Deshabilitamos y ocultamos los botones de pelea
-                botonAtacar.setVisible(false);
-                botonUsarObjeto.setVisible(false);
-
-                // Revelamos el botón para salir
-                botonSalir.setVisible(true);
-
-                // Salimos de la comprobación para evitar contraataque
-                return;
-            }
-
-            // 3. Si el enemigo sigue vivo, es su turno. Ataca al jugador.
-            this.enemigo.atacar(this.jugador);
-
-            // Actualizamos el HUD porque el jugador ha recibido daño
-            if (hudEstadisticas != null) {
-                hudEstadisticas.actualizarEstadisticas(jugador);
-            }
-
-            // 4. Actualizamos el texto para mostrar cómo ha quedado la cosa
-            areaTexto.setText("Has atacado a " + this.enemigo.getNombre() + ". Le queda " + this.enemigo.getVidaActual()
-                    + " de vida.\n" +
-                    this.enemigo.getNombre() + " contraataca! Te queda " + this.jugador.getVidaActual() + " de vida.");
-
-            // 5. Comprobamos si ha ganado el enemigo (¡GAME OVER!)
-            if (!this.jugador.estaVivo()) {
-                areaTexto.setText("¡Has sido derrotado! Fin del juego...");
-                botonAtacar.setVisible(false);
-                botonUsarObjeto.setVisible(false);
-
-                // Aunque pierdas, tienes que poder salir (mandarlo a la portada después en la
-                // lógica)
-                botonSalir.setVisible(true);
-            }
+                areaTexto.setText("Has atacado a " + this.enemigo.getNombre() + ". Le queda "
+                        + this.enemigo.getVidaActual() + " de vida.");
+            });
         });
 
         // Acción al pulsar el botón principal Usar Objeto
@@ -339,45 +300,18 @@ public class PanelCombate extends JPanel {
         }
 
         Item obj = jugador.getInventario().get(itemSeleccionadoCombate);
-        jugador.usarItem(itemSeleccionadoCombate, enemigo); // Efecto aplicado internamente
 
-        cerrarMenuObjeto(true);
+        ejecutarTurnoJugador(() -> {
+            int vidaEnemigoAntes = enemigo.getVidaActual();
+            jugador.usarItem(itemSeleccionadoCombate, enemigo); // Efecto aplicado internamente
 
-        // Actualizamos UI
-        repaint();
-        if (hudEstadisticas != null)
-            hudEstadisticas.actualizarEstadisticas(jugador);
+            cerrarMenuObjeto(true);
 
-        // Si el objeto mató al boss (ej: Virus Linux)
-        if (!enemigo.estaVivo()) {
-            areaTexto.setText("¡Has usado " + obj.getNombre() + "!\n¡Has derrotado a " + enemigo.getNombre() + "!");
-            jugador.setDinero(jugador.getDinero() + 100);
-            jugador.mejorarAtributosAlDerrotarBoss();
-            if (hudEstadisticas != null)
-                hudEstadisticas.actualizarEstadisticas(jugador);
-
-            botonAtacar.setVisible(false);
-            botonUsarObjeto.setVisible(false);
-            botonSalir.setVisible(true);
-            return;
-        }
-
-        // Si sobrevive, contraataca
-        enemigo.atacar(jugador);
-        if (hudEstadisticas != null)
-            hudEstadisticas.actualizarEstadisticas(jugador);
-
-        areaTexto.setText("Has usado " + obj.getNombre() + ".\n" +
-                enemigo.getNombre() + " contraataca! Te queda " + jugador.getVidaActual() + " de vida.");
-
-        // Check si morimos por el ataque enemigo (o suicidio de Guantón y consecuente
-        // remate)
-        if (!jugador.estaVivo()) {
-            areaTexto.setText("¡Has sido derrotado! Fin del juego...");
-            botonAtacar.setVisible(false);
-            botonUsarObjeto.setVisible(false);
-            botonSalir.setVisible(true);
-        }
+            if (enemigo.getVidaActual() < vidaEnemigoAntes) {
+                animarVibracionEnemigo();
+            }
+            areaTexto.setText("Has usado " + obj.getNombre() + ".");
+        });
     }
 
     private void cancelarMenuObjeto() {
@@ -399,40 +333,179 @@ public class PanelCombate extends JPanel {
         }
     }
 
+    // --- ANIMACIONES Y FLUJO DE TURNOS ---
+    private void animarVibracionEnemigo() {
+        Timer timerVibracion = new Timer(50, null);
+        timerVibracion.addActionListener(new java.awt.event.ActionListener() {
+            int ticks = 0;
+
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                if (ticks >= 8) {
+                    offsetXEnemigo = 0;
+                    offsetYEnemigo = 0;
+                    repaint();
+                    timerVibracion.stop();
+                } else {
+                    offsetXEnemigo = (int) (Math.random() * 20 - 10);
+                    offsetYEnemigo = (int) (Math.random() * 20 - 10);
+                    repaint();
+                    ticks++;
+                }
+            }
+        });
+        timerVibracion.start();
+    }
+
+    private void animarVibracionPantalla() {
+        Timer timerVibracion = new Timer(50, null);
+        timerVibracion.addActionListener(new java.awt.event.ActionListener() {
+            int ticks = 0;
+
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                if (ticks >= 8) {
+                    offsetXPantalla = 0;
+                    offsetYPantalla = 0;
+                    repaint();
+                    timerVibracion.stop();
+                } else {
+                    offsetXPantalla = (int) (Math.random() * 20 - 10);
+                    offsetYPantalla = (int) (Math.random() * 20 - 10);
+                    repaint();
+                    ticks++;
+                }
+            }
+        });
+        timerVibracion.start();
+    }
+
+    private void ejecutarTurnoJugador(Runnable accionJugador) {
+        // Bloqueamos botones para evitar spam
+        botonAtacar.setEnabled(false);
+        botonUsarObjeto.setEnabled(false);
+        botonConfirmarObjeto.setEnabled(false);
+        botonCancelarObjeto.setEnabled(false);
+        for (JButton b : botonesItems) {
+            if (b != null)
+                b.setEnabled(false);
+        }
+
+        // Ejecutamos la accion del jugador
+        accionJugador.run();
+
+        // Actualizamos UI
+        repaint();
+        if (hudEstadisticas != null)
+            hudEstadisticas.actualizarEstadisticas(jugador);
+
+        // Verificamos suicidio instántaneo (como con el Guantón)
+        if (!this.jugador.estaVivo()) {
+            animarVibracionPantalla();
+            areaTexto.setText(areaTexto.getText() + "\n¡Has sido derrotado! Fin del juego...");
+            cerrarMenuObjeto(false);
+            botonAtacar.setVisible(false);
+            botonUsarObjeto.setVisible(false);
+            botonSalir.setVisible(true);
+            botonSalir.setEnabled(true);
+            return;
+        }
+
+        // Verificamos si el enemigo murió
+        if (!this.enemigo.estaVivo()) {
+            areaTexto.setText(areaTexto.getText() + "\n¡Has derrotado a " + this.enemigo.getNombre()
+                    + "!\nHas ganado 100 monedas.\n¡Tus estadísticas han aumentado y te has curado!");
+
+            this.jugador.setDinero(this.jugador.getDinero() + 100);
+            this.jugador.mejorarAtributosAlDerrotarBoss();
+            if (hudEstadisticas != null)
+                hudEstadisticas.actualizarEstadisticas(jugador);
+
+            cerrarMenuObjeto(false);
+            botonAtacar.setVisible(false);
+            botonUsarObjeto.setVisible(false);
+            botonSalir.setVisible(true);
+            botonSalir.setEnabled(true);
+            return;
+        }
+
+        // Si sobrevive, programar contraataque del enemigo
+        Timer timerEnemigo = new Timer(1500, e -> {
+            int vidaJugadorAntes = this.jugador.getVidaActual();
+            this.enemigo.atacar(this.jugador);
+
+            if (this.jugador.getVidaActual() < vidaJugadorAntes) {
+                animarVibracionPantalla();
+            }
+
+            if (hudEstadisticas != null)
+                hudEstadisticas.actualizarEstadisticas(jugador);
+
+            areaTexto.setText(areaTexto.getText() + "\n" +
+                    this.enemigo.getNombre() + " contraataca! Te queda " + this.jugador.getVidaActual() + " de vida.");
+
+            if (!this.jugador.estaVivo()) {
+                areaTexto.setText(areaTexto.getText() + "\n¡Has sido derrotado! Fin del juego...");
+                cerrarMenuObjeto(false);
+                botonAtacar.setVisible(false);
+                botonUsarObjeto.setVisible(false);
+                botonSalir.setVisible(true);
+                botonSalir.setEnabled(true);
+            } else {
+                // Rehabilitamos de nuevo
+                botonAtacar.setEnabled(true);
+                botonUsarObjeto.setEnabled(true);
+                botonConfirmarObjeto.setEnabled(true);
+                botonCancelarObjeto.setEnabled(true);
+                for (JButton b : botonesItems) {
+                    if (b != null)
+                        b.setEnabled(true);
+                }
+            }
+        });
+        timerEnemigo.setRepeats(false);
+        timerEnemigo.start();
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.translate(offsetXPantalla, offsetYPantalla);
+
         if (imagenFondo != null) {
-            g.drawImage(imagenFondo.getImage(), 0, 0, getWidth(), getHeight(), this);
+            g2d.drawImage(imagenFondo.getImage(), 0, 0, getWidth(), getHeight(), this);
         }
         if (imagenEnemigo != null) {
-            g.drawImage(imagenEnemigo.getImage(), 820, 40, 300, 270, this);
+            g2d.drawImage(imagenEnemigo.getImage(), 820 + offsetXEnemigo, 40 + offsetYEnemigo, 300, 270, this);
 
             // Dibujar barra de vida del enemigo
             if (enemigo != null && enemigo.getVidaMaxima() > 0) {
                 int barraWidth = 200;
                 int barraHeight = 20;
-                int xBarra = 820 + (300 - barraWidth) / 2;
-                int yBarra = 40 + 270 + 10;
+                int xBarra = 820 + offsetXEnemigo + (300 - barraWidth) / 2;
+                int yBarra = 40 + offsetYEnemigo + 270 + 10;
 
-                g.setColor(Color.DARK_GRAY);
-                g.fillRect(xBarra, yBarra, barraWidth, barraHeight);
+                g2d.setColor(Color.DARK_GRAY);
+                g2d.fillRect(xBarra, yBarra, barraWidth, barraHeight);
 
                 int vidaActual = Math.max(0, enemigo.getVidaActual());
                 int widthVida = (int) ((double) vidaActual / enemigo.getVidaMaxima() * barraWidth);
-                g.setColor(Color.RED);
-                g.fillRect(xBarra, yBarra, widthVida, barraHeight);
+                g2d.setColor(Color.RED);
+                g2d.fillRect(xBarra, yBarra, widthVida, barraHeight);
 
-                g.setColor(Color.WHITE);
-                g.drawRect(xBarra, yBarra, barraWidth, barraHeight);
+                g2d.setColor(Color.WHITE);
+                g2d.drawRect(xBarra, yBarra, barraWidth, barraHeight);
 
-                g.setFont(new Font("Monospaced", Font.BOLD, 14));
+                g2d.setFont(new Font("Monospaced", Font.BOLD, 14));
                 String textoVida = vidaActual + " / " + enemigo.getVidaMaxima();
-                FontMetrics fm = g.getFontMetrics();
+                FontMetrics fm = g2d.getFontMetrics();
                 int textX = xBarra + (barraWidth - fm.stringWidth(textoVida)) / 2;
                 int textY = yBarra + ((barraHeight - fm.getHeight()) / 2) + fm.getAscent();
-                g.drawString(textoVida, textX, textY);
+                g2d.drawString(textoVida, textX, textY);
             }
         }
+        g2d.dispose();
     }
 }
