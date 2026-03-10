@@ -41,10 +41,21 @@ public class ControladorMovimiento {
         inputMap.put(KeyStroke.getKeyStroke("A"), "moverIzquierda");
         inputMap.put(KeyStroke.getKeyStroke("D"), "moverDerecha");
 
+        inputMap.put(KeyStroke.getKeyStroke("released W"), "soltarTecla");
+        inputMap.put(KeyStroke.getKeyStroke("released S"), "soltarTecla");
+        inputMap.put(KeyStroke.getKeyStroke("released A"), "soltarTecla");
+        inputMap.put(KeyStroke.getKeyStroke("released D"), "soltarTecla");
+
         actionMap.put("moverArriba", new AccionMovimiento("w"));
         actionMap.put("moverAbajo", new AccionMovimiento("s"));
         actionMap.put("moverIzquierda", new AccionMovimiento("a"));
         actionMap.put("moverDerecha", new AccionMovimiento("d"));
+        actionMap.put("soltarTecla", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                UtilidadesAudio.resetCooldownPasos();
+            }
+        });
     }
 
     private class AccionMovimiento extends AbstractAction {
