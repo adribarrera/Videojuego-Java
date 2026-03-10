@@ -106,6 +106,7 @@ public class ControladorMovimiento {
                 if (ticAnimacion > 4) {
                     ticAnimacion = 1;
                 }
+                UtilidadesAudio.reproducirSonido("pasos.wav");
                 panel.actualizarAnimacion(dir, ticAnimacion);
             }
         }

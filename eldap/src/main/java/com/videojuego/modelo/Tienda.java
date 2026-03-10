@@ -56,6 +56,7 @@ public class Tienda {
 
         if (sePuedeGuardar) {
             comprador.setDinero(comprador.getDinero() - objeto.getPrecio());
+            com.videojuego.controlador.UtilidadesAudio.reproducirSonido("compra.wav");
             return "Compra realizada." + objeto.getNombre() + " añadido a la mochila";
         } else {
             return "No puedes llevar más objetos en el inventario. Tienes la mochila llena (Máx "

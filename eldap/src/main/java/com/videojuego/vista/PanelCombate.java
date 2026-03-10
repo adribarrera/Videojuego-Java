@@ -77,7 +77,12 @@ public class PanelCombate extends JPanel {
 
         // Música
         try {
-            URL urlMusica = getClass().getResource("/assets/audio/minibossInst.wav");
+            URL urlMusica;
+            if (this.enemigo.getNombre().equalsIgnoreCase("Sergio")) {
+                urlMusica = getClass().getResource("/assets/audio/bossfinalInst.wav");
+            } else {
+                urlMusica = getClass().getResource("/assets/audio/minibossInst.wav");
+            }
 
             if (urlMusica != null) {
                 AudioInputStream audioInst = AudioSystem.getAudioInputStream(urlMusica);
@@ -85,7 +90,7 @@ public class PanelCombate extends JPanel {
                 musicaCombate.open(audioInst);
                 musicaCombate.loop(Clip.LOOP_CONTINUOUSLY);
             } else {
-                System.err.println("ERROR: No se encuentra minibossInst.wav");
+                System.err.println("ERROR: No se encuentra música de combate");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -210,8 +215,25 @@ public class PanelCombate extends JPanel {
         // Acción al atacar (Ahora enlazada a la función de turnos temporizados)
         botonAtacar.addActionListener(e -> {
             ejecutarTurnoJugador(() -> {
+
+                String clase = this.jugador.getClaseElegida().toLowerCase();
+                if (clase.equals("guerrero")) {
+                    com.videojuego.controlador.UtilidadesAudio.reproducirSonido("espadaPablo.wav");
+                } else if (clase.equals("mago")) {
+                    com.videojuego.controlador.UtilidadesAudio.reproducirSonido("magiaAdrian.wav");
+                } else if (clase.equals("asesino")) {
+                    com.videojuego.controlador.UtilidadesAudio.reproducirSonido("cuchillaDani.wav");
+                }
+
                 int vidaEnemigoAntes = enemigo.getVidaActual();
                 boolean critico = this.jugador.atacar(this.enemigo);
+
+                if (critico) {
+                    com.videojuego.controlador.UtilidadesAudio.reproducirSonido("critico.wav");
+                } else if (enemigo.getVidaActual() < vidaEnemigoAntes) {
+                    com.videojuego.controlador.UtilidadesAudio.reproducirSonido("hit.wav");
+                }
+
                 if (enemigo.getVidaActual() < vidaEnemigoAntes) {
                     animarVibracionEnemigo();
                 }
@@ -247,8 +269,11 @@ public class PanelCombate extends JPanel {
             if (!this.jugador.estaVivo()) {
                 // GAME OVER: Volver al menú de inicio
                 ventana.cambiarAMenu();
+            } else if (!this.enemigo.estaVivo()) {
+                // GANAR: Volver al mapa normal y eliminar al boss
+                ventana.volverAMapaYEliminarBoss(this.enemigo.getNombre());
             } else {
-                // GANAR: Volver al mapa normal
+                // VOLVER ESCAPE: Volver al mapa normal
                 ventana.volverAMapaDesdeCombate();
             }
         });
@@ -465,8 +490,16 @@ public class PanelCombate extends JPanel {
 
         // Si sobrevive, programar contraataque del enemigo
         Timer timerEnemigo = new Timer(1500, e -> {
+            com.videojuego.controlador.UtilidadesAudio.reproducirSonido("golpeEnemigo.wav");
+
             int vidaJugadorAntes = this.jugador.getVidaActual();
             boolean criticoEnemigo = this.enemigo.atacar(this.jugador);
+
+            if (criticoEnemigo) {
+                com.videojuego.controlador.UtilidadesAudio.reproducirSonido("critico.wav");
+            } else if (this.jugador.getVidaActual() < vidaJugadorAntes) {
+                com.videojuego.controlador.UtilidadesAudio.reproducirSonido("hit.wav");
+            }
 
             if (this.jugador.getVidaActual() < vidaJugadorAntes) {
                 animarVibracionPantalla();

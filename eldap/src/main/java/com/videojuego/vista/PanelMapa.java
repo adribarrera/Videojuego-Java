@@ -349,4 +349,24 @@ public class PanelMapa extends JPanel {
 		repaint();
 	}
 
+	public void eliminarBoss(String nombreBoss) {
+		if (bossesEnMapa != null) {
+			bossesEnMapa.removeIf(boss -> boss.nombre.equalsIgnoreCase(nombreBoss));
+		}
+
+		if (colisiones != null) {
+			colisiones.eliminarMuroBoss(nombreBoss);
+		}
+
+		bossCercano = null;
+		repaint();
+	}
+
+	public void reiniciarMapa() {
+		colisiones = new Colisiones();
+		inicializarBosses();
+		bossCercano = null;
+		cercaDeDelikia = false;
+		repaint();
+	}
 }

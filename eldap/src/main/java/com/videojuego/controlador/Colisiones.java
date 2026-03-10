@@ -57,7 +57,6 @@ public class Colisiones {
 
         muros.add(new Rectangle(675, 320, 35, 25)); // Tienda
 
-        
     }
 
     public boolean verificarMovimiento(int x, int y, int ancho, int alto) {
@@ -75,5 +74,28 @@ public class Colisiones {
     // modo Debug
     public ArrayList<Rectangle> getMuros() {
         return muros;
+    }
+
+    public void eliminarMuroBoss(String nombreBoss) {
+        Rectangle muroAEliminar = null;
+        switch (nombreBoss.toLowerCase()) {
+            case "soraya":
+                muroAEliminar = new Rectangle(115, 355, 20, 60);
+                break;
+            case "sergio":
+                muroAEliminar = new Rectangle(940, 145, 20, 60);
+                break;
+            case "juan carlos":
+            case "juancarlos":
+                muroAEliminar = new Rectangle(365, 135, 20, 60);
+                break;
+            case "jessica":
+                muroAEliminar = new Rectangle(1130, 355, 20, 60);
+                break;
+        }
+
+        if (muroAEliminar != null) {
+            muros.remove(muroAEliminar);
+        }
     }
 }

@@ -48,7 +48,7 @@ public class VentanaPrincipal extends JFrame {
         panelContenedor.add(seleccion, "Seleccion de Personaje");
 
         add(panelContenedor);
-        
+
         // --- CONFIGURACIÓN DEL PANEL CRISTAL (TRANSICIONES) ---
         panelTransicion = new JPanel() {
             @Override
@@ -56,7 +56,9 @@ public class VentanaPrincipal extends JFrame {
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g;
                 // Aplicamos la opacidad actual al "pincel"
-                g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacidadTransicion));  //Controla la transparencia
+                g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacidadTransicion)); // Controla
+                                                                                                           // la
+                                                                                                           // transparencia
                 g2d.setColor(Color.BLACK);
                 g2d.fillRect(0, 0, getWidth(), getHeight());
             }
@@ -68,10 +70,11 @@ public class VentanaPrincipal extends JFrame {
     }
 
     // --- TRANSICIÓN ---
-    // Recibe el nombre del panel al que vamos, y un "Runnable" (un bloque de código) para ejecutar cuando la pantalla esté 100% negra.
+    // Recibe el nombre del panel al que vamos, y un "Runnable" (un bloque de
+    // código) para ejecutar cuando la pantalla esté 100% negra.
     private void cambiarPanelConTransicion(String nombrePanelDestino, Runnable accionIntermedia) {
         panelTransicion.setVisible(true); // Encendemos el cristal
-        
+
         // El Timer se ejecuta cada 20 milisegundos para crear la animación
         timerTransicion = new Timer(20, new ActionListener() {
             boolean oscureciendo = true;
@@ -83,7 +86,7 @@ public class VentanaPrincipal extends JFrame {
                     if (opacidadTransicion >= 1.0f) {
                         opacidadTransicion = 1.0f;
                         oscureciendo = false; // Empieza a aclarar
-                        
+
                         // --- ¡MOMENTO DE CAMBIAR LAS COSAS A OSCURAS! ---
                         gestorPantallas.show(panelContenedor, nombrePanelDestino);
                         if (accionIntermedia != null) {
@@ -111,7 +114,8 @@ public class VentanaPrincipal extends JFrame {
     }
 
     public void iniciarJuegoConPersonaje(Personaje elegido) {
-        cambiarPanelConTransicion("Pantalla Juego", () -> { //De esta manera, queda que voy a Pantalla Juego y que se ejecute: DetenerMusica, setPersonaje, reproducirMusica...
+        cambiarPanelConTransicion("Pantalla Juego", () -> { // De esta manera, queda que voy a Pantalla Juego y que se
+                                                            // ejecute: DetenerMusica, setPersonaje, reproducirMusica...
             portada.detenerMusica();
             mapa.setPersonajeJugador(elegido);
             mapa.reproducirMusica();
@@ -124,7 +128,7 @@ public class VentanaPrincipal extends JFrame {
         panelContenedor.add(combate, "Pantalla Combate");
         cambiarPanelConTransicion("Pantalla Combate", () -> {
             mapa.detenerMusica();
-            
+
             combate.requestFocus();
         });
     }
@@ -136,21 +140,30 @@ public class VentanaPrincipal extends JFrame {
         });
     }
 
+    public void volverAMapaYEliminarBoss(String nombreBoss) {
+        mapa.eliminarBoss(nombreBoss);
+        cambiarPanelConTransicion("Pantalla Juego", () -> {
+            mapa.requestFocus();
+            mapa.reproducirMusica();
+        });
+    }
+
     public void cambiarAMenu() {
         cambiarPanelConTransicion("Menu Principal", () -> {
+            mapa.reiniciarMapa();
             portada.reproducirMusica();
         });
     }
-    
+
     public void abrirTienda(String tienda, Personaje jugadorActivo) {
         PanelTienda delikia = new PanelTienda();
-        delikia.setJugadorActivo(jugadorActivo); 
+        delikia.setJugadorActivo(jugadorActivo);
         panelContenedor.add(delikia, "Delik.IA");
         gestorPantallas.show(panelContenedor, "Delik.IA");
         delikia.requestFocus();
     }
 
-    public void volverAMapaDesdeTienda() { 
+    public void volverAMapaDesdeTienda() {
         gestorPantallas.show(panelContenedor, "Pantalla Juego");
         mapa.requestFocus();
     }
