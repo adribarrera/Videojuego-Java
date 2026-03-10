@@ -1,6 +1,8 @@
 package com.videojuego.vista;
 
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import javax.swing.*;
 import java.net.URL;
 import javax.sound.sampled.*;
@@ -39,6 +41,9 @@ public class PanelCombate extends JPanel {
     private JButton botonConfirmarObjeto;
     private JButton botonCancelarObjeto;
 
+    // --- Variable de Volumen ---
+    private int volumenActual = 100;
+
     public PanelCombate(Personaje jugador, String nombreBossEnemigo) {
 
         this.jugador = jugador;
@@ -61,6 +66,29 @@ public class PanelCombate extends JPanel {
         panelSuperior.add(hudEstadisticas);
 
         this.add(panelSuperior, BorderLayout.NORTH); // Lo ponemos en el norte
+
+        // --- CONFIGURACIÓN PARA EL MENÚ DE PAUSA ---
+        this.setFocusable(true); // Vital para que el panel escuche el teclado
+        this.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(PanelCombate.this);
+
+                    MenuEscape menu = new MenuEscape(
+                            ventana,
+                            volumenActual,
+                            () -> {
+                                PanelCombate.this.requestFocus(); // Devolvemos el foco al salir
+                            },
+                            (nuevoVolumen) -> {
+                                cambiarVolumenMusica(nuevoVolumen); // Movemos el slider
+                            });
+
+                    menu.setVisible(true);
+                }
+            }
+        });
     }
 
     // Metodo para cargar los recursos en el constructor
@@ -72,7 +100,6 @@ public class PanelCombate extends JPanel {
             imagenFondo = new ImageIcon(urlFondo);
         } else {
             System.err.println("ERROR: No se encuentra fondoCombate.jpg");
-            ;
         }
 
         // Música
@@ -195,16 +222,13 @@ public class PanelCombate extends JPanel {
 
         // Boton Confirmar y Cancelar que aparecen al usar Objeto
         int xConfirm = xItemsBase + 280;
-        botonConfirmarObjeto = Boton.crearBotonImagen("/assets/imagenes/botonObjeto.png", 160, 60); // Reutilizamos
-                                                                                                    // botonObjeto
-                                                                                                    // porque pega
+        botonConfirmarObjeto = Boton.crearBotonImagen("/assets/imagenes/botonObjeto.png", 160, 60);
         botonConfirmarObjeto.setBounds(xConfirm, 40, 160, 60);
         botonConfirmarObjeto.setVisible(false);
         botonConfirmarObjeto.addActionListener(e -> usarItemSeleccionado());
         panel.add(botonConfirmarObjeto);
 
-        botonCancelarObjeto = Boton.crearBotonImagen("/assets/imagenes/botonVolver.png", 160, 60); // Lo tenemos de
-                                                                                                   // tienda
+        botonCancelarObjeto = Boton.crearBotonImagen("/assets/imagenes/botonVolver.png", 160, 60);
         botonCancelarObjeto.setBounds(xConfirm, 100, 160, 60);
         botonCancelarObjeto.setVisible(false);
         botonCancelarObjeto.addActionListener(e -> cancelarMenuObjeto());
@@ -281,6 +305,24 @@ public class PanelCombate extends JPanel {
         panel.add(botonSalir);
         // Aquí finaliza el método configurarBotones
 
+    }
+
+    // --- MÉTODOS DE AUDIO ---
+    public void cambiarVolumenMusica(int porcentaje) {
+        if (this.volumenActual == porcentaje)
+            return; // Optimización anti-lag
+
+        this.volumenActual = porcentaje;
+
+        if (musicaCombate != null && musicaCombate.isOpen()) {
+            FloatControl control = (FloatControl) musicaCombate.getControl(FloatControl.Type.MASTER_GAIN);
+            if (porcentaje == 0) {
+                control.setValue(control.getMinimum());
+            } else {
+                float decibelios = (float) (Math.log10(porcentaje / 100.0) * 20.0);
+                control.setValue(decibelios);
+            }
+        }
     }
 
     // --- METODOS PROPIOS DEL INVENTARIO DE COMBATE ---
