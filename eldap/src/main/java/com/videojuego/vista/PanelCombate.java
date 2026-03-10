@@ -211,11 +211,12 @@ public class PanelCombate extends JPanel {
         botonAtacar.addActionListener(e -> {
             ejecutarTurnoJugador(() -> {
                 int vidaEnemigoAntes = enemigo.getVidaActual();
-                this.jugador.atacar(this.enemigo);
+                boolean critico = this.jugador.atacar(this.enemigo);
                 if (enemigo.getVidaActual() < vidaEnemigoAntes) {
                     animarVibracionEnemigo();
                 }
-                areaTexto.setText("Has atacado a " + this.enemigo.getNombre() + ". Le queda "
+                String prefijoCritico = critico ? "¡GOLPE CRÍTICO!\n" : "";
+                areaTexto.setText(prefijoCritico + "Has atacado a " + this.enemigo.getNombre() + ". Le queda "
                         + this.enemigo.getVidaActual() + " de vida.");
             });
         });
@@ -440,10 +441,16 @@ public class PanelCombate extends JPanel {
 
         // Verificamos si el enemigo murió
         if (!this.enemigo.estaVivo()) {
-            areaTexto.setText(areaTexto.getText() + "\n¡Has derrotado a " + this.enemigo.getNombre()
-                    + "!\nHas ganado 100 monedas.\n¡Tus estadísticas han aumentado y te has curado!");
 
-            this.jugador.setDinero(this.jugador.getDinero() + 100);
+            // Recompensa de monedas con factor de aleatoriedad (+/- 20% de las 100 base, es
+            // decir, de 80 a 120)
+            int monedasGanadas = 80 + (int) (Math.random() * 41);
+
+            areaTexto.setText(areaTexto.getText() + "\n¡Has derrotado a " + this.enemigo.getNombre()
+                    + "!\nHas ganado " + monedasGanadas
+                    + " monedas.\n¡Tus estadísticas han aumentado y te has curado!");
+
+            this.jugador.setDinero(this.jugador.getDinero() + monedasGanadas);
             this.jugador.mejorarAtributosAlDerrotarBoss();
             if (hudEstadisticas != null)
                 hudEstadisticas.actualizarEstadisticas(jugador);
@@ -459,7 +466,7 @@ public class PanelCombate extends JPanel {
         // Si sobrevive, programar contraataque del enemigo
         Timer timerEnemigo = new Timer(1500, e -> {
             int vidaJugadorAntes = this.jugador.getVidaActual();
-            this.enemigo.atacar(this.jugador);
+            boolean criticoEnemigo = this.enemigo.atacar(this.jugador);
 
             if (this.jugador.getVidaActual() < vidaJugadorAntes) {
                 animarVibracionPantalla();
@@ -468,7 +475,8 @@ public class PanelCombate extends JPanel {
             if (hudEstadisticas != null)
                 hudEstadisticas.actualizarEstadisticas(jugador);
 
-            areaTexto.setText(areaTexto.getText() + "\n" +
+            String prefijoCriticoEnemigo = criticoEnemigo ? "¡GOLPE CRÍTICO!\n" : "";
+            areaTexto.setText(areaTexto.getText() + "\n" + prefijoCriticoEnemigo +
                     this.enemigo.getNombre() + " contraataca! Te queda " + this.jugador.getVidaActual() + " de vida.");
 
             if (!this.jugador.estaVivo()) {
