@@ -10,6 +10,7 @@ public class Item {
     private int modificador; // Ejemplo: valor "50" a modificar
     private TipoEfecto efecto; // Sobre que se va a aplicar, para categorizar
     private int precio;
+    private String rutaImagen;
 
     public Item(String nombre, String descripcion, String rutaImagen, int modificador, TipoEfecto efecto, int precio) {
         this.nombre = nombre;
@@ -17,6 +18,7 @@ public class Item {
         this.modificador = modificador;
         this.efecto = efecto;
         this.precio = precio;
+        this.rutaImagen = rutaImagen;
 
         cargarImagen(rutaImagen);
     }
@@ -40,6 +42,10 @@ public class Item {
 
     public ImageIcon getImagen() {
         return imagen;
+    }
+
+    public String getRutaImagen() {
+        return rutaImagen;
     }
 
     public int getModificador() {

@@ -7,6 +7,8 @@ import javax.sound.sampled.*;
 import com.videojuego.controlador.Boton;
 import com.videojuego.modelo.Enemigo;
 import com.videojuego.modelo.Personaje;
+import com.videojuego.modelo.Item;
+import java.util.List;
 
 public class PanelCombate extends JPanel {
     private Clip musicaCombate;
@@ -21,6 +23,14 @@ public class PanelCombate extends JPanel {
     private Enemigo enemigo;
     private ImageIcon imagenEnemigo;
     private PanelEstadisticasHUD hudEstadisticas; // Añadimos el HUD
+
+    // --- Componentes para Objetos ---
+    private JButton[] botonesItems = new JButton[2];
+    private int itemSeleccionadoCombate = -1;
+    private ImageIcon[] iconosItemsNormales = new ImageIcon[2];
+    private ImageIcon[] iconosItemsSeleccionados = new ImageIcon[2];
+    private JButton botonConfirmarObjeto;
+    private JButton botonCancelarObjeto;
 
     public PanelCombate(Personaje jugador, String nombreBossEnemigo) {
 
@@ -118,25 +128,57 @@ public class PanelCombate extends JPanel {
     private void configurarBotones(JPanel panel) {
         int ancho = 200;
         int alto = 80;
-        int separacion = 10;
+        int separacion = 20;
 
-        int xInicio = 800;
-        int xCentro = xInicio + (ancho / 2) + (separacion / 2); // Formula para determinar el centro debajo de dos
-                                                                // botones
-        int yFila1 = 15;
-        int yFila2 = yFila1 + alto + separacion;
+        int xFila = 740;
+        int yBotones = (200 - alto) / 2;
 
         // Aquí usamos la clase Boton en lugar del método interno que hemos borrado
         botonAtacar = Boton.crearBotonImagen("/assets/imagenes/botonAtacar.png", ancho, alto);
 
         botonUsarObjeto = Boton.crearBotonImagen("/assets/imagenes/botonObjeto.png", ancho, alto);
-        botonAtacar.setBounds(xInicio, yFila1, ancho, alto);
-        botonUsarObjeto.setBounds(xCentro, yFila2, ancho, alto);
+        botonAtacar.setBounds(xFila, yBotones, ancho, alto);
+        botonUsarObjeto.setBounds(xFila + ancho + separacion, yBotones, ancho, alto);
+
+        // --- Botones e items para el Submenú de Inventario ---
+        int xItemsBase = xFila - 50;
+        for (int i = 0; i < 2; i++) {
+            botonesItems[i] = new JButton();
+            botonesItems[i].setBounds(xItemsBase + i * 140, 40, 120, 120); // Tamaño grande para que parezca inventario
+            botonesItems[i].setContentAreaFilled(false);
+            botonesItems[i].setBorderPainted(false);
+            botonesItems[i].setFocusPainted(false);
+            botonesItems[i].setCursor(new Cursor(Cursor.HAND_CURSOR));
+            botonesItems[i].setVisible(false); // Ocultos de inicio
+            final int index = i;
+            botonesItems[i].addActionListener(e -> seleccionarItemInventario(index));
+            panel.add(botonesItems[i]);
+        }
+
+        // Boton Confirmar y Cancelar que aparecen al usar Objeto
+        int xConfirm = xItemsBase + 280;
+        botonConfirmarObjeto = Boton.crearBotonImagen("/assets/imagenes/botonObjeto.png", 160, 60); // Reutilizamos
+                                                                                                    // botonObjeto
+                                                                                                    // porque pega
+        botonConfirmarObjeto.setBounds(xConfirm, 40, 160, 60);
+        botonConfirmarObjeto.setVisible(false);
+        botonConfirmarObjeto.addActionListener(e -> usarItemSeleccionado());
+        panel.add(botonConfirmarObjeto);
+
+        botonCancelarObjeto = Boton.crearBotonImagen("/assets/imagenes/botonVolver.png", 160, 60); // Lo tenemos de
+                                                                                                   // tienda
+        botonCancelarObjeto.setBounds(xConfirm, 100, 160, 60);
+        botonCancelarObjeto.setVisible(false);
+        botonCancelarObjeto.addActionListener(e -> cancelarMenuObjeto());
+        panel.add(botonCancelarObjeto);
+
+        // --- Fin botones Submenú ---
 
         botonAtacar.addActionListener(e -> {
 
             // 1. El jugador ataca al enemigo
             this.jugador.atacar(this.enemigo);
+            repaint(); // Actualizar interfaz (barra de vida del enemigo)
 
             // 2. Comprobamos si el enemigo ha muerto (¡HAS GANADO!)
             if (!this.enemigo.estaVivo()) {
@@ -190,15 +232,18 @@ public class PanelCombate extends JPanel {
             }
         });
 
+        // Acción al pulsar el botón principal Usar Objeto
+        botonUsarObjeto.addActionListener(e -> activarMenuObjetos());
+
         panel.add(botonAtacar);
         panel.add(botonUsarObjeto);
 
-        // Calculamos la posición del botón de Salir (A la derecha de Atacar)
-        int xSalir = xInicio + ancho + separacion;
+        // Calculamos la posición del botón de Salir (Centrado en el mismo espacio)
+        int xSalir = 850;
 
         // Creamos el botón (puedes usar la imagen que prefieras)
         botonSalir = Boton.crearBotonImagen("/assets/imagenes/botonSalirEscape.png", ancho, alto);
-        botonSalir.setBounds(xSalir, yFila1, ancho, alto);
+        botonSalir.setBounds(xSalir, yBotones, ancho, alto);
 
         // ¡Magia aquí! Lo ocultamos nada más empezar el combate
         botonSalir.setVisible(false);
@@ -224,6 +269,136 @@ public class PanelCombate extends JPanel {
 
     }
 
+    // --- METODOS PROPIOS DEL INVENTARIO DE COMBATE ---
+    private ImageIcon cargarIconoEscalado(String ruta, int ancho, int alto) {
+        try {
+            URL url = getClass().getResource(ruta);
+            if (url != null) {
+                Image imagen = new ImageIcon(url).getImage();
+                return new ImageIcon(imagen.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH));
+            }
+        } catch (Exception e) {
+            System.err.println("No carga: " + ruta);
+        }
+        return null;
+    }
+
+    private void activarMenuObjetos() {
+        List<Item> inventario = jugador.getInventario();
+        if (inventario.isEmpty()) {
+            areaTexto.setText("Buscas en la mochila pero no llevas ningún objeto.");
+            return;
+        }
+
+        botonAtacar.setVisible(false);
+        botonUsarObjeto.setVisible(false);
+
+        itemSeleccionadoCombate = -1;
+
+        for (int i = 0; i < 2; i++) {
+            if (i < inventario.size()) {
+                Item item = inventario.get(i);
+                String rutaNormal = item.getRutaImagen();
+                String rutaSelect = rutaNormal.replace("/Normal/", "/Seleccionado/");
+
+                iconosItemsNormales[i] = cargarIconoEscalado(rutaNormal, 120, 120);
+                iconosItemsSeleccionados[i] = cargarIconoEscalado(rutaSelect, 120, 120);
+
+                botonesItems[i].setIcon(iconosItemsNormales[i]);
+                botonesItems[i].setVisible(true);
+            } else {
+                botonesItems[i].setVisible(false);
+            }
+        }
+
+        botonConfirmarObjeto.setVisible(true);
+        botonCancelarObjeto.setVisible(true);
+        areaTexto.setText("Has abierto la mochila, elige el objeto a usar.");
+    }
+
+    private void seleccionarItemInventario(int indice) {
+        List<Item> inv = jugador.getInventario();
+        if (indice >= inv.size())
+            return;
+
+        for (int i = 0; i < 2; i++) {
+            if (botonesItems[i].isVisible())
+                botonesItems[i].setIcon(iconosItemsNormales[i]);
+        }
+        botonesItems[indice].setIcon(iconosItemsSeleccionados[indice]);
+        itemSeleccionadoCombate = indice;
+
+        Item obj = inv.get(indice);
+        areaTexto.setText(obj.getNombre() + "\n" + obj.getDescripcion());
+    }
+
+    private void usarItemSeleccionado() {
+        if (itemSeleccionadoCombate == -1) {
+            areaTexto.setText("Selecciona un objeto de la lista.");
+            return;
+        }
+
+        Item obj = jugador.getInventario().get(itemSeleccionadoCombate);
+        jugador.usarItem(itemSeleccionadoCombate, enemigo); // Efecto aplicado internamente
+
+        cerrarMenuObjeto(true);
+
+        // Actualizamos UI
+        repaint();
+        if (hudEstadisticas != null)
+            hudEstadisticas.actualizarEstadisticas(jugador);
+
+        // Si el objeto mató al boss (ej: Virus Linux)
+        if (!enemigo.estaVivo()) {
+            areaTexto.setText("¡Has usado " + obj.getNombre() + "!\n¡Has derrotado a " + enemigo.getNombre() + "!");
+            jugador.setDinero(jugador.getDinero() + 100);
+            jugador.mejorarAtributosAlDerrotarBoss();
+            if (hudEstadisticas != null)
+                hudEstadisticas.actualizarEstadisticas(jugador);
+
+            botonAtacar.setVisible(false);
+            botonUsarObjeto.setVisible(false);
+            botonSalir.setVisible(true);
+            return;
+        }
+
+        // Si sobrevive, contraataca
+        enemigo.atacar(jugador);
+        if (hudEstadisticas != null)
+            hudEstadisticas.actualizarEstadisticas(jugador);
+
+        areaTexto.setText("Has usado " + obj.getNombre() + ".\n" +
+                enemigo.getNombre() + " contraataca! Te queda " + jugador.getVidaActual() + " de vida.");
+
+        // Check si morimos por el ataque enemigo (o suicidio de Guantón y consecuente
+        // remate)
+        if (!jugador.estaVivo()) {
+            areaTexto.setText("¡Has sido derrotado! Fin del juego...");
+            botonAtacar.setVisible(false);
+            botonUsarObjeto.setVisible(false);
+            botonSalir.setVisible(true);
+        }
+    }
+
+    private void cancelarMenuObjeto() {
+        cerrarMenuObjeto(true);
+        areaTexto.setText("Decides guardarte la mochila. ¿Atacas o esperas?");
+    }
+
+    private void cerrarMenuObjeto(boolean restaurarBotonesPrincipales) {
+        for (JButton b : botonesItems) {
+            if (b != null)
+                b.setVisible(false);
+        }
+        botonConfirmarObjeto.setVisible(false);
+        botonCancelarObjeto.setVisible(false);
+
+        if (restaurarBotonesPrincipales) {
+            botonAtacar.setVisible(true);
+            botonUsarObjeto.setVisible(true);
+        }
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -232,6 +407,32 @@ public class PanelCombate extends JPanel {
         }
         if (imagenEnemigo != null) {
             g.drawImage(imagenEnemigo.getImage(), 820, 40, 300, 270, this);
+
+            // Dibujar barra de vida del enemigo
+            if (enemigo != null && enemigo.getVidaMaxima() > 0) {
+                int barraWidth = 200;
+                int barraHeight = 20;
+                int xBarra = 820 + (300 - barraWidth) / 2;
+                int yBarra = 40 + 270 + 10;
+
+                g.setColor(Color.DARK_GRAY);
+                g.fillRect(xBarra, yBarra, barraWidth, barraHeight);
+
+                int vidaActual = Math.max(0, enemigo.getVidaActual());
+                int widthVida = (int) ((double) vidaActual / enemigo.getVidaMaxima() * barraWidth);
+                g.setColor(Color.RED);
+                g.fillRect(xBarra, yBarra, widthVida, barraHeight);
+
+                g.setColor(Color.WHITE);
+                g.drawRect(xBarra, yBarra, barraWidth, barraHeight);
+
+                g.setFont(new Font("Monospaced", Font.BOLD, 14));
+                String textoVida = vidaActual + " / " + enemigo.getVidaMaxima();
+                FontMetrics fm = g.getFontMetrics();
+                int textX = xBarra + (barraWidth - fm.stringWidth(textoVida)) / 2;
+                int textY = yBarra + ((barraHeight - fm.getHeight()) / 2) + fm.getAscent();
+                g.drawString(textoVida, textX, textY);
+            }
         }
     }
 }
