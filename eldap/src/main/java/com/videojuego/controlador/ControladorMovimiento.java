@@ -9,6 +9,10 @@ import javax.swing.InputMap;
 import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.Timer;
+
 public class ControladorMovimiento {
 
     private Personaje personaje;
@@ -20,6 +24,10 @@ public class ControladorMovimiento {
     // Variables para controlar la animación
     private int ticAnimacion = 0;
 
+    // Lista para mantener el orden de las teclas pulsadas (prioridad a la última)
+    private List<String> teclasPulsadas = new ArrayList<>();
+    private Timer timerMovimiento;
+
     // AÑADIMOS Colisiones al constructor
     public ControladorMovimiento(Personaje personaje, PanelMapa panel, Colisiones colisiones, int anchoPersonaje,
             int altoPersonaje) {
@@ -30,96 +38,105 @@ public class ControladorMovimiento {
         this.altoPersonaje = altoPersonaje;
 
         configurarControles();
+        iniciarBucleMovimiento();
+    }
+
+    private void iniciarBucleMovimiento() {
+        // Ejecución cada ~33ms que equivale a unos 30FPS (velocidad de repetición
+        // nativa OS)
+        timerMovimiento = new Timer(33, e -> {
+            if (!teclasPulsadas.isEmpty()) {
+                // Siempre nos movemos en la ÚLTIMA dirección añadida a la lista
+                String direccionActual = teclasPulsadas.get(teclasPulsadas.size() - 1);
+                int anchoMapa = panel.getWidth();
+                int altoMapa = panel.getHeight();
+
+                moverConLimites(direccionActual, anchoMapa, altoMapa);
+                panel.repaint();
+            }
+        });
+        timerMovimiento.start();
     }
 
     private void configurarControles() {
         InputMap inputMap = panel.getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = panel.getActionMap();
 
-        inputMap.put(KeyStroke.getKeyStroke("W"), "moverArriba");
-        inputMap.put(KeyStroke.getKeyStroke("S"), "moverAbajo");
-        inputMap.put(KeyStroke.getKeyStroke("A"), "moverIzquierda");
-        inputMap.put(KeyStroke.getKeyStroke("D"), "moverDerecha");
+        String[] teclas = { "W", "S", "A", "D" };
 
-        inputMap.put(KeyStroke.getKeyStroke("released W"), "soltarTecla");
-        inputMap.put(KeyStroke.getKeyStroke("released S"), "soltarTecla");
-        inputMap.put(KeyStroke.getKeyStroke("released A"), "soltarTecla");
-        inputMap.put(KeyStroke.getKeyStroke("released D"), "soltarTecla");
+        for (String t : teclas) {
+            String dir = t.toLowerCase();
 
-        actionMap.put("moverArriba", new AccionMovimiento("w"));
-        actionMap.put("moverAbajo", new AccionMovimiento("s"));
-        actionMap.put("moverIzquierda", new AccionMovimiento("a"));
-        actionMap.put("moverDerecha", new AccionMovimiento("d"));
-        actionMap.put("soltarTecla", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                UtilidadesAudio.resetCooldownPasos();
-            }
-        });
+            // Presionar tecla
+            inputMap.put(KeyStroke.getKeyStroke("pressed " + t), "press" + dir);
+            actionMap.put("press" + dir, new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (!teclasPulsadas.contains(dir)) {
+                        teclasPulsadas.add(dir); // Añade al final para darle la prioridad máxima
+                    }
+                }
+            });
+
+            // Soltar tecla
+            inputMap.put(KeyStroke.getKeyStroke("released " + t), "release" + dir);
+            actionMap.put("release" + dir, new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    teclasPulsadas.remove(dir); // Elimina de la lista al soltar
+                    if (teclasPulsadas.isEmpty()) {
+                        UtilidadesAudio.resetCooldownPasos();
+                    }
+                }
+            });
+        }
     }
 
-    private class AccionMovimiento extends AbstractAction {
-        private String direccion;
+    private void moverConLimites(String dir, int limiteX, int limiteY) {
+        int vel = personaje.getVelocidad();
+        int actualX = personaje.getPosX();
+        int actualY = personaje.getPosY();
 
-        public AccionMovimiento(String direccion) {
-            this.direccion = direccion;
+        int nuevaX = actualX;
+        int nuevaY = actualY;
+
+        switch (dir.toLowerCase()) {
+            case "w":
+                nuevaY -= vel;
+                break;
+            case "s":
+                nuevaY += vel;
+                break;
+            case "a":
+                nuevaX -= vel;
+                break;
+            case "d":
+                nuevaX += vel;
+                break;
         }
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            int anchoMapa = panel.getWidth();
-            int altoMapa = panel.getHeight();
+        // LÍMITES DE PANTALLA
+        if (nuevaX < 0)
+            nuevaX = 0;
+        if (nuevaY < 0)
+            nuevaY = 0;
+        if (nuevaX > limiteX - anchoPersonaje)
+            nuevaX = limiteX - anchoPersonaje;
+        if (nuevaY > limiteY - altoPersonaje)
+            nuevaY = limiteY - altoPersonaje;
 
-            moverConLimites(direccion, anchoMapa, altoMapa);
-            panel.repaint();
-        }
+        // --- LA MAGIA: Preguntamos DIRECTAMENTE a la clase Colisiones ---
+        if (colisiones.verificarMovimiento(nuevaX, nuevaY, anchoPersonaje, altoPersonaje)) {
+            personaje.setPosX(nuevaX);
+            personaje.setPosY(nuevaY);
 
-        private void moverConLimites(String dir, int limiteX, int limiteY) {
-            int vel = personaje.getVelocidad();
-            int actualX = personaje.getPosX();
-            int actualY = personaje.getPosY();
-
-            int nuevaX = actualX;
-            int nuevaY = actualY;
-
-            switch (dir.toLowerCase()) {
-                case "w":
-                    nuevaY -= vel;
-                    break;
-                case "s":
-                    nuevaY += vel;
-                    break;
-                case "a":
-                    nuevaX -= vel;
-                    break;
-                case "d":
-                    nuevaX += vel;
-                    break;
+            // Actualizamos la Animación
+            ticAnimacion++;
+            if (ticAnimacion > 4) {
+                ticAnimacion = 1;
             }
-
-            // LÍMITES DE PANTALLA
-            if (nuevaX < 0)
-                nuevaX = 0;
-            if (nuevaY < 0)
-                nuevaY = 0;
-            if (nuevaX > limiteX - anchoPersonaje)
-                nuevaX = limiteX - anchoPersonaje;
-            if (nuevaY > limiteY - altoPersonaje)
-                nuevaY = limiteY - altoPersonaje;
-
-            // --- LA MAGIA: Preguntamos DIRECTAMENTE a la clase Colisiones ---
-            if (colisiones.verificarMovimiento(nuevaX, nuevaY, anchoPersonaje, altoPersonaje)) {
-                personaje.setPosX(nuevaX);
-                personaje.setPosY(nuevaY);
-
-                // Actualizamos la Animación
-                ticAnimacion++;
-                if (ticAnimacion > 4) {
-                    ticAnimacion = 1;
-                }
-                UtilidadesAudio.reproducirSonido("pasos.wav");
-                panel.actualizarAnimacion(dir, ticAnimacion);
-            }
+            UtilidadesAudio.reproducirSonido("pasos.wav");
+            panel.actualizarAnimacion(dir, ticAnimacion);
         }
     }
 }
