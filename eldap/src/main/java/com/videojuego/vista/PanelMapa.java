@@ -28,6 +28,7 @@ public class PanelMapa extends JPanel {
 	private HashMap<String, ImageIcon> spritesPersonaje;
 	private String direccionActual = "S";
 	private int frameActual = 1;
+	private int volumenActual = 100; // Guardará el porcentaje
 
 	private Personaje personaje;
 	private boolean modoDebug = false;
@@ -166,20 +167,41 @@ public class PanelMapa extends JPanel {
 		repaint();
 	}
 
-	public void mostrarDialogoPausa() { // Metodo que creamos botones y dialogoPausa
-		juegoPausado = true;
+	public void cambiarVolumenMusica(int porcentaje) {
+		this.volumenActual = porcentaje; // Actualizamos la variable
 
+		if (musicaFondo != null && musicaFondo.isOpen()) {
+			// Accedemos al control maestro del volumen del Clip de Java
+			FloatControl control = (FloatControl) musicaFondo.getControl(FloatControl.Type.MASTER_GAIN);
+
+			if (porcentaje == 0) {
+				control.setValue(control.getMinimum()); // Silencio total
+			} else {
+				// Fórmula para convertir de % (0-100) a decibelios
+				float decibelios = (float) (Math.log10(porcentaje / 100.0) * 20.0);
+				control.setValue(decibelios);
+			}
+		}
+	}
+
+	public void mostrarDialogoPausa() {
+		juegoPausado = true;
 		VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(this);
 
-		// Instanciamos nuestro nuevo menú reutilizable.
-		// Le pasamos la ventana, y lo que tiene que hacer cuando le demos a "Continuar"
-		MenuEscape menu = new MenuEscape(ventana, () -> {
-			juegoPausado = false;
-			this.requestFocus();
-		});
+		// Llamamos al nuevo constructor del slider
+		MenuEscape menu = new MenuEscape(
+				ventana,
+				volumenActual, // Le decimos en qué % de barra empezar
+				() -> {
+					// Al darle a Continuar
+					juegoPausado = false;
+					this.requestFocus();
+				},
+				(nuevoVolumen) -> {
+					// Cada vez que muevas el slider, ejecutará esto
+					cambiarVolumenMusica(nuevoVolumen);
+				});
 
-		// Lo hacemos visible (al ser modal, el código se pausa aquí hasta que el menú
-		// se cierre)
 		menu.setVisible(true);
 	}
 
