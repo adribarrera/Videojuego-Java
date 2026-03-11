@@ -498,8 +498,13 @@ public class PanelCombate extends JPanel {
             cerrarMenuObjeto(false);
             botonAtacar.setVisible(false);
             botonUsarObjeto.setVisible(false);
-            botonSalir.setVisible(true);
-            botonSalir.setEnabled(true);
+            // Timer de 2.5s antes de ir a PanelDerrota
+            Timer timerDerrota = new Timer(2500, ev -> {
+                VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(PanelCombate.this);
+                if (ventana != null) ventana.irADerrota();
+            });
+            timerDerrota.setRepeats(false);
+            timerDerrota.start();
             return;
         }
 
@@ -532,8 +537,20 @@ public class PanelCombate extends JPanel {
             cerrarMenuObjeto(false);
             botonAtacar.setVisible(false);
             botonUsarObjeto.setVisible(false);
-            botonSalir.setVisible(true);
-            botonSalir.setEnabled(true);
+
+            if (nombreJefe.contains("sergio")) {
+                // BOSS FINAL: transición automática a pantalla de Victoria
+                Timer timerVictoria = new Timer(2500, ev -> {
+                    VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(PanelCombate.this);
+                    if (ventana != null) ventana.irAVictoria();
+                });
+                timerVictoria.setRepeats(false);
+                timerVictoria.start();
+            } else {
+                // BOSS INTERMEDIO: mostrar botón de salir al mapa
+                botonSalir.setVisible(true);
+                botonSalir.setEnabled(true);
+            }
             return;
         }
 
@@ -566,8 +583,13 @@ public class PanelCombate extends JPanel {
                 cerrarMenuObjeto(false);
                 botonAtacar.setVisible(false);
                 botonUsarObjeto.setVisible(false);
-                botonSalir.setVisible(true);
-                botonSalir.setEnabled(true);
+                // Timer de 2.5s antes de ir a PanelDerrota
+                Timer timerDerrota = new Timer(2500, ev -> {
+                    VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(PanelCombate.this);
+                    if (ventana != null) ventana.irADerrota();
+                });
+                timerDerrota.setRepeats(false);
+                timerDerrota.start();
             } else {
                 // Rehabilitamos de nuevo
                 botonAtacar.setEnabled(true);

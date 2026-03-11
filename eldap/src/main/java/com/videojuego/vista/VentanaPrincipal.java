@@ -20,6 +20,8 @@ public class VentanaPrincipal extends JFrame {
     public PanelPortada portada = new PanelPortada();
     public PanelMapa mapa = new PanelMapa();
     public PanelEleccionPersonaje seleccion = new PanelEleccionPersonaje();
+    private PanelDerrota panelDerrota;
+    private PanelVictoria panelVictoria;
 
     private CardLayout gestorPantallas = new CardLayout();
     private JPanel panelContenedor = new JPanel(gestorPantallas);
@@ -128,6 +130,20 @@ public class VentanaPrincipal extends JFrame {
         cambiarPanelConTransicion("Pantalla Combate", () -> {
             combate.requestFocus();
         });
+    }
+
+    public void irADerrota() {
+        // Creamos un panel fresco para que el timer se reinicie en cada derrota
+        panelDerrota = new PanelDerrota();
+        panelContenedor.add(panelDerrota, "Pantalla Derrota");
+        cambiarPanelConTransicion("Pantalla Derrota", null);
+    }
+
+    public void irAVictoria() {
+        // Creamos un panel fresco para que el timer se reinicie si se vuelve a jugar
+        panelVictoria = new PanelVictoria();
+        panelContenedor.add(panelVictoria, "Pantalla Victoria");
+        cambiarPanelConTransicion("Pantalla Victoria", null);
     }
 
     public void volverAMapaDesdeCombate() {

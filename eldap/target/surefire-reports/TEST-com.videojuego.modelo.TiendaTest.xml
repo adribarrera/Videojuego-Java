@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.videojuego.modelo.TiendaTest" time="0.42" tests="5" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.videojuego.modelo.TiendaTest" time="0.626" tests="5" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="25"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -16,7 +16,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="ES"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-25.0.2\bin"/>
-    <property name="sun.java.command" value="C:\Users\drios\AppData\Local\Temp\surefire9632264818967521624\surefirebooter-20260311125531546_3.jar C:\Users\drios\AppData\Local\Temp\surefire9632264818967521624 2026-03-11T12-55-31_392-jvmRun1 surefire-20260311125531546_1tmp surefire_0-20260311125531546_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\drios\AppData\Local\Temp\surefire208334285728155873\surefirebooter-20260311132838033_3.jar C:\Users\drios\AppData\Local\Temp\surefire208334285728155873 2026-03-11T13-28-37_844-jvmRun1 surefire-20260311132838033_1tmp surefire_0-20260311132838033_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="C:\Users\drios\OneDrive\Desktop\ProyectoVideojuego\Videojuego-Java\eldap\target\test-classes;C:\Users\drios\OneDrive\Desktop\ProyectoVideojuego\Videojuego-Java\eldap\target\classes;C:\Users\drios\.m2\repository\org\junit\jupiter\junit-jupiter\5.10.2\junit-jupiter-5.10.2.jar;C:\Users\drios\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.2\junit-jupiter-api-5.10.2.jar;C:\Users\drios\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\drios\.m2\repository\org\junit\platform\junit-platform-commons\1.10.2\junit-platform-commons-1.10.2.jar;C:\Users\drios\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\drios\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.2\junit-jupiter-params-5.10.2.jar;C:\Users\drios\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.2\junit-jupiter-engine-5.10.2.jar;C:\Users\drios\.m2\repository\org\junit\platform\junit-platform-engine\1.10.2\junit-platform-engine-1.10.2.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -31,7 +31,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\drios\AppData\Local\Temp\surefire9632264818967521624\surefirebooter-20260311125531546_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\drios\AppData\Local\Temp\surefire208334285728155873\surefirebooter-20260311132838033_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="25.0.2+10-LTS-69"/>
@@ -60,11 +60,11 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="69.0"/>
   </properties>
-  <testcase name="procesarCompra_indiceInvalido" classname="com.videojuego.modelo.TiendaTest" time="0.288"/>
-  <testcase name="procesarCompra_ok_descuentaYAgrega" classname="com.videojuego.modelo.TiendaTest" time="0.08"/>
-  <testcase name="procesarCompra_sinDinero" classname="com.videojuego.modelo.TiendaTest" time="0.004"/>
-  <testcase name="obtenerInfoItems_devuelveInfoOEspacioVacio" classname="com.videojuego.modelo.TiendaTest" time="0.005"/>
-  <testcase name="procesarCompra_inventarioLleno" classname="com.videojuego.modelo.TiendaTest" time="0.004">
+  <testcase name="procesarCompra_indiceInvalido" classname="com.videojuego.modelo.TiendaTest" time="0.382"/>
+  <testcase name="procesarCompra_ok_descuentaYAgrega" classname="com.videojuego.modelo.TiendaTest" time="0.159"/>
+  <testcase name="procesarCompra_sinDinero" classname="com.videojuego.modelo.TiendaTest" time="0.008"/>
+  <testcase name="obtenerInfoItems_devuelveInfoOEspacioVacio" classname="com.videojuego.modelo.TiendaTest" time="0.01"/>
+  <testcase name="procesarCompra_inventarioLleno" classname="com.videojuego.modelo.TiendaTest" time="0.008">
     <system-err><![CDATA[ERROR: No se encuentra la imagen del ítem en: /no-existe.png
 ERROR: No se encuentra la imagen del ítem en: /no-existe.png
 ]]></system-err>

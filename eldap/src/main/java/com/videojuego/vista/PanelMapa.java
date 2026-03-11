@@ -235,7 +235,7 @@ public class PanelMapa extends JPanel {
 			cercaDeDelikia = true;
 			g.setColor(Color.WHITE);
 			g.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14));
-			g.drawString("Pulsa E para comprar (Delik.IA)", personaje.getPosX() - 50, personaje.getPosY() - 15);
+			g.drawString("Pulsa E para comprar", personaje.getPosX() - 50, personaje.getPosY() - 15);
 		} else {
 			// Comprobar Bosses (solo si no estamos ya interactuando con la tienda)
 			for (BossEnMapa boss : bossesEnMapa) {
@@ -245,7 +245,7 @@ public class PanelMapa extends JPanel {
 					// Pintamos el "cartelito"
 					g.setColor(Color.WHITE);
 					g.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14));
-					g.drawString("Pulsa E para combatir (vs " + boss.nombre + ")", personaje.getPosX() - 50,
+					g.drawString("Pulsa E para combatir", personaje.getPosX() - 50,
 							personaje.getPosY() - 15);
 					break;
 				}
