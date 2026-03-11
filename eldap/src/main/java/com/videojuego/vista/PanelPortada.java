@@ -3,7 +3,6 @@ package com.videojuego.vista;
 import java.awt.*;
 import javax.swing.*;
 import java.net.URL;
-import javax.sound.sampled.*;
 import com.videojuego.controlador.Boton;
 
 public class PanelPortada extends JPanel {
@@ -35,7 +34,8 @@ public class PanelPortada extends JPanel {
 	}
 
 	public void reproducirMusica() {
-		com.videojuego.controlador.ControladorAudio.getInstance().reproducirMusicaAmbiental("/assets/audio/instrumentalPortada.wav");
+		com.videojuego.controlador.ControladorAudio.getInstance()
+				.reproducirMusicaAmbiental("/assets/audio/instrumentalPortada.wav");
 	}
 
 	public void detenerMusica() {

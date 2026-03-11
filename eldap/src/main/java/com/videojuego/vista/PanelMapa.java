@@ -12,7 +12,6 @@ import javax.swing.SwingUtilities;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.net.URL;
-import javax.sound.sampled.*;
 import java.awt.Rectangle;
 
 import com.videojuego.modelo.Personaje;
@@ -163,7 +162,8 @@ public class PanelMapa extends JPanel {
 		// Llamamos al nuevo constructor del slider
 		MenuEscape menu = new MenuEscape(
 				ventana,
-				com.videojuego.controlador.ControladorAudio.getInstance().getVolumenGlobal(), // Le decimos en qué % de barra empezar
+				com.videojuego.controlador.ControladorAudio.getInstance().getVolumenGlobal(), // Le decimos en qué % de
+																								// barra empezar
 				() -> {
 					// Al darle a Continuar
 					juegoPausado = false;
@@ -271,11 +271,13 @@ public class PanelMapa extends JPanel {
 			System.err.println("ERROR: No se encontró la imagen del mapa.");
 		}
 
-		com.videojuego.controlador.ControladorAudio.getInstance().reproducirMusicaAmbiental("/assets/audio/mapaInst.wav");
+		com.videojuego.controlador.ControladorAudio.getInstance()
+				.reproducirMusicaAmbiental("/assets/audio/mapaInst.wav");
 	}
 
 	public void reproducirMusica() {
-		com.videojuego.controlador.ControladorAudio.getInstance().reproducirMusicaAmbiental("/assets/audio/mapaInst.wav");
+		com.videojuego.controlador.ControladorAudio.getInstance()
+				.reproducirMusicaAmbiental("/assets/audio/mapaInst.wav");
 	}
 
 	public void detenerMusica() {
@@ -283,7 +285,8 @@ public class PanelMapa extends JPanel {
 	}
 
 	public void interactuar() {
-		if (juegoPausado) return;
+		if (juegoPausado)
+			return;
 		if (bossCercano != null) {
 			VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(this);
 			ventana.iniciarCombate(bossCercano.nombre);

@@ -23,7 +23,6 @@ public class PanelCombate extends JPanel {
 
     private Personaje jugador;
     private Enemigo enemigo;
-    private ImageIcon imagenAtaqueEnemigo;
     private ImageIcon imagenJugador;
     private ImageIcon imagenEnemigo;
     private PanelEstadisticasHUD hudEstadisticas; // Añadimos el HUD
@@ -258,7 +257,8 @@ public class PanelCombate extends JPanel {
                     areaTexto.setText(prefijoCritico + "Has atacado a " + this.enemigo.getNombre() + ". Le queda "
                             + this.enemigo.getVidaActual() + " de vida.");
                 } else {
-                    areaTexto.setText(prefijoCritico + "Has atacado a " + this.enemigo.getNombre() + " con un golpe letal.");
+                    areaTexto.setText(
+                            prefijoCritico + "Has atacado a " + this.enemigo.getNombre() + " con un golpe letal.");
                 }
             });
         });
@@ -369,6 +369,7 @@ public class PanelCombate extends JPanel {
     }
 
     private void seleccionarItemInventario(int indice) {
+        com.videojuego.controlador.UtilidadesAudio.reproducirSonido("audioItem.wav");
         List<Item> inv = jugador.getInventario();
         if (indice >= inv.size())
             return;
@@ -508,7 +509,7 @@ public class PanelCombate extends JPanel {
             // Recompensa de monedas dependiente del boss
             int monedasGanadas = 0;
             String nombreJefe = this.enemigo.getNombre().toLowerCase();
-            
+
             if (nombreJefe.contains("jessica")) {
                 monedasGanadas = 50 + (int) (Math.random() * 31); // 50 - 80
             } else if (nombreJefe.contains("juancarlos") || nombreJefe.contains("juan carlos")) {

@@ -3,7 +3,6 @@ package com.videojuego.vista;
 import java.awt.*;
 import javax.swing.*;
 import java.net.URL;
-import javax.sound.sampled.*;
 import com.videojuego.controlador.Boton;
 import com.videojuego.modelo.Personaje;
 import com.videojuego.modelo.Tienda;
@@ -52,7 +51,8 @@ public class PanelTienda extends JPanel {
             System.err.println("ERROR: No se encontró la imagen de la tienda");
         }
 
-        com.videojuego.controlador.ControladorAudio.getInstance().reproducirMusicaAmbiental("/assets/audio/mapaInst.wav");
+        com.videojuego.controlador.ControladorAudio.getInstance()
+                .reproducirMusicaAmbiental("/assets/audio/mapaInst.wav");
 
     }
 
@@ -165,6 +165,7 @@ public class PanelTienda extends JPanel {
 
     // --- Acciones de los Botones ---
     private void seleccionarItem(int indice) {
+        com.videojuego.controlador.UtilidadesAudio.reproducirSonido("audioItem.wav");
         for (int i = 0; i < 6; i++) {
             if (botonesItems[i] != null) {
                 botonesItems[i].setIcon(iconosNormales[i]);

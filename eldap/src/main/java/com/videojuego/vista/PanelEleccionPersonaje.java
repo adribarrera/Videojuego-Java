@@ -98,6 +98,7 @@ public class PanelEleccionPersonaje extends JPanel {
         btnConfirmar.setBounds(575, 450, 250, 80);
 
         btnConfirmar.addActionListener(e -> {
+            com.videojuego.controlador.UtilidadesAudio.reproducirSonido("audioItem.wav");
             if (personajeSeleccionado != null) {
                 // Instanciamos un Personaje NUEVO basado en la elección para resetear stats si
                 // venimos de morir
@@ -128,6 +129,7 @@ public class PanelEleccionPersonaje extends JPanel {
     }
 
     public void seleccionarPersonaje(Personaje p) {
+        com.videojuego.controlador.UtilidadesAudio.reproducirSonido("audioItem.wav");
         this.personajeSeleccionado = p;
 
         // Formateamos el texto leyendo los getters de tu clase Personaje

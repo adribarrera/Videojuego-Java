@@ -34,7 +34,7 @@ public class Tienda {
     public String obtenerInfoItems(int indice) {
         if (indice >= 0 && indice < inventarioTienda.size()) {
             Item item = inventarioTienda.get(indice);
-            return item.getNombre() + " - Precio: " + item.getPrecio() + " monedas \n" + item.getDescripcion();
+            return item.getNombre() + "\nPrecio: " + item.getPrecio() + " monedas \n" + item.getDescripcion();
         }
         return "Espacio vacío";
     }
@@ -57,9 +57,9 @@ public class Tienda {
         if (sePuedeGuardar) {
             comprador.setDinero(comprador.getDinero() - objeto.getPrecio());
             com.videojuego.controlador.UtilidadesAudio.reproducirSonido("compra.wav");
-            return "Compra realizada." + objeto.getNombre() + " añadido a la mochila";
+            return "Compra realizada.\n" + objeto.getNombre() + " añadido a la mochila";
         } else {
-            return "No puedes llevar más objetos en el inventario. Tienes la mochila llena (Máx "
+            return "No puedes llevar más objetos en el inventario.\nTienes la mochila llena (Máx "
                     + comprador.MAX_OBJETOS + ").";
         }
     }
