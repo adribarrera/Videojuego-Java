@@ -79,14 +79,14 @@ public class Item {
                 break;
 
             case DUPLICAR_DEFENSA: // GABARDINA DE SERGIO
-                System.out.println("Te pones la gabardina de Sergio. Ahora si que no hay quien te pare.");
-                System.out.println("Tu escudo aumenta un " + this.modificador + "% extra permanentemente.");
+                System.out.println("Te pones la gabardina de Sergio. Te vuelves casi invulnerable.");
+                System.out.println("Tu resistencia al daño aumenta un " + this.modificador + "% extra permanentemente.");
                 jugador.aumentarDefensa(this.modificador);
                 break;
 
             case ROBAR_VIDA: // EL CHATTO
-                System.out.println("El Chatto le roba las ideas al enemigo. Le quitas al enemigo " + this.modificador
-                        + " puntos de su vida y te curas con ella");
+                System.out.println("El Chatto le roba la vitalidad al enemigo. Le quitas " + this.modificador
+                        + " puntos de forma directa y te curas con ellos");
                 enemigo.recibirDanioDirecto(this.modificador);
                 jugador.curar(this.modificador);
                 break;
@@ -98,13 +98,13 @@ public class Item {
                 jugador.setProbCriticoActual(1.0); // 100% de probabilidad
                 break;
 
-            case TRAMPA_GUANTON: // GUANTÓN DE JUAN CARLOS O VIRUS DE LINUX
-                System.out.println("¡Usas el objeto que acabas de comprar!");
-                System.out.println("Infliges 1000 de daño asegurado al enemigo, de una.");
-                enemigo.recibirDanioDirecto(1000);
+            case TRAMPA_GUANTON: // VIRUS DE LINUX
+                System.out.println("¡Usas el código fuente corrupto en tu enemigo!");
+                System.out.println("Infliges 1500 de daño devastador.");
+                enemigo.recibirDanioDirecto(1500);
                 System.out.println("¡OH NO, ESPERA!");
-                System.out.println("¡Esto tenía truco! ¡El rebote te hace daño a ti!");
-                int danioGuanton = (jugador.getVidaMaxima() * this.modificador) / 100;
+                System.out.println("¡El virus corrompe tus propios sistemas! Pierdes el 50% de tu salud máxima.");
+                int danioGuanton = (jugador.getVidaMaxima() * 50) / 100;
                 jugador.recibirDanioDirecto(danioGuanton);
                 break;
 

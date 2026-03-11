@@ -21,14 +21,12 @@ import com.videojuego.controlador.Colisiones; // Importamos nuestra nueva clase
 import com.videojuego.controlador.ControladorMovimiento;
 
 public class PanelMapa extends JPanel {
-	private Clip musicaFondo;
 	private ImageIcon imagenMapa;
 
 	// Variables para la Animación
 	private HashMap<String, ImageIcon> spritesPersonaje;
 	private String direccionActual = "S";
 	private int frameActual = 1;
-	private int volumenActual = 100; // Guardará el porcentaje
 
 	private Personaje personaje;
 	private boolean modoDebug = false;
@@ -62,19 +60,6 @@ public class PanelMapa extends JPanel {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ESCAPE && !juegoPausado) {
 					mostrarDialogoPausa();
-				}
-				// NUEVO EVENTO: Tecla 'E' para combatir o tienda
-				if (e.getKeyCode() == KeyEvent.VK_E && !juegoPausado) {
-					if (bossCercano != null) { // Solo si hay cartelito / estamos en área
-						// Buscamos a la madre de todo (VentanaPrincipal) y le ordenamos combatir
-						VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(PanelMapa.this);
-						// Le pasamos el nombre del boss para que genere la pelea adecuada
-						ventana.iniciarCombate(bossCercano.nombre);
-					} else if (cercaDeDelikia) {
-						// LOGICA DE TIENDA
-						VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(PanelMapa.this);
-						ventana.abrirTienda("Delik.IA", personaje);
-					}
 				}
 			}
 		});
@@ -168,20 +153,7 @@ public class PanelMapa extends JPanel {
 	}
 
 	public void cambiarVolumenMusica(int porcentaje) {
-		this.volumenActual = porcentaje; // Actualizamos la variable
-
-		if (musicaFondo != null && musicaFondo.isOpen()) {
-			// Accedemos al control maestro del volumen del Clip de Java
-			FloatControl control = (FloatControl) musicaFondo.getControl(FloatControl.Type.MASTER_GAIN);
-
-			if (porcentaje == 0) {
-				control.setValue(control.getMinimum()); // Silencio total
-			} else {
-				// Fórmula para convertir de % (0-100) a decibelios
-				float decibelios = (float) (Math.log10(porcentaje / 100.0) * 20.0);
-				control.setValue(decibelios);
-			}
-		}
+		com.videojuego.controlador.ControladorAudio.getInstance().setVolumenGlobal(porcentaje);
 	}
 
 	public void mostrarDialogoPausa() {
@@ -191,7 +163,7 @@ public class PanelMapa extends JPanel {
 		// Llamamos al nuevo constructor del slider
 		MenuEscape menu = new MenuEscape(
 				ventana,
-				volumenActual, // Le decimos en qué % de barra empezar
+				com.videojuego.controlador.ControladorAudio.getInstance().getVolumenGlobal(), // Le decimos en qué % de barra empezar
 				() -> {
 					// Al darle a Continuar
 					juegoPausado = false;
@@ -299,31 +271,25 @@ public class PanelMapa extends JPanel {
 			System.err.println("ERROR: No se encontró la imagen del mapa.");
 		}
 
-		// Cargar Música
-		try {
-			URL urlMusica = getClass().getResource("/assets/audio/mapaInst.wav");
-			if (urlMusica != null) {
-				AudioInputStream audioInst = AudioSystem.getAudioInputStream(urlMusica);
-				musicaFondo = AudioSystem.getClip();
-				musicaFondo.open(audioInst);
-			} else {
-				System.err.println("ERROR: No se encontró el audio del mapa.");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		com.videojuego.controlador.ControladorAudio.getInstance().reproducirMusicaAmbiental("/assets/audio/mapaInst.wav");
 	}
 
 	public void reproducirMusica() {
-		if (musicaFondo != null) {
-			musicaFondo.setFramePosition(0);
-			musicaFondo.loop(Clip.LOOP_CONTINUOUSLY);
-		}
+		com.videojuego.controlador.ControladorAudio.getInstance().reproducirMusicaAmbiental("/assets/audio/mapaInst.wav");
 	}
 
 	public void detenerMusica() {
-		if (musicaFondo != null && musicaFondo.isRunning()) {
-			musicaFondo.stop();
+		com.videojuego.controlador.ControladorAudio.getInstance().detenerMusica();
+	}
+
+	public void interactuar() {
+		if (juegoPausado) return;
+		if (bossCercano != null) {
+			VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(this);
+			ventana.iniciarCombate(bossCercano.nombre);
+		} else if (cercaDeDelikia) {
+			VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(this);
+			ventana.abrirTienda("Delik.IA", personaje);
 		}
 	}
 

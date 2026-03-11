@@ -85,6 +85,7 @@ public class PanelEleccionPersonaje extends JPanel {
         areaEstadisticas.setForeground(Color.WHITE);
         areaEstadisticas.setEditable(false);
         areaEstadisticas.setLineWrap(true); // Añadido para que se comporte como en combate
+        areaEstadisticas.setWrapStyleWord(true); // Salto limpio por palabras
 
         // Posicionamos el texto dentro del panelEstadisticas (dejando un margen)
         areaEstadisticas.setBounds(20, 20, 360, 280);

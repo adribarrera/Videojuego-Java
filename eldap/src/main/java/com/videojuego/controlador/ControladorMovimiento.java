@@ -90,6 +90,15 @@ public class ControladorMovimiento {
                 }
             });
         }
+
+        // --- TECLA DE INTERACCIÓN 'E' ---
+        inputMap.put(KeyStroke.getKeyStroke("released E"), "interact");
+        actionMap.put("interact", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.interactuar(); // Llama al método que creamos en PanelMapa
+            }
+        });
     }
 
     private void moverConLimites(String dir, int limiteX, int limiteY) {

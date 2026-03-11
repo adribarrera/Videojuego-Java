@@ -115,8 +115,7 @@ public class VentanaPrincipal extends JFrame {
 
     public void iniciarJuegoConPersonaje(Personaje elegido) {
         cambiarPanelConTransicion("Pantalla Juego", () -> { // De esta manera, queda que voy a Pantalla Juego y que se
-                                                            // ejecute: DetenerMusica, setPersonaje, reproducirMusica...
-            portada.detenerMusica();
+                                                            // ejecute: setPersonaje, reproducirMusica...
             mapa.setPersonajeJugador(elegido);
             mapa.reproducirMusica();
             mapa.requestFocus();
@@ -127,8 +126,6 @@ public class VentanaPrincipal extends JFrame {
         PanelCombate combate = new PanelCombate(mapa.getPersonaje(), nombreBossEnemigo);
         panelContenedor.add(combate, "Pantalla Combate");
         cambiarPanelConTransicion("Pantalla Combate", () -> {
-            mapa.detenerMusica();
-
             combate.requestFocus();
         });
     }

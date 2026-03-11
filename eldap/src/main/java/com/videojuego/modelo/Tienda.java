@@ -14,21 +14,21 @@ public class Tienda {
     }
 
     private void cargarMaquinaExpendedora() {
-        inventarioTienda.add(new Item("Vaper de Guanábana", "Recuperas un 25% de tu salud máxima.",
-                "/assets/imagenes/Objetos/Normal/vaper.png", 25, TipoEfecto.CURAR_PORCENTAJE, 60));
+        inventarioTienda.add(new Item("Vaper de Guanábana", "Recuperas un 50% de tu salud máxima.",
+                "/assets/imagenes/Objetos/Normal/vaper.png", 50, TipoEfecto.CURAR_PORCENTAJE, 80));
         inventarioTienda.add(new Item("Mantequilla Lista Para Enfoscar (M.L.P.E)",
-                "Inflige 300 puntos de daño fijo al enemigo.", "/assets/imagenes/Objetos/Normal/mantequilla.png", 300,
-                TipoEfecto.DANIO_PORCENTAJE_ENEMIGO, 70));
-        inventarioTienda.add(new Item("Gabardina de Sergio", "Aumenta permanentemente tu defensa en un 20%.",
-                "/assets/imagenes/Objetos/Normal/gabardina.png", 20, TipoEfecto.DUPLICAR_DEFENSA, 100));
-        inventarioTienda.add(new Item("El Chatto", "Robas 200 puntos de vida al enemigo y te curas con ello.",
-                "/assets/imagenes/Objetos/Normal/chato.png", 200, TipoEfecto.ROBAR_VIDA, 200));
+                "Inflige 500 puntos de daño fijo al enemigo.", "/assets/imagenes/Objetos/Normal/mantequilla.png", 500,
+                TipoEfecto.DANIO_PORCENTAJE_ENEMIGO, 150));
+        inventarioTienda.add(new Item("Gabardina de Sergio", "Aumenta permanentemente tu defensa en un 35% extra.",
+                "/assets/imagenes/Objetos/Normal/gabardina.png", 35, TipoEfecto.DUPLICAR_DEFENSA, 120));
+        inventarioTienda.add(new Item("El Chatto", "Robas 600 puntos de vida al enemigo y te curas con ello.",
+                "/assets/imagenes/Objetos/Normal/chato.png", 600, TipoEfecto.ROBAR_VIDA, 250));
         inventarioTienda
                 .add(new Item("Examen Sorpresa de Soraya", "Tu siguiente ataque será un golpe crítico del 100%.",
-                        "/assets/imagenes/Objetos/Normal/examen.png", 0, TipoEfecto.CRITICO_SEGURO, 250));
+                        "/assets/imagenes/Objetos/Normal/examen.png", 0, TipoEfecto.CRITICO_SEGURO, 150));
         inventarioTienda.add(new Item("Virus de Linux",
-                "Inflinges 1000 de daño fijo al enemigo pero pierdes el 25% de tu vida máxima",
-                "/assets/imagenes/Objetos/Normal/virus.png", 25, TipoEfecto.TRAMPA_GUANTON, 50));
+                "Inflinges 1500 de daño fijo al enemigo pero pierdes el 50% de tu vida máxima",
+                "/assets/imagenes/Objetos/Normal/virus.png", 50, TipoEfecto.TRAMPA_GUANTON, 50));
     }
 
     public String obtenerInfoItems(int indice) {

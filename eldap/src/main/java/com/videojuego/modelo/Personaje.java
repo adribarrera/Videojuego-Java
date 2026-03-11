@@ -37,28 +37,28 @@ public class Personaje implements Entidad {
                 this.vidaMaxima = 500;
                 this.ataque = 75;
                 this.defensa = 40; // 40% de reducción de daño
-                this.probCritico = 0.05;
+                this.probCritico = 0.04;
                 this.velocidad = 5;
                 break;
             case "mago":
                 this.vidaMaxima = 350;
                 this.ataque = 120;
                 this.defensa = 15; // 15% de reducción de daño
-                this.probCritico = 0.10;
+                this.probCritico = 0.08;
                 this.velocidad = 7;
                 break;
             case "asesino":
                 this.vidaMaxima = 400;
                 this.ataque = 90;
                 this.defensa = 25; // 25% de reducción de daño
-                this.probCritico = 0.20;
-                this.velocidad = 10;
+                this.probCritico = 0.12;
+                this.velocidad = 9;
                 break;
             default:
                 this.vidaMaxima = 500;
                 this.ataque = 75;
                 this.defensa = 40;
-                this.probCritico = 0.05;
+                this.probCritico = 0.025;
                 this.velocidad = 5;
                 break;
         }
@@ -104,8 +104,8 @@ public class Personaje implements Entidad {
         boolean esCritico = false;
 
         if (Math.random() < this.probCriticoActual) {
-            System.out.println(nombre + " asesta un GOLPE CRÍTICO");
-            danioFinal = danioFinal * 2;
+            System.out.println(nombre + " asesta un GOLPE CRÍTICO MAGISTRAL");
+            danioFinal = danioFinal * 4;
             esCritico = true;
 
             if (this.probCriticoActual >= 1.0) { // Si se han usado las gafas de Soraya, hay que devolverlo a lo normal

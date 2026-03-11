@@ -14,27 +14,27 @@ public class Enemigo implements Entidad {
             case "soraya":
                 this.vidaMaxima = 1500;
                 this.ataque = 120;
-                this.probCritico = 0.15;
+                this.probCritico = 0.075;
                 break;
             case "jessica":
                 this.vidaMaxima = 600;
                 this.ataque = 50;
-                this.probCritico = 0.05;
+                this.probCritico = 0.025;
                 break;
             case "juancarlos":
                 this.vidaMaxima = 1000;
                 this.ataque = 100;
-                this.probCritico = 0.05;
+                this.probCritico = 0.025;
                 break;
             case "sergio":
                 this.vidaMaxima = 3000;
                 this.ataque = 200;
-                this.probCritico = 0.10;
+                this.probCritico = 0.05;
                 break;
             default:
                 this.vidaMaxima = 600;
                 this.ataque = 50;
-                this.probCritico = 0.05;
+                this.probCritico = 0.025;
                 break;
         }
         this.vidaActual = this.vidaMaxima;
@@ -48,8 +48,8 @@ public class Enemigo implements Entidad {
         boolean esCritico = false;
 
         if (Math.random() < this.probCritico) {
-            System.out.println(nombre + " asesta un GOLPE CRÍTICO");
-            danioFinal = danioFinal * 2;
+            System.out.println(nombre + " asesta un GOLPE CRÍTICO SALVAJE");
+            danioFinal = danioFinal * 3;
             esCritico = true;
         }
 

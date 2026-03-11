@@ -23,8 +23,9 @@ public class PanelCombate extends JPanel {
 
     private Personaje jugador;
     private Enemigo enemigo;
-    private ImageIcon imagenEnemigo;
+    private ImageIcon imagenAtaqueEnemigo;
     private ImageIcon imagenJugador;
+    private ImageIcon imagenEnemigo;
     private PanelEstadisticasHUD hudEstadisticas; // Añadimos el HUD
 
     // -- Animaciones --
@@ -102,27 +103,17 @@ public class PanelCombate extends JPanel {
             System.err.println("ERROR: No se encuentra fondoCombate.jpg");
         }
 
-        // Música
         try {
-            URL urlMusica;
             if (this.enemigo.getNombre().equalsIgnoreCase("Sergio")) {
-                urlMusica = getClass().getResource("/assets/audio/bossfinalInst.wav");
+                com.videojuego.controlador.ControladorAudio.getInstance()
+                        .reproducirMusicaAmbiental("/assets/audio/bossfinalInst.wav");
             } else {
-                urlMusica = getClass().getResource("/assets/audio/minibossInst.wav");
-            }
-
-            if (urlMusica != null) {
-                AudioInputStream audioInst = AudioSystem.getAudioInputStream(urlMusica);
-                musicaCombate = AudioSystem.getClip();
-                musicaCombate.open(audioInst);
-                musicaCombate.loop(Clip.LOOP_CONTINUOUSLY);
-            } else {
-                System.err.println("ERROR: No se encuentra música de combate");
+                com.videojuego.controlador.ControladorAudio.getInstance()
+                        .reproducirMusicaAmbiental("/assets/audio/minibossInst.wav");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         // Imagen del enemigo
 
         String nombreBossEnemigo = this.enemigo.getNombre();
@@ -182,11 +173,12 @@ public class PanelCombate extends JPanel {
     // Creación del área de texto.
     private void configurarAreaTexto() {
         areaTexto = new JTextArea("Comienza el combate"); // Texto introductorio
-        areaTexto.setFont(new Font("Monospaced", Font.BOLD, 22)); // Fuente
+        areaTexto.setFont(new Font("Monospaced", Font.BOLD, 18)); // Fuente reducida de 22 a 18 para que quepan 5 líneas
         areaTexto.setBackground(Color.decode("#123038")); // Color del fondo del area de texto
         areaTexto.setForeground(Color.WHITE); // Color de la fuente del area de texto
         areaTexto.setEditable(false); // No editable
         areaTexto.setLineWrap(true); // Para que el texto corte y no se salga del cuadro
+        areaTexto.setWrapStyleWord(true); // Corta por palabras, no por letras
         areaTexto.setBounds(30, 30, 600, 140); // Posicion y dimensiones // Se añade al JPanel inferior
     }
 
@@ -262,8 +254,12 @@ public class PanelCombate extends JPanel {
                     animarVibracionEnemigo();
                 }
                 String prefijoCritico = critico ? "¡GOLPE CRÍTICO!\n" : "";
-                areaTexto.setText(prefijoCritico + "Has atacado a " + this.enemigo.getNombre() + ". Le queda "
-                        + this.enemigo.getVidaActual() + " de vida.");
+                if (enemigo.estaVivo()) {
+                    areaTexto.setText(prefijoCritico + "Has atacado a " + this.enemigo.getNombre() + ". Le queda "
+                            + this.enemigo.getVidaActual() + " de vida.");
+                } else {
+                    areaTexto.setText(prefijoCritico + "Has atacado a " + this.enemigo.getNombre() + " con un golpe letal.");
+                }
             });
         });
 
@@ -509,13 +505,23 @@ public class PanelCombate extends JPanel {
         // Verificamos si el enemigo murió
         if (!this.enemigo.estaVivo()) {
 
-            // Recompensa de monedas con factor de aleatoriedad (+/- 20% de las 100 base, es
-            // decir, de 80 a 120)
-            int monedasGanadas = 80 + (int) (Math.random() * 41);
+            // Recompensa de monedas dependiente del boss
+            int monedasGanadas = 0;
+            String nombreJefe = this.enemigo.getNombre().toLowerCase();
+            
+            if (nombreJefe.contains("jessica")) {
+                monedasGanadas = 50 + (int) (Math.random() * 31); // 50 - 80
+            } else if (nombreJefe.contains("juancarlos") || nombreJefe.contains("juan carlos")) {
+                monedasGanadas = 90 + (int) (Math.random() * 41); // 90 - 130
+            } else if (nombreJefe.contains("soraya")) {
+                monedasGanadas = 140 + (int) (Math.random() * 41); // 140 - 180
+            } else {
+                monedasGanadas = 100; // Default just in case
+            }
 
             areaTexto.setText(areaTexto.getText() + "\n¡Has derrotado a " + this.enemigo.getNombre()
-                    + "!\nHas ganado " + monedasGanadas
-                    + " monedas.\n¡Tus estadísticas han aumentado y te has curado!");
+                    + " y consigues " + monedasGanadas
+                    + " oro!\n¡Tus estadísticas han aumentado y te has curado por completo!");
 
             this.jugador.setDinero(this.jugador.getDinero() + monedasGanadas);
             this.jugador.mejorarAtributosAlDerrotarBoss();

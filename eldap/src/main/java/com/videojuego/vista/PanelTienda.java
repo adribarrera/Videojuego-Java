@@ -9,7 +9,6 @@ import com.videojuego.modelo.Personaje;
 import com.videojuego.modelo.Tienda;
 
 public class PanelTienda extends JPanel {
-    private Clip musicaFondo;
     private ImageIcon imagenFondo;
 
     private Tienda maquinaDelikia = new Tienda("Delik.IA");
@@ -53,18 +52,7 @@ public class PanelTienda extends JPanel {
             System.err.println("ERROR: No se encontró la imagen de la tienda");
         }
 
-        try {
-            URL urlMusica = getClass().getResource("/assets/audio/mapaInst.wav");
-            if (urlMusica != null) {
-                AudioInputStream audioInst = AudioSystem.getAudioInputStream(urlMusica);
-                musicaFondo = AudioSystem.getClip();
-                musicaFondo.open(audioInst);
-            } else {
-                System.err.println("ERROR: No se encontró el audio de la tienda.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        com.videojuego.controlador.ControladorAudio.getInstance().reproducirMusicaAmbiental("/assets/audio/mapaInst.wav");
 
     }
 
@@ -137,9 +125,8 @@ public class PanelTienda extends JPanel {
         areaDescripcion.setForeground(Color.WHITE);
         areaDescripcion.setEditable(false);
         areaDescripcion.setLineWrap(true);
+        areaDescripcion.setWrapStyleWord(true); // Evitar salto a mitad de palabra
         areaDescripcion.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Le damos un "padding" de 10px
-                                                                                    // para que las letras no choquen
-                                                                                    // con el borde
 
         panelContenedorTexto.add(areaDescripcion, BorderLayout.CENTER);
         panelMenu.add(panelContenedorTexto);

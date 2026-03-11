@@ -8,7 +8,6 @@ import com.videojuego.controlador.Boton;
 
 public class PanelPortada extends JPanel {
 
-	private Clip musicaFondo;
 	private ImageIcon imagenFondo;
 
 	public PanelPortada() {
@@ -30,31 +29,17 @@ public class PanelPortada extends JPanel {
 				System.err.println("ERROR: No se encuentró la imagen de portada.");
 			}
 
-			// Cargar Música
-			URL urlMusica = getClass().getResource("/assets/audio/instrumentalPortada.wav");
-			if (urlMusica != null) {
-				AudioInputStream audioInst = AudioSystem.getAudioInputStream(urlMusica);
-				musicaFondo = AudioSystem.getClip();
-				musicaFondo.open(audioInst);
-			} else {
-				System.err.println("ERROR: No se encontró el audio de la portada.");
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void reproducirMusica() {
-		if (musicaFondo != null) {
-			musicaFondo.setFramePosition(0);
-			musicaFondo.loop(Clip.LOOP_CONTINUOUSLY);
-		}
+		com.videojuego.controlador.ControladorAudio.getInstance().reproducirMusicaAmbiental("/assets/audio/instrumentalPortada.wav");
 	}
 
 	public void detenerMusica() {
-		if (musicaFondo != null && musicaFondo.isRunning()) {
-			musicaFondo.stop();
-		}
+		com.videojuego.controlador.ControladorAudio.getInstance().detenerMusica();
 	}
 
 	private void configurarBotones() {
