@@ -6,5 +6,5 @@ public enum TipoEfecto {
     DUPLICAR_DEFENSA, // Gabardina de Sergio
     ROBAR_VIDA, // El Chatto
     CRITICO_SEGURO, // Gafas de Soraya
-    TRAMPA_GUANTON // Guantón de Juan Carlos
+    TRAMPA_VIRUS // Guantón de Juan Carlos
 }

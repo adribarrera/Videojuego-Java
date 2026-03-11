@@ -206,13 +206,14 @@ public class Personaje implements Entidad {
         }
     }
 
-    public void usarItem(int indice, Enemigo enemigoEnCombate) {
+    public String usarItem(int indice, Enemigo enemigoEnCombate) {
         if (indice >= 0 && indice < inventario.size()) {
             Item item = inventario.get(indice);
-            item.aplicarA(this, enemigoEnCombate);
+            String mensaje = item.aplicarA(this, enemigoEnCombate);
             inventario.remove(indice);
+            return mensaje;
         } else {
-            System.out.println("No hay objeto en ese hueco");
+            return "No hay objeto en ese hueco.";
         }
     }
 

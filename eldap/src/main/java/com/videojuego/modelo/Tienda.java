@@ -27,8 +27,8 @@ public class Tienda {
                 .add(new Item("Examen Sorpresa de Soraya", "Tu siguiente ataque será un golpe crítico del 100%.",
                         "/assets/imagenes/Objetos/Normal/examen.png", 0, TipoEfecto.CRITICO_SEGURO, 150));
         inventarioTienda.add(new Item("Virus de Linux",
-                "Inflinges 1500 de daño fijo al enemigo pero pierdes el 50% de tu vida máxima",
-                "/assets/imagenes/Objetos/Normal/virus.png", 50, TipoEfecto.TRAMPA_GUANTON, 50));
+                "Inflinges 1500 de daño fijo al enemigo pero...",
+                "/assets/imagenes/Objetos/Normal/virus.png", 50, TipoEfecto.TRAMPA_VIRUS, 50));
     }
 
     public String obtenerInfoItems(int indice) {

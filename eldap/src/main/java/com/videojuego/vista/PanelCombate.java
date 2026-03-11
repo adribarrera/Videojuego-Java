@@ -273,7 +273,7 @@ public class PanelCombate extends JPanel {
         int xSalir = 850;
 
         // Creamos el botón (puedes usar la imagen que prefieras)
-        botonSalir = Boton.crearBotonImagen("/assets/imagenes/botonSalirEscape.png", ancho, alto);
+        botonSalir = Boton.crearBotonImagen("/assets/imagenes/BotonVolverAlMapa.png", ancho, alto);
         botonSalir.setBounds(xSalir, yBotones, ancho, alto);
 
         // ¡Magia aquí! Lo ocultamos nada más empezar el combate
@@ -338,7 +338,7 @@ public class PanelCombate extends JPanel {
     private void activarMenuObjetos() {
         List<Item> inventario = jugador.getInventario();
         if (inventario.isEmpty()) {
-            areaTexto.setText("Buscas en la mochila pero no llevas ningún objeto.");
+            añadirLinea("Buscas en la mochila pero no llevas ningún objeto.");
             return;
         }
 
@@ -365,7 +365,7 @@ public class PanelCombate extends JPanel {
 
         botonConfirmarObjeto.setVisible(true);
         botonCancelarObjeto.setVisible(true);
-        areaTexto.setText("Has abierto la mochila, elige el objeto a usar.");
+        añadirLinea("Has abierto la mochila, elige el objeto a usar.");
     }
 
     private void seleccionarItemInventario(int indice) {
@@ -382,33 +382,32 @@ public class PanelCombate extends JPanel {
         itemSeleccionadoCombate = indice;
 
         Item obj = inv.get(indice);
-        areaTexto.setText(obj.getNombre() + "\n" + obj.getDescripcion());
+        añadirLinea(obj.getNombre() + ": " + obj.getDescripcion());
     }
 
     private void usarItemSeleccionado() {
         if (itemSeleccionadoCombate == -1) {
-            areaTexto.setText("Selecciona un objeto de la lista.");
+            añadirLinea("Selecciona un objeto de la lista.");
             return;
         }
 
-        Item obj = jugador.getInventario().get(itemSeleccionadoCombate);
 
         ejecutarTurnoJugador(() -> {
             int vidaEnemigoAntes = enemigo.getVidaActual();
-            jugador.usarItem(itemSeleccionadoCombate, enemigo); // Efecto aplicado internamente
+            String mensajeItem = jugador.usarItem(itemSeleccionadoCombate, enemigo);
 
             cerrarMenuObjeto(true);
 
             if (enemigo.getVidaActual() < vidaEnemigoAntes) {
                 animarVibracionEnemigo();
             }
-            areaTexto.setText("Has usado " + obj.getNombre() + ".");
+            añadirLinea(mensajeItem);
         });
     }
 
     private void cancelarMenuObjeto() {
         cerrarMenuObjeto(true);
-        areaTexto.setText("Decides guardarte la mochila. ¿Atacas o esperas?");
+        añadirLinea("Decides guardarte la mochila. ¿Atacas o esperas?");
     }
 
     private void cerrarMenuObjeto(boolean restaurarBotonesPrincipales) {
@@ -423,6 +422,38 @@ public class PanelCombate extends JPanel {
             botonAtacar.setVisible(true);
             botonUsarObjeto.setVisible(true);
         }
+    }
+
+    /**
+     * Ventana deslizante de 4 líneas para el areaTexto.
+     * Si ya hay 4 o más líneas, elimina la primera antes de añadir la nueva.
+     */
+    private void añadirLinea(String nuevaLinea) {
+        // Si la nueva línea tiene saltos internos, la procesamos en partes
+        if (nuevaLinea.contains("\n")) {
+            for (String parte : nuevaLinea.split("\n", -1)) {
+                añadirLinea(parte);
+            }
+            return;
+        }
+
+        String actual = areaTexto.getText();
+        String[] lineas = actual.isEmpty() ? new String[0] : actual.split("\n", -1);
+
+        int MAX_LINEAS = 4;
+        String resultado;
+        if (lineas.length >= MAX_LINEAS) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 1; i < lineas.length; i++) {
+                if (i > 1) sb.append("\n");
+                sb.append(lineas[i]);
+            }
+            sb.append("\n").append(nuevaLinea);
+            resultado = sb.toString();
+        } else {
+            resultado = actual.isEmpty() ? nuevaLinea : actual + "\n" + nuevaLinea;
+        }
+        areaTexto.setText(resultado);
     }
 
     // --- ANIMACIONES Y FLUJO DE TURNOS ---
@@ -494,7 +525,7 @@ public class PanelCombate extends JPanel {
         // Verificamos suicidio instántaneo (como con el Guantón)
         if (!this.jugador.estaVivo()) {
             animarVibracionPantalla();
-            areaTexto.setText(areaTexto.getText() + "\n¡Has sido derrotado! Fin del juego...");
+            añadirLinea("¡Has sido derrotado! Fin del juego...");
             cerrarMenuObjeto(false);
             botonAtacar.setVisible(false);
             botonUsarObjeto.setVisible(false);
@@ -525,9 +556,9 @@ public class PanelCombate extends JPanel {
                 monedasGanadas = 100; // Default just in case
             }
 
-            areaTexto.setText(areaTexto.getText() + "\n¡Has derrotado a " + this.enemigo.getNombre()
-                    + " y consigues " + monedasGanadas
-                    + " oro!\n¡Tus estadísticas han aumentado y te has curado por completo!");
+            añadirLinea("¡Has derrotado a " + this.enemigo.getNombre()
+                    + " y consigues " + monedasGanadas + " oro!");
+            añadirLinea("¡Tus estadísticas han aumentado y te has curado!");
 
             this.jugador.setDinero(this.jugador.getDinero() + monedasGanadas);
             this.jugador.mejorarAtributosAlDerrotarBoss();
@@ -575,11 +606,11 @@ public class PanelCombate extends JPanel {
                 hudEstadisticas.actualizarEstadisticas(jugador);
 
             String prefijoCriticoEnemigo = criticoEnemigo ? "¡GOLPE CRÍTICO!\n" : "";
-            areaTexto.setText(areaTexto.getText() + "\n" + prefijoCriticoEnemigo +
-                    this.enemigo.getNombre() + " contraataca! Te queda " + this.jugador.getVidaActual() + " de vida.");
+            añadirLinea(prefijoCriticoEnemigo + this.enemigo.getNombre()
+                    + " contraataca! Te queda " + this.jugador.getVidaActual() + " de vida.");
 
             if (!this.jugador.estaVivo()) {
-                areaTexto.setText(areaTexto.getText() + "\n¡Has sido derrotado! Fin del juego...");
+                añadirLinea("¡Has sido derrotado! Fin del juego...");
                 cerrarMenuObjeto(false);
                 botonAtacar.setVisible(false);
                 botonUsarObjeto.setVisible(false);

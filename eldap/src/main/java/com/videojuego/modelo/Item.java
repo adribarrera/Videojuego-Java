@@ -60,58 +60,39 @@ public class Item {
         return precio;
     }
 
-    public void aplicarA(Personaje jugador, Enemigo enemigo) {
-        System.out.println("Usando " + this.nombre + "...");
-
+    public String aplicarA(Personaje jugador, Enemigo enemigo) {
         switch (this.efecto) {
             case CURAR_PORCENTAJE: // VAPER
-                System.out.println(
-                        "Necesitas un break. Le das una calada al vaper. Disfrutas el sabor de la guanábana. Recuperas un "
-                                + this.modificador + "% de tu salud");
                 int cura = (jugador.getVidaMaxima() * this.modificador) / 100;
                 jugador.curar(cura);
-                break;
+                return "Le das una calada al vaper. Sabor guanábana.\nRecuperas un " + this.modificador + "% de tu salud.";
 
             case DANIO_PORCENTAJE_ENEMIGO: // M.L.P.E
-                System.out.println("Abres la mantequilla y le lanzas tropezones al enemigo.");
-                System.out.println("Infliges " + this.modificador + " puntos de daño fijo de puro enfoscamiento.");
                 enemigo.recibirDanioDirecto(this.modificador);
-                break;
+                return "Lanzas tropezones de mantequilla al enemigo.\nInfliges " + this.modificador + " de daño fijo.";
 
             case DUPLICAR_DEFENSA: // GABARDINA DE SERGIO
-                System.out.println("Te pones la gabardina de Sergio. Te vuelves casi invulnerable.");
-                System.out.println("Tu resistencia al daño aumenta un " + this.modificador + "% extra permanentemente.");
                 jugador.aumentarDefensa(this.modificador);
-                break;
+                return "Te pones la gabardina de Sergio.\nTu resistencia aumenta un " + this.modificador + "% extra.";
 
             case ROBAR_VIDA: // EL CHATTO
-                System.out.println("El Chatto le roba la vitalidad al enemigo. Le quitas " + this.modificador
-                        + " puntos de forma directa y te curas con ellos");
                 enemigo.recibirDanioDirecto(this.modificador);
                 jugador.curar(this.modificador);
-                break;
+                return "El Chatto roba vitalidad al enemigo.\nLe quitas " + this.modificador + " HP y te los curas.";
 
-            case CRITICO_SEGURO: // GAFAS DE SORAYA
-                System.out.println(
-                        "Te pones las Gafas de Soraya. Ves todo con más claridad, hasta los puntos débiles del enemigo.");
-                System.out.println("Tu siguiente ataque infligirá un crítico del 100%");
-                jugador.setProbCriticoActual(1.0); // 100% de probabilidad
-                break;
+            case CRITICO_SEGURO: // EXAMEN DE SORAYA
+                jugador.setProbCriticoActual(1.0);
+                return "Sacas el examen sorpresa de Soraya.\nTu siguiente ataque será un crítico del 100%.";
 
-            case TRAMPA_GUANTON: // VIRUS DE LINUX
-                System.out.println("¡Usas el código fuente corrupto en tu enemigo!");
-                System.out.println("Infliges 1500 de daño devastador.");
+            case TRAMPA_VIRUS: // VIRUS DE LINUX
                 enemigo.recibirDanioDirecto(1500);
-                System.out.println("¡OH NO, ESPERA!");
-                System.out.println("¡El virus corrompe tus propios sistemas! Pierdes el 50% de tu salud máxima.");
-                int danioGuanton = (jugador.getVidaMaxima() * 50) / 100;
-                jugador.recibirDanioDirecto(danioGuanton);
-                break;
+                int danioVirus = (jugador.getVidaMaxima() * 50) / 100;
+                jugador.recibirDanioDirecto(danioVirus);
+                return "¡Lanzas el virus al enemigo! 1500 de daño.\n¡Oh no! El virus te corrompe: pierdes el 50% de tu vida.";
 
             default:
-                System.out.println("Efecto desconocido.");
-                break;
+                return "Efecto desconocido.";
         }
     }
 
-}
+}
