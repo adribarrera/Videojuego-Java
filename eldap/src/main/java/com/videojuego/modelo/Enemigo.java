@@ -17,12 +17,13 @@ public class Enemigo implements Entidad {
                 this.probCritico = 0.075;
                 break;
             case "jessica":
-                this.vidaMaxima = 600;
+                this.vidaMaxima = 60;
                 this.ataque = 50;
                 this.probCritico = 0.025;
                 break;
+
             case "juancarlos":
-                this.vidaMaxima = 1000;
+                this.vidaMaxima = 100;
                 this.ataque = 100;
                 this.probCritico = 0.025;
                 break;

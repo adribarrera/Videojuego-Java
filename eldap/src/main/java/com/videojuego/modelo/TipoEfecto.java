@@ -2,9 +2,9 @@ package com.videojuego.modelo;
 
 public enum TipoEfecto {
     CURAR_PORCENTAJE, // Vaper
-    DANIO_PORCENTAJE_ENEMIGO, // M.L.P.E.
-    DUPLICAR_DEFENSA, // Gabardina de Sergio
+    AUMENTAR_CRITICO, // M.L.P.E.
+    AUMENTAR_DEFENSA, // Gabardina de Sergio
     ROBAR_VIDA, // El Chatto
     CRITICO_SEGURO, // Examen de Soraya
-    TRAMPA_VIRUS // Virus de Linux
+    PACTO_VIDA_ATAQUE // Virus de Linux
 }

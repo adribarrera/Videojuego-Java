@@ -34,24 +34,24 @@ public class Personaje implements Entidad {
 
         switch (claseElegida.toLowerCase()) {
             case "guerrero":
-                this.vidaMaxima = 500;
+                this.vidaMaxima = 600;
                 this.ataque = 75;
                 this.defensa = 40; // 40% de reducción de daño
                 this.probCritico = 0.04;
                 this.velocidad = 5;
                 break;
             case "mago":
-                this.vidaMaxima = 350;
+                this.vidaMaxima = 400;
                 this.ataque = 120;
-                this.defensa = 15; // 15% de reducción de daño
+                this.defensa = 30; // 15% de reducción de daño
                 this.probCritico = 0.08;
                 this.velocidad = 6;
                 break;
             case "asesino":
-                this.vidaMaxima = 400;
+                this.vidaMaxima = 500;
                 this.ataque = 90;
-                this.defensa = 25; // 25% de reducción de daño
-                this.probCritico = 0.12;
+                this.defensa = 35; // 25% de reducción de daño
+                this.probCritico = 0.25;
                 this.velocidad = 7;
                 break;
             default:
@@ -126,7 +126,7 @@ public class Personaje implements Entidad {
 
         // La defensa reduce el daño recibido de forma porcentual (Ej: 30 de defensa =
         // 30% menos daño)
-        double porcentajeReduccion = Math.min(this.defensa, 90) / 100.0; // Cap a 90% para nunca ser invencible
+        double porcentajeReduccion = Math.min(this.defensa, 75) / 100.0; // Cap a 75% para nunca ser invencible
         int danioReducido = (int) (cantidad * (1.0 - porcentajeReduccion));
 
         // Siempre nos harán al menos 1 punto de daño si nos golpean de forma normal
@@ -244,6 +244,10 @@ public class Personaje implements Entidad {
 
     public int getVidaActual() {
         return vidaActual;
+    }
+
+    public void setVidaActual(int vidaActual) {
+        this.vidaActual = vidaActual;
     }
 
     public int getAtaque() {

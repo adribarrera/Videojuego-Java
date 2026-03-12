@@ -68,13 +68,15 @@ public class Item {
                 return "Le das una calada al vaper. Sabor guanábana.\nRecuperas un " + this.modificador
                         + "% de tu salud.";
 
-            case DANIO_PORCENTAJE_ENEMIGO: // M.L.P.E
-                enemigo.recibirDanioDirecto(this.modificador);
-                return "Lanzas tropezones de mantequilla al enemigo.\nInfliges " + this.modificador + " de daño fijo.";
+            case AUMENTAR_CRITICO: // M.L.P.E
+                double incremento = this.modificador / 100.0;
+                jugador.setProbCritico(jugador.getProbCritico() + incremento);
+                jugador.setProbCriticoActual(jugador.getProbCritico());
+                return "Te embadurnas las manos de Mantequilla L.P.E.\nMejora el agarre de tu arma: aumenta tu crítico permanente un " + this.modificador + "%.";
 
-            case DUPLICAR_DEFENSA: // GABARDINA DE SERGIO
+            case AUMENTAR_DEFENSA: // GABARDINA DE SERGIO
                 jugador.aumentarDefensa(this.modificador);
-                return "Te pones la gabardina de Sergio.\nTu resistencia aumenta un " + this.modificador + "% extra.";
+                return "Te pones la gabardina de Sergio.\nTu resistencia aumenta " + this.modificador + " puntos extra.";
 
             case ROBAR_VIDA: // EL CHATTO
                 enemigo.recibirDanioDirecto(this.modificador);
@@ -85,10 +87,14 @@ public class Item {
                 jugador.setProbCriticoActual(1.0);
                 return "Sacas el examen sorpresa de Soraya.\nTu siguiente ataque será un crítico del 100%.";
 
-            case TRAMPA_VIRUS: // VIRUS DE LINUX
-                int danioVirus = (jugador.getVidaMaxima() * 50) / 100;
-                jugador.recibirDanioDirecto(danioVirus);
-                return "Lanzas el virus al enemigo y...\n¡Oh no! El virus te corrompe: pierdes el 50% de tu vida.";
+            case PACTO_VIDA_ATAQUE: // VIRUS DE LINUX
+                int costeHp = (jugador.getVidaMaxima() * 20) / 100;
+                jugador.setVidaMaxima(jugador.getVidaMaxima() - costeHp);
+                if (jugador.getVidaActual() > jugador.getVidaMaxima()) {
+                    jugador.setVidaActual(jugador.getVidaMaxima());
+                }
+                jugador.setAtaque(jugador.getAtaque() + this.modificador);
+                return "Aceptas el Virus... sacrificas 20% de salud máxima\ny ganas +" + this.modificador + " de ataque permanentemente.";
 
             default:
                 return "Efecto desconocido.";
