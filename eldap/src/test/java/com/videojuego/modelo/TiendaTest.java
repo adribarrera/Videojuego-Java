@@ -10,7 +10,7 @@ class TiendaTest {
     void obtenerInfoItems_devuelveInfoOEspacioVacio() {
         Tienda t = new Tienda("T");
         String info = t.obtenerInfoItems(0);
-        assertTrue(info.contains("Precio"));
+        assertTrue(info.contains("Precio:"));
 
         String vacio = t.obtenerInfoItems(999);
         assertTrue(vacio.startsWith("Espacio"));
@@ -19,7 +19,7 @@ class TiendaTest {
     @Test
     void procesarCompra_indiceInvalido() {
         Tienda t = new Tienda("T");
-        Personaje p = new Personaje("Ana", "guerrero");
+        Personaje p = new Personaje("zeio", "guerrero");
         String res = t.procesarCompra(-1, p);
         assertTrue(res.startsWith("Selecci"));
     }
@@ -27,16 +27,16 @@ class TiendaTest {
     @Test
     void procesarCompra_sinDinero() {
         Tienda t = new Tienda("T");
-        Personaje p = new Personaje("Ana", "guerrero");
+        Personaje p = new Personaje("zeio", "guerrero");
         p.setDinero(0);
         String res = t.procesarCompra(0, p);
-        assertTrue(res.startsWith("Te faltan "));
+        assertTrue(res.startsWith("Te faltan"));
     }
 
     @Test
     void procesarCompra_ok_descuentaYAgrega() {
         Tienda t = new Tienda("T");
-        Personaje p = new Personaje("Ana", "guerrero");
+        Personaje p = new Personaje("zeio", "guerrero");
         p.setDinero(1000);
 
         String res = t.procesarCompra(0, p);
@@ -49,7 +49,7 @@ class TiendaTest {
     @Test
     void procesarCompra_inventarioLleno() {
         Tienda t = new Tienda("T");
-        Personaje p = new Personaje("Ana", "guerrero");
+        Personaje p = new Personaje("zeio", "guerrero");
         p.setDinero(1000);
 
         p.recogerItem(new Item("I1", "", "/no-existe.png", 0, TipoEfecto.CURAR_PORCENTAJE, 1));
