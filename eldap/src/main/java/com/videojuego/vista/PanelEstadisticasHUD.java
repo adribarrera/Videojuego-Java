@@ -10,6 +10,7 @@ public class PanelEstadisticasHUD extends JPanel {
     private JLabel labelVida;
     private JLabel labelAtaque;
     private JLabel labelDefensa;
+    private JLabel labelCritico;
     private JLabel labelMonedas;
 
     public PanelEstadisticasHUD() {
@@ -20,12 +21,14 @@ public class PanelEstadisticasHUD extends JPanel {
         labelVida = crearLabelConIcono("/assets/imagenes/Iconos/Vida.png", "0/0");
         labelAtaque = crearLabelConIcono("/assets/imagenes/Iconos/Ataque.png", "0");
         labelDefensa = crearLabelConIcono("/assets/imagenes/Iconos/Escudo.png", "0%");
+        labelCritico = crearLabelConIcono("/assets/imagenes/Iconos/Critico.png", "0%");
         labelMonedas = crearLabelConIcono("/assets/imagenes/Iconos/Moneda.png", "0");
 
         // Añadirlos al panel
         this.add(labelVida);
         this.add(labelAtaque);
         this.add(labelDefensa);
+        this.add(labelCritico);
         this.add(labelMonedas);
     }
 
@@ -56,6 +59,7 @@ public class PanelEstadisticasHUD extends JPanel {
             labelVida.setText(personaje.getVidaActual() + "/" + personaje.getVidaMaxima());
             labelAtaque.setText(String.valueOf(personaje.getAtaque()));
             labelDefensa.setText(personaje.getDefensa() + "%");
+            labelCritico.setText((int)(personaje.getProbCritico() * 100) + "%");
             labelMonedas.setText(String.valueOf(personaje.getDinero()));
         }
     }
