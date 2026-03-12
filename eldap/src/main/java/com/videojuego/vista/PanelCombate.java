@@ -391,7 +391,6 @@ public class PanelCombate extends JPanel {
             return;
         }
 
-
         ejecutarTurnoJugador(() -> {
             int vidaEnemigoAntes = enemigo.getVidaActual();
             String mensajeItem = jugador.usarItem(itemSeleccionadoCombate, enemigo);
@@ -445,7 +444,8 @@ public class PanelCombate extends JPanel {
         if (lineas.length >= MAX_LINEAS) {
             StringBuilder sb = new StringBuilder();
             for (int i = 1; i < lineas.length; i++) {
-                if (i > 1) sb.append("\n");
+                if (i > 1)
+                    sb.append("\n");
                 sb.append(lineas[i]);
             }
             sb.append("\n").append(nuevaLinea);
@@ -522,7 +522,7 @@ public class PanelCombate extends JPanel {
         if (hudEstadisticas != null)
             hudEstadisticas.actualizarEstadisticas(jugador);
 
-        // Verificamos suicidio instántaneo (como con el Guantón)
+        // Verificamos suicidio instántaneo
         if (!this.jugador.estaVivo()) {
             animarVibracionPantalla();
             añadirLinea("¡Has sido derrotado! Fin del juego...");
@@ -532,7 +532,8 @@ public class PanelCombate extends JPanel {
             // Timer de 2.5s antes de ir a PanelDerrota
             Timer timerDerrota = new Timer(2500, ev -> {
                 VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(PanelCombate.this);
-                if (ventana != null) ventana.irADerrota();
+                if (ventana != null)
+                    ventana.irADerrota();
             });
             timerDerrota.setRepeats(false);
             timerDerrota.start();
@@ -547,18 +548,18 @@ public class PanelCombate extends JPanel {
             String nombreJefe = this.enemigo.getNombre().toLowerCase();
 
             if (nombreJefe.contains("jessica")) {
-                monedasGanadas = 50 + (int) (Math.random() * 31); // 50 - 80
+                monedasGanadas = 80 + (int) (Math.random() * 31); // 80 - 110
             } else if (nombreJefe.contains("juancarlos") || nombreJefe.contains("juan carlos")) {
-                monedasGanadas = 90 + (int) (Math.random() * 41); // 90 - 130
+                monedasGanadas = 120 + (int) (Math.random() * 41); // 120 - 160
             } else if (nombreJefe.contains("soraya")) {
-                monedasGanadas = 140 + (int) (Math.random() * 41); // 140 - 180
+                monedasGanadas = 200 + (int) (Math.random() * 41); // 200 - 240
             } else {
                 monedasGanadas = 100; // Default just in case
             }
 
             añadirLinea("¡Has derrotado a " + this.enemigo.getNombre()
                     + " y consigues " + monedasGanadas + " oro!");
-            añadirLinea("¡Tus estadísticas han aumentado y te has curado!");
+            añadirLinea("¡Mejoras tus stats y te curas por completo!");
 
             this.jugador.setDinero(this.jugador.getDinero() + monedasGanadas);
             this.jugador.mejorarAtributosAlDerrotarBoss();
@@ -573,7 +574,8 @@ public class PanelCombate extends JPanel {
                 // BOSS FINAL: transición automática a pantalla de Victoria
                 Timer timerVictoria = new Timer(2500, ev -> {
                     VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(PanelCombate.this);
-                    if (ventana != null) ventana.irAVictoria();
+                    if (ventana != null)
+                        ventana.irAVictoria();
                 });
                 timerVictoria.setRepeats(false);
                 timerVictoria.start();
@@ -617,7 +619,8 @@ public class PanelCombate extends JPanel {
                 // Timer de 2.5s antes de ir a PanelDerrota
                 Timer timerDerrota = new Timer(2500, ev -> {
                     VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(PanelCombate.this);
-                    if (ventana != null) ventana.irADerrota();
+                    if (ventana != null)
+                        ventana.irADerrota();
                 });
                 timerDerrota.setRepeats(false);
                 timerDerrota.start();

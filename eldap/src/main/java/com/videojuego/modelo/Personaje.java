@@ -45,14 +45,14 @@ public class Personaje implements Entidad {
                 this.ataque = 120;
                 this.defensa = 15; // 15% de reducción de daño
                 this.probCritico = 0.08;
-                this.velocidad = 7;
+                this.velocidad = 6;
                 break;
             case "asesino":
                 this.vidaMaxima = 400;
                 this.ataque = 90;
                 this.defensa = 25; // 25% de reducción de daño
                 this.probCritico = 0.12;
-                this.velocidad = 9;
+                this.velocidad = 7;
                 break;
             default:
                 this.vidaMaxima = 500;
@@ -105,7 +105,7 @@ public class Personaje implements Entidad {
 
         if (Math.random() < this.probCriticoActual) {
             System.out.println(nombre + " asesta un GOLPE CRÍTICO MAGISTRAL");
-            danioFinal = danioFinal * 4;
+            danioFinal = danioFinal * 3;
             esCritico = true;
 
             if (this.probCriticoActual >= 1.0) { // Si se han usado las gafas de Soraya, hay que devolverlo a lo normal
@@ -175,7 +175,7 @@ public class Personaje implements Entidad {
 
     // --- METODOS DE ITEMS ---
 
-    public void recibirDanioDirecto(int cantidad) { // Para el Chatto y el Guantón de Juan Carlos
+    public void recibirDanioDirecto(int cantidad) { // Para el Chatto y el Virus
         this.vidaActual = this.vidaActual - cantidad;
         if (this.vidaActual < 0) {
             this.vidaActual = 0;

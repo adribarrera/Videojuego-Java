@@ -65,7 +65,8 @@ public class Item {
             case CURAR_PORCENTAJE: // VAPER
                 int cura = (jugador.getVidaMaxima() * this.modificador) / 100;
                 jugador.curar(cura);
-                return "Le das una calada al vaper. Sabor guanábana.\nRecuperas un " + this.modificador + "% de tu salud.";
+                return "Le das una calada al vaper. Sabor guanábana.\nRecuperas un " + this.modificador
+                        + "% de tu salud.";
 
             case DANIO_PORCENTAJE_ENEMIGO: // M.L.P.E
                 enemigo.recibirDanioDirecto(this.modificador);
@@ -85,14 +86,13 @@ public class Item {
                 return "Sacas el examen sorpresa de Soraya.\nTu siguiente ataque será un crítico del 100%.";
 
             case TRAMPA_VIRUS: // VIRUS DE LINUX
-                enemigo.recibirDanioDirecto(1500);
                 int danioVirus = (jugador.getVidaMaxima() * 50) / 100;
                 jugador.recibirDanioDirecto(danioVirus);
-                return "¡Lanzas el virus al enemigo! 1500 de daño.\n¡Oh no! El virus te corrompe: pierdes el 50% de tu vida.";
+                return "Lanzas el virus al enemigo y...\n¡Oh no! El virus te corrompe: pierdes el 50% de tu vida.";
 
             default:
                 return "Efecto desconocido.";
         }
     }
 
-}
+}

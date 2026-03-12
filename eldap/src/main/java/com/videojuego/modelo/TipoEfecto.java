@@ -5,6 +5,6 @@ public enum TipoEfecto {
     DANIO_PORCENTAJE_ENEMIGO, // M.L.P.E.
     DUPLICAR_DEFENSA, // Gabardina de Sergio
     ROBAR_VIDA, // El Chatto
-    CRITICO_SEGURO, // Gafas de Soraya
-    TRAMPA_VIRUS // Guantón de Juan Carlos
+    CRITICO_SEGURO, // Examen de Soraya
+    TRAMPA_VIRUS // Virus de Linux
 }
