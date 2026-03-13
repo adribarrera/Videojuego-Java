@@ -123,7 +123,7 @@ public class PanelTienda extends JPanel {
         panelContenedorTexto.setLayout(new BorderLayout()); // Para que el texto ocupe todo el interior
         panelContenedorTexto.setBorder(BorderFactory.createLineBorder(Color.decode("#00CBD1"), 2)); // Borde panel texto
 
-        areaDescripcion = new JTextArea("Bienvenido a Delik.IA. Seleccione un producto.");
+        areaDescripcion = new JTextArea("Bienvenido a " + maquinaDelikia.getNombre() + ". Seleccione un producto.");
         areaDescripcion.setFont(new Font("Monospaced", Font.BOLD, 18));
         areaDescripcion.setBackground(Color.decode("#123038"));
         areaDescripcion.setForeground(Color.WHITE);
@@ -209,8 +209,12 @@ public class PanelTienda extends JPanel {
         }
 
         itemSeleccionado = -1; // Reinicio el seleccionador de objetos
-        areaDescripcion.setText("Bienvenido a Delik.IA. Seleccione un producto."); // Reinicio el texto de entrada a la
-                                                                                   // máquina
+        areaDescripcion.setText("Bienvenido a " + maquinaDelikia.getNombre() + ". Seleccione un producto."); // Reinicio
+                                                                                                             // el texto
+                                                                                                             // de
+                                                                                                             // entrada
+                                                                                                             // a la
+        // máquina
 
         VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(this);
         if (ventana != null) {
