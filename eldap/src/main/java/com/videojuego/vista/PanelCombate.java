@@ -44,9 +44,6 @@ public class PanelCombate extends JPanel {
     private JButton botonConfirmarObjeto;
     private JButton botonCancelarObjeto;
 
-    // --- Variable de Volumen ---
-    private int volumenActual = 100;
-
     /**
      * Inicializa el combate entre el jugador y un jefe específico.
      * 
@@ -86,7 +83,7 @@ public class PanelCombate extends JPanel {
 
                     MenuEscape menu = new MenuEscape(
                             ventana,
-                            volumenActual,
+                            com.videojuego.controlador.ControladorAudio.getInstance().getVolumenGlobal(),
                             () -> {
                                 PanelCombate.this.requestFocus(); // Devolvemos el foco al salir
                             },
@@ -297,6 +294,8 @@ public class PanelCombate extends JPanel {
         botonSalir.setVisible(false);
 
         botonSalir.addActionListener(e -> {
+            com.videojuego.controlador.ControladorAudio.getInstance().detenerMusica();
+
             // Hablamos con VentanaPrincipal para que nos saque de aquí
             VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(PanelCombate.this);
 
@@ -319,10 +318,6 @@ public class PanelCombate extends JPanel {
 
     // --- MÉTODOS DE AUDIO ---
     public void cambiarVolumenMusica(int porcentaje) {
-        if (this.volumenActual == porcentaje)
-            return; // Optimización anti-lag
-
-        this.volumenActual = porcentaje;
         com.videojuego.controlador.ControladorAudio.getInstance().setVolumenGlobal(porcentaje);
     }
 
