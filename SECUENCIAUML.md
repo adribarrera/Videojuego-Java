@@ -19,7 +19,7 @@ sequenceDiagram
     VP->>CA: detenerMusica()
 ```
 
-## 2. Victoria sobre Jefe Intermedio
+## 2. Combate con victoria
 ```mermaid
 sequenceDiagram
     actor U as Usuario
