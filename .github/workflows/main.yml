@@ -26,8 +26,7 @@ jobs:
           java-version: '25'
           cache: maven
           
-      - name: Build executable JAR (main only)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      - name: Build executable JAR 
         working-directory: eldap
         run: mvn -B -DskipTests clean package
 
