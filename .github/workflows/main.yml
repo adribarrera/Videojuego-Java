@@ -30,3 +30,27 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         working-directory: eldap
         run: mvn -B -DskipTests clean package
+
+      - name: Upload binary artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: eldap-binary-${{ github.sha }}
+          path: |
+            eldap/target/eldap-1.0-SNAPSHOT-all.jar
+            eldap/target/eldap-1.0-SNAPSHOT.jar
+          if-no-files-found: error
+       
+      - name: Publish GitHub Release (main only)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: ncipollo/release-action@v1
+        with:
+          tag: latest-eldap
+          name: Latest eldap Build
+          body: |
+            Build generated automatically from main.
+            Commit: ${{ github.sha }}
+          artifacts: "eldap/target/eldap-1.0-SNAPSHOT-all.jar,eldap/target/eldap-1.0-SNAPSHOT.jar"
+          allowUpdates: true
+          replacesArtifacts: true
+          artifactErrorsFailBuild: true
+          generateReleaseNotes: true
