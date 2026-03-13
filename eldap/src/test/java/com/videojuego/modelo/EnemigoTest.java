@@ -21,8 +21,8 @@ class EnemigoTest {
         assertEquals(0.025, jessica.getProbCritico(), 0.0001);
 
         Enemigo juanCarlos = new Enemigo("juanCarlos");
-        assertEquals(800, juanCarlos.getVidaMaxima());
-        assertEquals(100, juanCarlos.getAtaque());
+        assertEquals(600, juanCarlos.getVidaMaxima());
+        assertEquals(50, juanCarlos.getAtaque());
         assertEquals(0.025, juanCarlos.getProbCritico(), 0.0001);
 
         Enemigo sergio = new Enemigo("sergio");
