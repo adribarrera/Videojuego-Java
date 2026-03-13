@@ -325,8 +325,9 @@ public class PanelMapa extends JPanel {
 
 		// Es fundamental recrear el controlador al cambiar de personaje
 		// para asegurar que el Timer esté vinculado a la instancia correcta.
-		
-		// Antes de crear uno nuevo, detenemos el viejo para evitar fugas de memoria y caida de FPS
+
+		// Antes de crear uno nuevo, detenemos el viejo para evitar fugas de memoria y
+		// caida de FPS
 		if (this.controladorMovimiento != null) {
 			this.controladorMovimiento.detener();
 		}
@@ -352,6 +353,14 @@ public class PanelMapa extends JPanel {
 	public void reiniciarMapa() {
 		colisiones = new Colisiones();
 		inicializarBosses();
+
+		// Reset del personaje a sus valores base de inicio
+		if (this.personaje != null) {
+			String nombreActual = this.personaje.getNombre();
+			String claseActual = this.personaje.getClaseElegida();
+			setPersonajeJugador(new Personaje(nombreActual, claseActual));
+		}
+
 		bossCercano = null;
 		cercaDeDelikia = false;
 		repaint();

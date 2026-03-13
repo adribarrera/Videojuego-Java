@@ -5,7 +5,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
 import java.net.URL;
-import javax.sound.sampled.*;
 import com.videojuego.controlador.Boton;
 import com.videojuego.modelo.Enemigo;
 import com.videojuego.modelo.Personaje;
@@ -18,7 +17,6 @@ import java.util.List;
  * animaciones de daño y lógica de flujo de batalla.
  */
 public class PanelCombate extends JPanel {
-    private Clip musicaCombate;
     private ImageIcon imagenFondo;
     private JTextArea areaTexto;
 
@@ -51,7 +49,8 @@ public class PanelCombate extends JPanel {
 
     /**
      * Inicializa el combate entre el jugador y un jefe específico.
-     * @param jugador Instancia del jugador actual.
+     * 
+     * @param jugador           Instancia del jugador actual.
      * @param nombreBossEnemigo Nombre del jefe a enfrentar.
      */
     public PanelCombate(Personaje jugador, String nombreBossEnemigo) {
@@ -167,7 +166,9 @@ public class PanelCombate extends JPanel {
     }
 
     /**
-     * Crea el panel inferior que contiene el cuadro de texto y los botones de acción.
+     * Crea el panel inferior que contiene el cuadro de texto y los botones de
+     * acción.
+     * 
      * @return El panel configurado para la zona sur de la pantalla.
      */
     private JPanel crearPanelInferior() {
@@ -296,9 +297,6 @@ public class PanelCombate extends JPanel {
         botonSalir.setVisible(false);
 
         botonSalir.addActionListener(e -> {
-            if (musicaCombate != null)
-                musicaCombate.stop();
-
             // Hablamos con VentanaPrincipal para que nos saque de aquí
             VentanaPrincipal ventana = (VentanaPrincipal) SwingUtilities.getWindowAncestor(PanelCombate.this);
 
@@ -325,16 +323,7 @@ public class PanelCombate extends JPanel {
             return; // Optimización anti-lag
 
         this.volumenActual = porcentaje;
-
-        if (musicaCombate != null && musicaCombate.isOpen()) {
-            FloatControl control = (FloatControl) musicaCombate.getControl(FloatControl.Type.MASTER_GAIN);
-            if (porcentaje == 0) {
-                control.setValue(control.getMinimum());
-            } else {
-                float decibelios = (float) (Math.log10(porcentaje / 100.0) * 20.0);
-                control.setValue(decibelios);
-            }
-        }
+        com.videojuego.controlador.ControladorAudio.getInstance().setVolumenGlobal(porcentaje);
     }
 
     // --- METODOS PROPIOS DEL INVENTARIO DE COMBATE ---
@@ -442,10 +431,11 @@ public class PanelCombate extends JPanel {
     /**
      * Añade una nueva línea al registro de combate con un efecto de desplazamiento.
      * Mantiene un máximo de 4 líneas visibles para evitar desbordamientos.
+     * 
      * @param nuevaLinea Texto a mostrar.
      */
     private void añadirLinea(String nuevaLinea) {
-        // Si la nueva línea tiene saltos internos, la procesamos en partes
+        // Si la nueva línea ya trae saltos explícitos, los procesamos uno a uno
         if (nuevaLinea.contains("\n")) {
             for (String parte : nuevaLinea.split("\n", -1)) {
                 añadirLinea(parte);
@@ -453,19 +443,39 @@ public class PanelCombate extends JPanel {
             return;
         }
 
+        // --- Lógica de Auto-Wrap manual ---
+        // El JTextArea tiene 600px de ancho y fuente Monospaced 18px Bold.
+        // Aproximadamente caben 53-55 caracteres por línea. Usaremos un margen de
+        // seguridad.
+        int MAX_CARACTERES_POR_FILA = 50;
+
+        if (nuevaLinea.length() > MAX_CARACTERES_POR_FILA) {
+            String parte1 = nuevaLinea.substring(0, MAX_CARACTERES_POR_FILA);
+            String parte2 = nuevaLinea.substring(MAX_CARACTERES_POR_FILA);
+            // Buscamos el último espacio para no cortar palabras
+            int ultimoEspacio = parte1.lastIndexOf(' ');
+            if (ultimoEspacio > 30) { // Si hay un espacio razonable, cortamos ahí
+                añadirLinea(nuevaLinea.substring(0, ultimoEspacio));
+                añadirLinea(nuevaLinea.substring(ultimoEspacio + 1));
+            } else {
+                añadirLinea(parte1);
+                añadirLinea(parte2);
+            }
+            return;
+        }
+
         String actual = areaTexto.getText();
         String[] lineas = actual.isEmpty() ? new String[0] : actual.split("\n", -1);
 
-        int MAX_LINEAS = 4;
+        int MAX_LINEAS_VISIBLES = 4;
         String resultado;
-        if (lineas.length >= MAX_LINEAS) {
+        if (lineas.length >= MAX_LINEAS_VISIBLES) {
             StringBuilder sb = new StringBuilder();
+            // Descartamos la primera línea y sumamos el resto
             for (int i = 1; i < lineas.length; i++) {
-                if (i > 1)
-                    sb.append("\n");
-                sb.append(lineas[i]);
+                sb.append(lineas[i]).append("\n");
             }
-            sb.append("\n").append(nuevaLinea);
+            sb.append(nuevaLinea);
             resultado = sb.toString();
         } else {
             resultado = actual.isEmpty() ? nuevaLinea : actual + "\n" + nuevaLinea;
@@ -521,8 +531,10 @@ public class PanelCombate extends JPanel {
     }
 
     /**
-     * Orquesta el flujo de un turno: acción del jugador, chequeo de victoria/derrota
+     * Orquesta el flujo de un turno: acción del jugador, chequeo de
+     * victoria/derrota
      * y el contraataque automático del enemigo.
+     * 
      * @param accionJugador Bloque de código con la acción seleccionada.
      */
     private void ejecutarTurnoJugador(Runnable accionJugador) {
