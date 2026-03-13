@@ -7,6 +7,10 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+/**
+ * Pantalla que se muestra cuando el jugador pierde el combate.
+ * Realiza una transición automática de vuelta al menú principal tras unos segundos.
+ */
 public class PanelDerrota extends JPanel {
 
     private ImageIcon imagenFondo;

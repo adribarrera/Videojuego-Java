@@ -3,6 +3,10 @@ package com.videojuego.controlador;
 import javax.sound.sampled.*;
 import java.net.URL;
 
+/**
+ * Gestor centralizado de audio que utiliza el patrón Singleton.
+ * Se encarga de la reproducción de música ambiental en bucle y del control de volumen maestro.
+ */
 public class ControladorAudio {
     
     // Instancia única (Singleton)
@@ -23,7 +27,11 @@ public class ControladorAudio {
         return instancia;
     }
     
-    // Reproduce una canción en bucle, deteniendo la anterior si existía
+    /**
+     * Carga y reproduce una pista de audio en bucle continuo.
+     * Si ya hay una pista sonando, la detiene y libera sus recursos antes de empezar.
+     * @param rutaArchivo Ruta del archivo de audio (.wav) en el classpath.
+     */
     public void reproducirMusicaAmbiental(String rutaArchivo) {
         detenerMusica(); // Nos aseguramos de apagar lo que hubiera sonando
         

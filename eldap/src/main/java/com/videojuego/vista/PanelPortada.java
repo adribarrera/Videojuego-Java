@@ -5,6 +5,10 @@ import javax.swing.*;
 import java.net.URL;
 import com.videojuego.controlador.Boton;
 
+/**
+ * Pantalla inicial del juego que contiene el título y los controles de acceso.
+ * Gestiona la música de bienvenida y la navegación al selector de personajes.
+ */
 public class PanelPortada extends JPanel {
 
 	private ImageIcon imagenFondo;

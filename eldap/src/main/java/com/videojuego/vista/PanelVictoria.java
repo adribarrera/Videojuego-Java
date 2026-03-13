@@ -7,6 +7,10 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+/**
+ * Pantalla que se muestra cuando el jugador vence al jefe final.
+ * Celebra el éxito del jugador antes de regresar al menú principal.
+ */
 public class PanelVictoria extends JPanel {
 
     private ImageIcon imagenFondo;

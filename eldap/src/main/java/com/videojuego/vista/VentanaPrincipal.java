@@ -15,6 +15,11 @@ import javax.swing.*;
 
 import com.videojuego.modelo.Personaje;
 
+/**
+ * Marco principal de la aplicación que actúa como controlador de navegación (Router).
+ * Gestiona el intercambio de pantallas (Paneles) mediante un CardLayout y
+ * orquesta las transiciones visuales (efectos de fundido).
+ */
 public class VentanaPrincipal extends JFrame {
 
     public PanelPortada portada = new PanelPortada();
@@ -33,6 +38,10 @@ public class VentanaPrincipal extends JFrame {
     private float opacidadTransicion = 0.0f;
     private Timer timerTransicion;
 
+    /**
+     * Configura la ventana inicial, carga el icono de la aplicación
+     * y registra todos los paneles principales del juego.
+     */
     public VentanaPrincipal() {
         this.setTitle("ELDAP");
 
@@ -78,6 +87,11 @@ public class VentanaPrincipal extends JFrame {
     // --- TRANSICIÓN ---
     // Recibe el nombre del panel al que vamos, y un "Runnable" (un bloque de
     // código) para ejecutar cuando la pantalla esté 100% negra.
+    /**
+     * Gestiona el cambio entre paneles con un efecto de fundido a negro.
+     * @param nombrePanelDestino El identificador del panel en el CardLayout.
+     * @param accionIntermedia Código que se ejecuta cuando la pantalla está totalmente a oscuras.
+     */
     private void cambiarPanelConTransicion(String nombrePanelDestino, Runnable accionIntermedia) {
         if (timerTransicion != null && timerTransicion.isRunning()) {
             timerTransicion.stop(); // Detenemos cualquier transición anterior
@@ -132,6 +146,10 @@ public class VentanaPrincipal extends JFrame {
         });
     }
 
+    /**
+     * Crea una nueva instancia de combate y cambia la vista hacia ella.
+     * @param nombreBossEnemigo Identificador del jefe que aparecerá en el panel.
+     */
     public void iniciarCombate(String nombreBossEnemigo) {
         if (panelCombateActual != null) {
             panelContenedor.remove(panelCombateActual);

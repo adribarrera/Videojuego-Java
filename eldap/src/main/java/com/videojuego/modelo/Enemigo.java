@@ -1,5 +1,9 @@
 package com.videojuego.modelo;
 
+/**
+ * Representa a los oponentes que el jugador encuentra en el mapa.
+ * Define estadísticas preestablecidas según el tipo de jefe.
+ */
 public class Enemigo implements Entidad {
     protected String nombre;
     protected int vidaMaxima;
@@ -7,6 +11,10 @@ public class Enemigo implements Entidad {
     protected int ataque;
     protected double probCritico;
 
+    /**
+     * Inicializa un enemigo con estadísticas fijas según su identidad.
+     * @param tipoEnemigo Nombre del jefe (ej: "Soraya", "Sergio").
+     */
     public Enemigo(String tipoEnemigo) {
         this.nombre = tipoEnemigo;
 
@@ -41,6 +49,12 @@ public class Enemigo implements Entidad {
         this.vidaActual = this.vidaMaxima;
     }
 
+    /**
+     * Ejecuta un ataque contra el jugador.
+     * Incluye una variación de daño aleatoria y cálculo de críticos.
+     * @param objetivo La entidad que recibe el ataque.
+     * @return true si el ataque fue un golpe crítico.
+     */
     @Override
     public boolean atacar(Entidad objetivo) {
         // RNG: el ataque variará entre un 85% y un 115% de su valor base

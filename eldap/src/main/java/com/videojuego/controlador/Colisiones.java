@@ -3,6 +3,10 @@ package com.videojuego.controlador;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
+/**
+ * Gestor de la lógica de colisiones físicas en el mapa.
+ * Define las áreas intransitables (muros) y los obstáculos temporales (jefes).
+ */
 public class Colisiones {
     private ArrayList<Rectangle> muros;
 
@@ -59,6 +63,15 @@ public class Colisiones {
 
     }
 
+    /**
+     * Verifica si una entidad en una posición y con unas dimensiones dadas
+     * colisionaría con algún muro u obstáculo del mapa.
+     * @param x Nueva coordenada X sugerida.
+     * @param y Nueva coordenada Y sugerida.
+     * @param ancho Ancho de la entidad.
+     * @param alto Alto de la entidad.
+     * @return true si el camino está despejado; false si hay colisión.
+     */
     public boolean verificarMovimiento(int x, int y, int ancho, int alto) {
         Rectangle futuroPersonaje = new Rectangle(x, y, ancho, alto);
 
@@ -76,6 +89,10 @@ public class Colisiones {
         return muros;
     }
 
+    /**
+     * Elimina el obstáculo físico asociado a un jefe tras su derrota.
+     * @param nombreBoss Nombre del jefe vencido.
+     */
     public void eliminarMuroBoss(String nombreBoss) {
         Rectangle muroAEliminar = null;
         switch (nombreBoss.toLowerCase()) {

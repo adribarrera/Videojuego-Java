@@ -3,6 +3,11 @@ package com.videojuego.modelo;
 import javax.swing.ImageIcon; // Para manejar la imagen
 import java.net.URL; // Para cargar la imagen desde archivos
 
+/**
+ * Representa un objeto consumible o equipable en el juego.
+ * Cada ítem tiene un efecto único que puede alterar las estadísticas
+ * de las entidades durante o fuera del combate.
+ */
 public class Item {
     private String nombre;
     private String descripcion;
@@ -60,6 +65,12 @@ public class Item {
         return precio;
     }
 
+    /**
+     * Ejecuta la lógica asociada al ítem sobre el jugador o el enemigo.
+     * @param jugador Instancia del jugador que usa el ítem.
+     * @param enemigo Objetivo actual si estamos en combate.
+     * @return Descripción textual de lo ocurrido para mostrar en el log.
+     */
     public String aplicarA(Personaje jugador, Enemigo enemigo) {
         switch (this.efecto) {
             case CURAR_PORCENTAJE: // VAPER

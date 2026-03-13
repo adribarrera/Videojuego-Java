@@ -8,6 +8,10 @@ import javax.swing.*;
 import com.videojuego.controlador.Boton;
 import com.videojuego.modelo.Personaje;
 
+/**
+ * Interfaz de selección donde el usuario elige su rol inicial (Guerrero, Mago, Asesino).
+ * Muestra una vista previa de las estadísticas básicas de cada clase.
+ */
 public class PanelEleccionPersonaje extends JPanel {
     private ImageIcon imagenFondo;
     private JLabel labelFotoPersonaje;

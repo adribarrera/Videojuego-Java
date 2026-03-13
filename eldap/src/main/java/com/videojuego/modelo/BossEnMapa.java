@@ -3,6 +3,10 @@ package com.videojuego.modelo;
 import javax.swing.ImageIcon;
 import java.awt.Rectangle;
 
+/**
+ * Representación simplificada de un jefe tal como aparece en el mapa antes del combate.
+ * Define su posición visual y su área de interacción.
+ */
 public class BossEnMapa {
     public String nombre;
     public int posX, posY;
@@ -10,6 +14,14 @@ public class BossEnMapa {
     public ImageIcon imagen;
     public Rectangle areaInteraccion;
 
+    /**
+     * Crea un jefe ubicado en el mapa con su correspondiente área de interacción.
+     * @param nombre Identificador del jefe.
+     * @param posX Coordenada X inicial.
+     * @param posY Coordenada Y inicial.
+     * @param rutaImagen Sprite a mostrar.
+     * @param areaInteraccion Rectángulo que define el rango de activación.
+     */
     public BossEnMapa(String nombre, int posX, int posY, String rutaImagen, Rectangle areaInteraccion) {
         this.nombre = nombre;
         this.posX = posX;

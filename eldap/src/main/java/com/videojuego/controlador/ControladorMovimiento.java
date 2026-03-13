@@ -13,6 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Timer;
 
+/**
+ * Sistema de control que vincula la entrada del usuario con el movimiento del personaje.
+ * Implementa un bucle de refresco constante para asegurar fluidez y gestiona
+ * la detección de colisiones antes de actualizar la posición.
+ */
 public class ControladorMovimiento {
 
     private Personaje personaje;
@@ -28,7 +33,14 @@ public class ControladorMovimiento {
     private List<String> teclasPulsadas = new ArrayList<>();
     private Timer timerMovimiento;
 
-    // AÑADIMOS Colisiones al constructor
+    /**
+     * Crea un controlador vinculado a un panel y personaje específicos.
+     * @param personaje Entidad que se moverá.
+     * @param panel Panel de visualización donde ocurren los eventos.
+     * @param colisiones Gestor de lógica de colisiones.
+     * @param anchoPersonaje Ancho del sprite para el cálculo de límites.
+     * @param altoPersonaje Alto del sprite para el cálculo de límites.
+     */
     public ControladorMovimiento(Personaje personaje, PanelMapa panel, Colisiones colisiones, int anchoPersonaje,
             int altoPersonaje) {
         this.personaje = personaje;
@@ -41,6 +53,10 @@ public class ControladorMovimiento {
         iniciarBucleMovimiento();
     }
 
+    /**
+     * Inicializa el Timer que procesa el desplazamiento continuamente mientras haya teclas pulsadas.
+     * Aproximadamente 30 FPS para coincidir con la tasa de refresco estándar de UI.
+     */
     private void iniciarBucleMovimiento() {
         // Ejecución cada ~33ms que equivale a unos 30FPS (velocidad de repetición
         // nativa OS)
@@ -58,6 +74,10 @@ public class ControladorMovimiento {
         timerMovimiento.start();
     }
 
+    /**
+     * Define los KeyStrokes y Actions para las teclas de movimiento y la interacción.
+     * Usa un sistema de lista para dar prioridad a la tecla pulsada más recientemente.
+     */
     private void configurarControles() {
         InputMap inputMap = panel.getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = panel.getActionMap();
@@ -101,6 +121,12 @@ public class ControladorMovimiento {
         });
     }
 
+    /**
+     * Calcula la nueva posición potencial y verifica límites de pantalla y colisiones físicas.
+     * @param dir Tecla pulsada ("w", "a", "s", "d").
+     * @param limiteX Ancho máximo de la ventana.
+     * @param limiteY Alto máximo de la ventana.
+     */
     private void moverConLimites(String dir, int limiteX, int limiteY) {
         int vel = personaje.getVelocidad();
         int actualX = personaje.getPosX();
@@ -134,7 +160,7 @@ public class ControladorMovimiento {
         if (nuevaY > limiteY - altoPersonaje)
             nuevaY = limiteY - altoPersonaje;
 
-        // --- LA MAGIA: Preguntamos DIRECTAMENTE a la clase Colisiones ---
+        // Verificación final de colisiones contra elementos del mapa
         if (colisiones.verificarMovimiento(nuevaX, nuevaY, anchoPersonaje, altoPersonaje)) {
             personaje.setPosX(nuevaX);
             personaje.setPosY(nuevaY);

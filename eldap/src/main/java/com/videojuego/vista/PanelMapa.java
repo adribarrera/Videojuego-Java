@@ -19,6 +19,11 @@ import com.videojuego.modelo.BossEnMapa;
 import com.videojuego.controlador.Colisiones; // Importamos nuestra nueva clase
 import com.videojuego.controlador.ControladorMovimiento;
 
+/**
+ * Representa el escenario principal de exploración del juego.
+ * Gestiona el renderizado del mapa, la animación del personaje,
+ * la detección de proximidad a jefes y la interacción con la tienda.
+ */
 public class PanelMapa extends JPanel {
 	private ImageIcon imagenMapa;
 
@@ -28,7 +33,7 @@ public class PanelMapa extends JPanel {
 	private int frameActual = 1;
 
 	private Personaje personaje;
-	private ControladorMovimiento controladorMovimiento; // ¡AÑADIDO CONTROLADOR PARA DETENER SUS TIMERS!
+	private ControladorMovimiento controladorMovimiento;
 	private boolean modoDebug = false;
 	private Colisiones colisiones;
 	private boolean juegoPausado = false;
@@ -46,6 +51,10 @@ public class PanelMapa extends JPanel {
 	// Panel HUD de estadísticas
 	private PanelEstadisticasHUD hudEstadisticas;
 
+	/**
+	 * Configura el panel del mapa, inicializa las colisiones, el HUD
+	 * y prepara los componentes interactivos (Jefes y Tienda).
+	 */
 	public PanelMapa() {
 		colisiones = new Colisiones();
 		setLayout(null); // para poner botones encima
@@ -285,6 +294,10 @@ public class PanelMapa extends JPanel {
 		com.videojuego.controlador.ControladorAudio.getInstance().detenerMusica();
 	}
 
+	/**
+	 * Procesa la interacción del usuario al pulsar la tecla de acción.
+	 * Activa el combate o abre la tienda si el jugador está en el rango adecuado.
+	 */
 	public void interactuar() {
 		if (juegoPausado)
 			return;
@@ -310,8 +323,8 @@ public class PanelMapa extends JPanel {
 
 		cargarSprites();
 
-		// ¡Súper Importante! Creamos el ControladorMovimiento AHORA, no en el
-		// constructor, porque antes el personaje era null.
+		// Es fundamental recrear el controlador al cambiar de personaje
+		// para asegurar que el Timer esté vinculado a la instancia correcta.
 		
 		// Antes de crear uno nuevo, detenemos el viejo para evitar fugas de memoria y caida de FPS
 		if (this.controladorMovimiento != null) {

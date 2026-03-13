@@ -6,6 +6,10 @@ import java.net.URL;
 
 import com.videojuego.modelo.Personaje;
 
+/**
+ * Componente visual de la interfaz de usuario (HUD) que muestra el estado vital
+ * y las estadísticas actuales del jugador en tiempo real.
+ */
 public class PanelEstadisticasHUD extends JPanel {
     private JLabel labelVida;
     private JLabel labelAtaque;
@@ -54,6 +58,10 @@ public class PanelEstadisticasHUD extends JPanel {
         return label;
     }
 
+    /**
+     * Sincroniza los valores del HUD con las estadísticas actuales de una entidad.
+     * @param personaje El personaje cuyos datos queremos visualizar.
+     */
     public void actualizarEstadisticas(Personaje personaje) {
         if (personaje != null) {
             labelVida.setText(personaje.getVidaActual() + "/" + personaje.getVidaMaxima());

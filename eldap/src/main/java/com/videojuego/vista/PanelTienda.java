@@ -7,6 +7,10 @@ import com.videojuego.controlador.Boton;
 import com.videojuego.modelo.Personaje;
 import com.videojuego.modelo.Tienda;
 
+/**
+ * Escena de la tienda "Delik.IA" donde el jugador puede comprar objetos.
+ * Presenta una cuadrícula de ítems con sus descripciones y precios.
+ */
 public class PanelTienda extends JPanel {
     private ImageIcon imagenFondo;
 

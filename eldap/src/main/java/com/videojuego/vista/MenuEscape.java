@@ -15,6 +15,10 @@ import javax.swing.JSlider; // IMPORTANTE PARA EL SLIDER
 
 import com.videojuego.controlador.Boton;
 
+/**
+ * Menú de pausa que permite ajustar el volumen y salir del juego.
+ * Implementa dos constructores para mayor versatilidad en diferentes pantallas.
+ */
 public class MenuEscape extends JDialog {
 
     // --- CONSTRUCTOR 1: EL ORIGINAL (Sin volumen) ---

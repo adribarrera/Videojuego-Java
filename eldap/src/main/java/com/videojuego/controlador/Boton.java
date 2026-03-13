@@ -7,10 +7,18 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+/**
+ * Factoría de utilidad para la creación y personalización de botones Swing con imágenes.
+ * Centraliza la lógica de escalado de iconos y estilos visuales.
+ */
 public class Boton {
-    // --- Boton VentanaPrincipal
-    // --- CREACIÓN DEL BOTÓN INCIO ---
-    // Creamos la imagen original y obtener su objeto 'Image'
+    /**
+     * Crea un JButton configurado con una imagen escalada a dimensiones específicas.
+     * @param rutaImagen Ruta al recurso de imagen dentro del classpath.
+     * @param ancho Ancho deseado del botón.
+     * @param alto Alto deseado del botón.
+     * @return Instancia de JButton con el icono cargado y estilos predefinidos.
+     */
     public static JButton crearBotonImagen(String rutaImagen, int ancho, int alto) {
 
         JButton boton = new JButton();

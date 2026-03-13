@@ -12,6 +12,11 @@ import com.videojuego.modelo.Personaje;
 import com.videojuego.modelo.Item;
 import java.util.List;
 
+/**
+ * Panel que gestiona la escena de combate por turnos.
+ * Se encarga de la renderización de personajes, gestión de HUD,
+ * animaciones de daño y lógica de flujo de batalla.
+ */
 public class PanelCombate extends JPanel {
     private Clip musicaCombate;
     private ImageIcon imagenFondo;
@@ -44,6 +49,11 @@ public class PanelCombate extends JPanel {
     // --- Variable de Volumen ---
     private int volumenActual = 100;
 
+    /**
+     * Inicializa el combate entre el jugador y un jefe específico.
+     * @param jugador Instancia del jugador actual.
+     * @param nombreBossEnemigo Nombre del jefe a enfrentar.
+     */
     public PanelCombate(Personaje jugador, String nombreBossEnemigo) {
 
         this.jugador = jugador;
@@ -91,7 +101,10 @@ public class PanelCombate extends JPanel {
         });
     }
 
-    // Metodo para cargar los recursos en el constructor
+    /**
+     * Carga las imágenes y la música necesarias para el combate.
+     * Selecciona los sprites según la clase del jugador y el tipo de jefe.
+     */
     private void cargarRecursos() {
         // Fondo
         URL urlFondo = getClass().getResource("/assets/imagenes/fondoCombate.jpg");
@@ -153,7 +166,10 @@ public class PanelCombate extends JPanel {
         }
     }
 
-    // Creación de otro JPanel (para cuadro de texto)
+    /**
+     * Crea el panel inferior que contiene el cuadro de texto y los botones de acción.
+     * @return El panel configurado para la zona sur de la pantalla.
+     */
     private JPanel crearPanelInferior() {
         JPanel panel = new JPanel();
         panel.setPreferredSize(new Dimension(1280, 200)); // Tamaño
@@ -276,7 +292,7 @@ public class PanelCombate extends JPanel {
         botonSalir = Boton.crearBotonImagen("/assets/imagenes/BotonVolverAlMapa.png", ancho, alto);
         botonSalir.setBounds(xSalir, yBotones, ancho, alto);
 
-        // ¡Magia aquí! Lo ocultamos nada más empezar el combate
+        // Inicialmente oculto hasta el final del combate
         botonSalir.setVisible(false);
 
         botonSalir.addActionListener(e -> {
@@ -424,8 +440,9 @@ public class PanelCombate extends JPanel {
     }
 
     /**
-     * Ventana deslizante de 4 líneas para el areaTexto.
-     * Si ya hay 4 o más líneas, elimina la primera antes de añadir la nueva.
+     * Añade una nueva línea al registro de combate con un efecto de desplazamiento.
+     * Mantiene un máximo de 4 líneas visibles para evitar desbordamientos.
+     * @param nuevaLinea Texto a mostrar.
      */
     private void añadirLinea(String nuevaLinea) {
         // Si la nueva línea tiene saltos internos, la procesamos en partes
@@ -503,6 +520,11 @@ public class PanelCombate extends JPanel {
         timerVibracion.start();
     }
 
+    /**
+     * Orquesta el flujo de un turno: acción del jugador, chequeo de victoria/derrota
+     * y el contraataque automático del enemigo.
+     * @param accionJugador Bloque de código con la acción seleccionada.
+     */
     private void ejecutarTurnoJugador(Runnable accionJugador) {
         // Bloqueamos botones para evitar spam
         botonAtacar.setEnabled(false);

@@ -3,6 +3,10 @@ package com.videojuego.modelo;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * Clase base que representa a cualquier entidad viva en el juego (Jugador o Enemigo).
+ * Gestiona estadísticas de combate, posición en el mapa e inventario.
+ */
 public class Personaje implements Entidad {
     // 1. Atributos de Identidad y Combate
     protected String nombre;
@@ -24,7 +28,11 @@ public class Personaje implements Entidad {
     protected List<Item> inventario;
     protected final int MAX_OBJETOS = 2;
 
-    // Constructor base
+    /**
+     * Constructor para inicializar un personaje según su clase.
+     * @param nombre Nombre del personaje.
+     * @param claseElegida Tipo de clase (Guerrero, Mago, Asesino) que define las stats base.
+     */
     public Personaje(String nombre, String claseElegida) {
         this.nombre = nombre;
         this.claseElegida = claseElegida;
@@ -70,8 +78,10 @@ public class Personaje implements Entidad {
 
     // --- MÉTODOS DE MOVIMIENTO ---
 
-    // Moverse en una dirección
-
+    /**
+     * Actualiza la posición del personaje en una dirección específica.
+     * @param direccion "arriba", "abajo", "izquierda" o "derecha".
+     */
     public void moverDireccion(String direccion) {
         switch (direccion.toLowerCase()) {
             case "arriba":
@@ -96,6 +106,12 @@ public class Personaje implements Entidad {
 
     // --- MÉTODOS DE COMBATE ---
 
+    /**
+     * Ejecuta un ataque contra otro personaje.
+     * El daño tiene una variación aleatoria (85%-115%) y posibilidad de crítico.
+     * @param enemigo El objetivo del ataque.
+     * @return true si el ataque fue un golpe crítico.
+     */
     @Override
     public boolean atacar(Entidad enemigo) {
         // RNG: el ataque variará entre un 85% y un 115% de su valor base
@@ -143,6 +159,10 @@ public class Personaje implements Entidad {
     }
 
     // --- ESCALADO DE ESTADÍSTICAS ---
+    /**
+     * Aumenta permanentemente las estadísticas del personaje de forma aleatoria.
+     * Se suele llamar al vencer a un jefe.
+     */
     public void mejorarAtributosAlDerrotarBoss() {
         // RNG para el aumento de estadísticas
         int gananciaVida = 80 + (int) (Math.random() * 41); // Entre 80 y 120
@@ -206,6 +226,12 @@ public class Personaje implements Entidad {
         }
     }
 
+    /**
+     * Usa un objeto del inventario basado en su índice.
+     * @param indice Posición en el inventario (0 o 1).
+     * @param enemigoEnCombate Objetivo si el item tiene efectos ofensivos.
+     * @return Mensaje descriptivo de la acción realizada.
+     */
     public String usarItem(int indice, Enemigo enemigoEnCombate) {
         if (indice >= 0 && indice < inventario.size()) {
             Item item = inventario.get(indice);

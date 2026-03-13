@@ -3,6 +3,10 @@ package com.videojuego.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Representa un punto de venta gestionado por una IA (Delikia).
+ * Contiene un inventario de ítems que el jugador puede adquirir con dinero del juego.
+ */
 public class Tienda {
     private String nombre;
     private List<Item> inventarioTienda;
@@ -40,6 +44,13 @@ public class Tienda {
         return "Espacio vacío";
     }
 
+    /**
+     * Intenta vender un ítem al personaje jugador.
+     * Verifica fondos suficientes y espacio disponible en el inventario.
+     * @param indice Posición del ítem en la tienda.
+     * @param comprador Personaje que desea comprar.
+     * @return Mensaje descriptivo del resultado de la transacción.
+     */
     public String procesarCompra(int indice, Personaje comprador) {
         if (indice < 0 || indice >= inventarioTienda.size()) {
             return "Selección inválida.";

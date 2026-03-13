@@ -5,15 +5,26 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.net.URL;
 
+/**
+ * Utilidades para la reproducción de efectos de sonido puntuales.
+ * Gestiona el cooldown de sonidos repetitivos como los pasos del personaje.
+ */
 public class UtilidadesAudio {
 
     private static long ultimoSonidoPaso = 0;
     private static final int COOLDOWN_PASOS = 200; // Milisegundos entre paso y paso
 
+    /**
+     * Resetea el contador de tiempo de los pasos para permitir su reproducción inmediata.
+     */
     public static void resetCooldownPasos() {
         ultimoSonidoPaso = 0;
     }
 
+    /**
+     * Reproduce un archivo de sonido .wav una sola vez.
+     * @param archivoActivacion Nombre del archivo en la carpeta /assets/audio/.
+     */
     public static void reproducirSonido(String archivoActivacion) {
         // Evitamos que los pasos se reproduzcan a lo loco filtrando solo
         // "pasos.wav"
