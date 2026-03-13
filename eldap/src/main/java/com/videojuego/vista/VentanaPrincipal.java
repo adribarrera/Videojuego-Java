@@ -22,6 +22,8 @@ public class VentanaPrincipal extends JFrame {
     public PanelEleccionPersonaje seleccion = new PanelEleccionPersonaje();
     private PanelDerrota panelDerrota;
     private PanelVictoria panelVictoria;
+    private PanelCombate panelCombateActual;
+    private PanelTienda panelTiendaActual;
 
     private CardLayout gestorPantallas = new CardLayout();
     private JPanel panelContenedor = new JPanel(gestorPantallas);
@@ -66,6 +68,8 @@ public class VentanaPrincipal extends JFrame {
             }
         };
         panelTransicion.setOpaque(false);
+        // Interceptar clicks para que no se puedan pulsar botones mientras hay transición
+        panelTransicion.addMouseListener(new java.awt.event.MouseAdapter() {});
         this.setGlassPane(panelTransicion); // Lo ponemos por encima de toda la ventana
 
         portada.reproducirMusica();
@@ -75,6 +79,10 @@ public class VentanaPrincipal extends JFrame {
     // Recibe el nombre del panel al que vamos, y un "Runnable" (un bloque de
     // código) para ejecutar cuando la pantalla esté 100% negra.
     private void cambiarPanelConTransicion(String nombrePanelDestino, Runnable accionIntermedia) {
+        if (timerTransicion != null && timerTransicion.isRunning()) {
+            timerTransicion.stop(); // Detenemos cualquier transición anterior
+        }
+        
         panelTransicion.setVisible(true); // Encendemos el cristal
 
         // El Timer se ejecuta cada 20 milisegundos para crear la animación
@@ -100,7 +108,7 @@ public class VentanaPrincipal extends JFrame {
                     if (opacidadTransicion <= 0.0f) {
                         opacidadTransicion = 0.0f;
                         panelTransicion.setVisible(false); // Apagamos el cristal
-                        timerTransicion.stop(); // Terminamos la animación
+                        ((Timer) e.getSource()).stop(); // Terminamos la animación
                     }
                 }
                 panelTransicion.repaint(); // Pedimos que redibuje el cristal con la nueva opacidad
@@ -125,14 +133,20 @@ public class VentanaPrincipal extends JFrame {
     }
 
     public void iniciarCombate(String nombreBossEnemigo) {
-        PanelCombate combate = new PanelCombate(mapa.getPersonaje(), nombreBossEnemigo);
-        panelContenedor.add(combate, "Pantalla Combate");
+        if (panelCombateActual != null) {
+            panelContenedor.remove(panelCombateActual);
+        }
+        panelCombateActual = new PanelCombate(mapa.getPersonaje(), nombreBossEnemigo);
+        panelContenedor.add(panelCombateActual, "Pantalla Combate");
         cambiarPanelConTransicion("Pantalla Combate", () -> {
-            combate.requestFocus();
+            panelCombateActual.requestFocus();
         });
     }
 
     public void irADerrota() {
+        if (panelDerrota != null) {
+            panelContenedor.remove(panelDerrota);
+        }
         // Creamos un panel fresco para que el timer se reinicie en cada derrota
         panelDerrota = new PanelDerrota();
         panelContenedor.add(panelDerrota, "Pantalla Derrota");
@@ -140,6 +154,9 @@ public class VentanaPrincipal extends JFrame {
     }
 
     public void irAVictoria() {
+        if (panelVictoria != null) {
+            panelContenedor.remove(panelVictoria);
+        }
         // Creamos un panel fresco para que el timer se reinicie si se vuelve a jugar
         panelVictoria = new PanelVictoria();
         panelContenedor.add(panelVictoria, "Pantalla Victoria");
@@ -169,11 +186,14 @@ public class VentanaPrincipal extends JFrame {
     }
 
     public void abrirTienda(String tienda, Personaje jugadorActivo) {
-        PanelTienda delikia = new PanelTienda();
-        delikia.setJugadorActivo(jugadorActivo);
-        panelContenedor.add(delikia, "Delik.IA");
+        if (panelTiendaActual != null) {
+            panelContenedor.remove(panelTiendaActual);
+        }
+        panelTiendaActual = new PanelTienda();
+        panelTiendaActual.setJugadorActivo(jugadorActivo);
+        panelContenedor.add(panelTiendaActual, "Delik.IA");
         gestorPantallas.show(panelContenedor, "Delik.IA");
-        delikia.requestFocus();
+        panelTiendaActual.requestFocus();
     }
 
     public void volverAMapaDesdeTienda() {

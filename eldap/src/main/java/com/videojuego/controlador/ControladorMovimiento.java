@@ -148,4 +148,11 @@ public class ControladorMovimiento {
             panel.actualizarAnimacion(dir, ticAnimacion);
         }
     }
+
+    public void detener() {
+        if (timerMovimiento != null) {
+            timerMovimiento.stop();
+        }
+        teclasPulsadas.clear();
+    }
 }

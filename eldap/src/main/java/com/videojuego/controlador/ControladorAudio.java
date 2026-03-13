@@ -48,9 +48,13 @@ public class ControladorAudio {
     }
     
     public void detenerMusica() {
-        if (musicaFondo != null && musicaFondo.isRunning()) {
-            musicaFondo.stop();
-            musicaFondo.close(); // Liberamos los recursos de la pista anterior
+        if (musicaFondo != null) {
+            if (musicaFondo.isRunning()) {
+                musicaFondo.stop();
+            }
+            if (musicaFondo.isOpen()) {
+                musicaFondo.close(); // Liberamos los recursos de la pista anterior
+            }
         }
     }
     

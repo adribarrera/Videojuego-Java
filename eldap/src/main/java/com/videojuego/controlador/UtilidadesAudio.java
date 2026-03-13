@@ -30,11 +30,13 @@ public class UtilidadesAudio {
             if (urlSonido != null) {
                 AudioInputStream audioStream = AudioSystem.getAudioInputStream(urlSonido);
                 Clip clip = AudioSystem.getClip();
+                clip.addLineListener(event -> {
+                    if (event.getType() == javax.sound.sampled.LineEvent.Type.STOP) {
+                        event.getLine().close();
+                    }
+                });
                 clip.open(audioStream);
                 clip.start();
-                // Opcional: Para evitar fugas de memoria, se puede cerrar al acabar (pero al
-                // ser sonidos rápidos y Swing, no es 100% vital si es ligero, aunque es buena
-                // práctica).
             } else {
                 System.err.println("No se encontró el archivo de audio: " + archivoActivacion);
             }

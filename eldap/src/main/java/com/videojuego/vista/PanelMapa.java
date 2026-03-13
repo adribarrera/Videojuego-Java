@@ -28,6 +28,7 @@ public class PanelMapa extends JPanel {
 	private int frameActual = 1;
 
 	private Personaje personaje;
+	private ControladorMovimiento controladorMovimiento; // ¡AÑADIDO CONTROLADOR PARA DETENER SUS TIMERS!
 	private boolean modoDebug = false;
 	private Colisiones colisiones;
 	private boolean juegoPausado = false;
@@ -74,7 +75,7 @@ public class PanelMapa extends JPanel {
 		// 3. Activamos el Controlador de Movimiento
 		// Le pasamos: el personaje, este panel, y el tamaño de la imagen
 
-		new ControladorMovimiento(personaje, this, colisiones, 70, 70);
+		this.controladorMovimiento = new ControladorMovimiento(personaje, this, colisiones, 70, 70);
 
 		cargarRecursos();
 		inicializarBosses();
@@ -310,9 +311,13 @@ public class PanelMapa extends JPanel {
 		cargarSprites();
 
 		// ¡Súper Importante! Creamos el ControladorMovimiento AHORA, no en el
-		// constructor,
-		// porque antes el personaje era null.
-		new ControladorMovimiento(this.personaje, this, colisiones, 70, 70);
+		// constructor, porque antes el personaje era null.
+		
+		// Antes de crear uno nuevo, detenemos el viejo para evitar fugas de memoria y caida de FPS
+		if (this.controladorMovimiento != null) {
+			this.controladorMovimiento.detener();
+		}
+		this.controladorMovimiento = new ControladorMovimiento(this.personaje, this, colisiones, 70, 70);
 
 		// Refrescamos la pantalla para dibujarlo
 		repaint();
