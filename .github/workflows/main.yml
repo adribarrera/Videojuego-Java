@@ -1,0 +1,32 @@
+name: Java CI
+
+on:
+  push:
+    branches: ["main", "develop"]
+  pull_request:
+    branches: ["main", "develop"]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-test-package:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          
+      - name: Build executable JAR (main only)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        working-directory: daw1
+        run: mvn -B -DskipTests clean package
