@@ -26,8 +26,7 @@ jobs:
           java-version: '25'
           cache: maven
           
-      - name: Build executable JAR (main only)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      - name: Build executable JAR 
         working-directory: eldap
         run: mvn -B -DskipTests clean package
 
@@ -36,7 +35,6 @@ jobs:
         with:
           name: eldap-binary-${{ github.sha }}
           path: |
-            eldap/target/eldap-1.0-SNAPSHOT-all.jar
             eldap/target/eldap-1.0-SNAPSHOT.jar
           if-no-files-found: error
        
@@ -49,7 +47,7 @@ jobs:
           body: |
             Build generated automatically from main.
             Commit: ${{ github.sha }}
-          artifacts: "eldap/target/eldap-1.0-SNAPSHOT-all.jar,eldap/target/eldap-1.0-SNAPSHOT.jar"
+          artifacts: "eldap/target/eldap-1.0-SNAPSHOT.jar"
           allowUpdates: true
           replacesArtifacts: true
           artifactErrorsFailBuild: true
