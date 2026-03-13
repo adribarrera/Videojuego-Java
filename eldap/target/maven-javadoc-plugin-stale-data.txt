@@ -1,0 +1,48 @@
+-J-Duser.language=
+-J-Duser.country=
+@options
+@packages
+--no-fonts
+-encoding
+'UTF-8'
+-protected
+-source
+'17'
+-sourcepath
+'C:/Users/pablo/OneDrive/Desktop/Videjuego/eldap/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2026. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/pablo/OneDrive/Desktop/Videjuego/eldap/target/reports/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'eldap 1.0-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'eldap 1.0-SNAPSHOT API'
+com.videojuego.controlador
+com.videojuego.modelo
+com.videojuego.principal
+com.videojuego.vista
+C:\Users\pablo\OneDrive\Desktop\Videjuego\eldap\src\main\java = 1772785036755
+C:\Users\pablo\OneDrive\Desktop\Videjuego\eldap\target\reports\apidocs\allclasses-index.html = 1773392453542
+C:\Users\pablo\OneDrive\Desktop\Videjuego\eldap\target\reports\apidocs\allpackages-index.html = 1773392453547
+C:\Users\pablo\OneDrive\Desktop\Videjuego\eldap\target\reports\apidocs\constant-values.html = 1773392453304
+C:\Users\pablo\OneDrive\Desktop\Videjuego\eldap\target\reports\apidocs\element-list = 1773392453233
+C:\Users\pablo\OneDrive\Desktop\Videjuego\eldap\target\reports\apidocs\help-doc.html = 1773392453604
+C:\Users\pablo\OneDrive\Desktop\Videjuego\eldap\target\reports\apidocs\index-all.html = 1773392453590
+C:\Users\pablo\OneDrive\Desktop\Videjuego\eldap\target\reports\apidocs\index.html = 1773392453513
+C:\Users\pablo\OneDrive\Desktop\Videjuego\eldap\target\reports\apidocs\member-search-index.js = 1773392453554
+C:\Users\pablo\OneDrive\Desktop\Videjuego\eldap\target\reports\apidocs\module-search-index.js = 1773392453548
+C:\Users\pablo\OneDrive\Desktop\Videjuego\eldap\target\reports\apidocs\overview-summary.html = 1773392453598
+C:\Users\pablo\OneDrive\Desktop\Videjuego\eldap\target\reports\apidocs\overview-tree.html = 1773392453507
+C:\Users\pablo\OneDrive\Desktop\Videjuego\eldap\target\reports\apidocs\package-search-index.js = 1773392453550
+C:\Users\pablo\OneDrive\Desktop\Videjuego\eldap\target\reports\apidocs\search.html = 1773392453594
+C:\Users\pablo\OneDrive\Desktop\Videjuego\eldap\target\reports\apidocs\serialized-form.html = 1773392453342
+C:\Users\pablo\OneDrive\Desktop\Videjuego\eldap\target\reports\apidocs\tag-search-index.js = 1773392453556
+C:\Users\pablo\OneDrive\Desktop\Videjuego\eldap\target\reports\apidocs\type-search-index.js = 1773392453552
