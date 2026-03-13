@@ -35,7 +35,6 @@ jobs:
         with:
           name: eldap-binary-${{ github.sha }}
           path: |
-            eldap/target/eldap-1.0-SNAPSHOT-all.jar
             eldap/target/eldap-1.0-SNAPSHOT.jar
           if-no-files-found: error
        
@@ -48,7 +47,7 @@ jobs:
           body: |
             Build generated automatically from main.
             Commit: ${{ github.sha }}
-          artifacts: "eldap/target/eldap-1.0-SNAPSHOT-all.jar,eldap/target/eldap-1.0-SNAPSHOT.jar"
+          artifacts: "eldap/target/eldap-1.0-SNAPSHOT.jar"
           allowUpdates: true
           replacesArtifacts: true
           artifactErrorsFailBuild: true
