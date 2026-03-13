@@ -49,6 +49,7 @@ Asegúrate de tener instalado **Maven** y un **JDK 17** o superior.
 - [UML.md](./UML.md): Diagrama de clases y arquitectura.
 - [CASOUSOUML.md](./CASOUSOUML.md): Casos de uso funcionales.
 - [SECUENCIAUML.md](./SECUENCIAUML.md): Flujos de ejecución inicio/combate/tienda.
+- [ESTADOSUML.md](./ESTADOSUML.md): Ciclo de vida y estados de la aplicación.
 
 ---
 *Desarrollado para el Proyecto ELDAP - Java.*
