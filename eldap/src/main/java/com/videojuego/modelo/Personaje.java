@@ -4,7 +4,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- * Clase base que representa a cualquier entidad viva en el juego (Jugador o Enemigo).
+ * Clase base que representa a cualquier entidad viva en el juego (Jugador o
+ * Enemigo).
  * Gestiona estadísticas de combate, posición en el mapa e inventario.
  */
 public class Personaje implements Entidad {
@@ -30,8 +31,10 @@ public class Personaje implements Entidad {
 
     /**
      * Constructor para inicializar un personaje según su clase.
-     * @param nombre Nombre del personaje.
-     * @param claseElegida Tipo de clase (Guerrero, Mago, Asesino) que define las stats base.
+     * 
+     * @param nombre       Nombre del personaje.
+     * @param claseElegida Tipo de clase (Guerrero, Mago, Asesino) que define las
+     *                     stats base.
      */
     public Personaje(String nombre, String claseElegida) {
         this.nombre = nombre;
@@ -51,14 +54,14 @@ public class Personaje implements Entidad {
             case "mago":
                 this.vidaMaxima = 400;
                 this.ataque = 120;
-                this.defensa = 30; // 15% de reducción de daño
+                this.defensa = 30; // 30% de reducción de daño
                 this.probCritico = 0.08;
                 this.velocidad = 6;
                 break;
             case "asesino":
                 this.vidaMaxima = 500;
                 this.ataque = 90;
-                this.defensa = 35; // 25% de reducción de daño
+                this.defensa = 35; // 35% de reducción de daño
                 this.probCritico = 0.25;
                 this.velocidad = 7;
                 break;
@@ -80,6 +83,7 @@ public class Personaje implements Entidad {
 
     /**
      * Actualiza la posición del personaje en una dirección específica.
+     * 
      * @param direccion "arriba", "abajo", "izquierda" o "derecha".
      */
     public void moverDireccion(String direccion) {
@@ -109,6 +113,7 @@ public class Personaje implements Entidad {
     /**
      * Ejecuta un ataque contra otro personaje.
      * El daño tiene una variación aleatoria (85%-115%) y posibilidad de crítico.
+     * 
      * @param enemigo El objetivo del ataque.
      * @return true si el ataque fue un golpe crítico.
      */
@@ -228,7 +233,8 @@ public class Personaje implements Entidad {
 
     /**
      * Usa un objeto del inventario basado en su índice.
-     * @param indice Posición en el inventario (0 o 1).
+     * 
+     * @param indice           Posición en el inventario (0 o 1).
      * @param enemigoEnCombate Objetivo si el item tiene efectos ofensivos.
      * @return Mensaje descriptivo de la acción realizada.
      */
